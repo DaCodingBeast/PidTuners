@@ -1,5 +1,7 @@
 package ArmSpecific
 
+import org.firstinspires.ftc.teamcode.customHardware.pso.Hardware
+
 /**
  * The Constants needed to Simulate the Arm Mechanism
  * @param RPM The Motors Actual RPM, accounting for the affect of friction

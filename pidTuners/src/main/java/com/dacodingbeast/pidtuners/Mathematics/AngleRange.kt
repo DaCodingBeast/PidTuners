@@ -1,18 +1,36 @@
 package com.dacodingbeast.pidtuners.Mathematics
 
-import ArmSpecific.Direction
 import android.util.Log
+import com.dacodingbeast.pidtuners.Simulators.Direction
 import kotlin.math.PI
 
 /**
  * Angle Unit used throughout simulation
  */
-data class AngleRange(var start: Double, var target: Double) {
+class AngleRange private constructor(val start: Double, val target: Double) {
 
-    /**
-     * List of Functions preformed on everything involving Angles
-     */
     companion object Angles{
+
+        const val DEG_TO_RAD = Math.PI / 180
+        const val RAD_TO_DEG = 180 / Math.PI
+
+        /**
+         * Create an AngleRange using radians.
+         */
+        fun fromRadians(startAngle: Double, endAngle: Double): AngleRange {
+            val s = wrap(startAngle)
+            val e = wrap(endAngle)
+            return AngleRange(s, e)
+        }
+
+        /**
+         * Create an AngleRange using degrees.
+         */
+        fun fromDegrees(startAngle: Double, endAngle: Double): AngleRange {
+            return AngleRange(wrap(startAngle * DEG_TO_RAD), wrap(endAngle * DEG_TO_RAD))
+        }
+
+
         /**
          * Wrapping the Angle in -PI to PI range
          * @param theta Angle Error being wrapped, so that the shortest route is discovered
@@ -86,7 +104,6 @@ data class AngleRange(var start: Double, var target: Double) {
                         angleChange + 2 * PI
                     }
                 }
-
                 Direction.Clockwise -> {
                     if (angleChange<0){
                         angleChange
@@ -98,23 +115,15 @@ data class AngleRange(var start: Double, var target: Double) {
         }
     }
 
-    init {
-
-        /**
-         * Requirements that the Angle Range must be within -PI to PI
-         */
-        require(start in -PI..PI) { Log.d(ArmSpecific.error,"Angle Ranges should be in Radians") }
-        require(target in -PI..PI) { Log.d(ArmSpecific.error,"Angle Ranges should be in Radians") }
-
-        start = wrap(start)
-        target = wrap(target)
-
-    }
     /**
      * To String method to display changes in Arms positions
      */
     override fun toString(): String {
         return "(${this.start}, ${this.target})"
+    }
+
+    fun toDegrees(): Pair<Double, Double> {
+        return Pair(start * RAD_TO_DEG, target * RAD_TO_DEG)
     }
 
 }

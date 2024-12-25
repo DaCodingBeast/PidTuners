@@ -5,7 +5,7 @@ import ArmSpecific.Hardware.Motor
 import ArmSpecific.SystemConstants
 import ArmSpecific.pso4Arms
 import com.dacodingbeast.pidtuners.Mathematics.AngleRange
-import PSO_Algorithm.Particle
+import com.dacodingbeast.pidtuners.Algorithm.Particle
 import PSO_Algorithm.Ranges
 import android.util.Log
 import org.junit.Test

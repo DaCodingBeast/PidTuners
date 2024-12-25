@@ -3,7 +3,7 @@ package com.example.pso4pid
 import ArmSpecific.FitnessFunction
 import ArmSpecific.pso4Arms
 import com.dacodingbeast.pidtuners.Mathematics.AngleRange
-import PSO_Algorithm.Particle
+import com.dacodingbeast.pidtuners.Algorithm.Particle
 import PSO_Algorithm.Ranges
 import org.firstinspires.ftc.teamcode.PSO.Arm.Constants
 import org.junit.Test

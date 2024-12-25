@@ -1,4 +1,4 @@
-package PSO_Algorithm
+package com.dacodingbeast.pidtuners.Algorithm
 
 import kotlin.math.abs
 

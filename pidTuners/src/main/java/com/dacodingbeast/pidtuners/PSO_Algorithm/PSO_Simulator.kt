@@ -1,7 +1,10 @@
 package PSO_Algorithm
 
 import ArmSpecific.FitnessFunction
+import com.dacodingbeast.pidtuners.Algorithm.Particle
 import com.dacodingbeast.pidtuners.Mathematics.AngleRange
+import com.dacodingbeast.pidtuners.Mathematics.Units.Ranges
+import com.dacodingbeast.pidtuners.Algorithm.Vector
 import kotlin.random.Random.Default.nextDouble
 
 
@@ -19,10 +22,8 @@ import kotlin.random.Random.Default.nextDouble
  */
 //decrease previous when running a ton of swarm
 
-class Ranges(val start: Double, val stop: Double)
 
-
-class PSO(
+class PSO_Simulator(
     swarmSize: Int,
     private val randomInRanges: ArrayList<Ranges>,
     time: Double,
@@ -109,4 +110,5 @@ class PSO(
         return lastPower
     }
 }
-//only have prints be the global best at the end
+
+//todo only have prints be the global best at the end

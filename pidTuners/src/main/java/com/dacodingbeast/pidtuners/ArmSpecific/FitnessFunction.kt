@@ -2,7 +2,8 @@ package ArmSpecific
 
 import com.dacodingbeast.pidtuners.Mathematics.AngleRange
 import CommonUtilities.PIDFParams
-import PSO_Algorithm.Particle
+import com.dacodingbeast.pidtuners.Algorithm.Particle
+import com.dacodingbeast.pidtuners.Simulators.ArmSimData
 import kotlin.math.abs
 import kotlin.math.pow
 
