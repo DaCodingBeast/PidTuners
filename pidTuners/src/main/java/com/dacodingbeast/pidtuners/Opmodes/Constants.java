@@ -4,14 +4,14 @@ import static org.firstinspires.ftc.teamcode.App.Constant.*;
 import static java.lang.Math.PI;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.dacodingbeast.pidtuners.CommonUtilities.Hardware;
+import com.dacodingbeast.pidtuners.Mathematics.AngleRange;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import ArmSpecific.ArmAngle;
-import ArmSpecific.GravityModelConstants;
-import ArmSpecific.Hardware;
-import ArmSpecific.SystemConstants;
+import com.dacodingbeast.pidtuners.ArmSpecific.GravityModelConstants;
+import com.dacodingbeast.pidtuners.ArmSpecific.SystemConstants;
 import ArmSpecific.pso4Arms;
-import CommonUtilities.AngleRange;
 import CommonUtilities.PIDFParams;
 import CommonUtilities.PIDFcontroller;
 

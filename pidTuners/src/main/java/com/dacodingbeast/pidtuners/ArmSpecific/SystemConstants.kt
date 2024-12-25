@@ -1,4 +1,7 @@
-package ArmSpecific
+package com.dacodingbeast.pidtuners.ArmSpecific
+
+import ArmSpecific.pso4Arms
+import com.dacodingbeast.pidtuners.CommonUtilities.Hardware
 
 /**
  * The Constants needed to Simulate the Arm Mechanism
@@ -11,12 +14,12 @@ package ArmSpecific
  */
 data class SystemConstants(
     val RPM: Double,
-    val motor: Hardware.Motor,
+//    val motor: Hardware.Motor,
     val gravityConstants: GravityModelConstants,
     val Inertia: Double
 ) {
     init {
-        pso4Arms.System.SystemConstants = this
+        pso4Arms.SystemConstants = this
     }
 }
 

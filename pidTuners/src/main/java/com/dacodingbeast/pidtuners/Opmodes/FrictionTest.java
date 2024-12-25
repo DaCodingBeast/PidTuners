@@ -14,7 +14,7 @@ import CommonUtilities.Models;
 import CommonUtilities.RemoveOutliers;
 
 @TeleOp(name = "FrictionTest", group = "Linear OpMode")
-public class FrictionTest extends LinearOpMode {
+public class FrictionTest(com.dacodingbeast.pidtuners.CommonUtilities.Constants constants) extends LinearOpMode {
 
     @Override
     public void runOpMode() {
