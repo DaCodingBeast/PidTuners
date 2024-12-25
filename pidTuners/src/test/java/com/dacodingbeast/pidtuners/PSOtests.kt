@@ -1,8 +1,8 @@
 package com.example.pso4pid
 
-import ArmSpecific.GravityModelConstants
+import com.dacodingbeast.pidtuners.ArmSpecific.GravityModelConstants
 import ArmSpecific.Hardware.Motor
-import ArmSpecific.SystemConstants
+import com.dacodingbeast.pidtuners.ArmSpecific.SystemConstants
 import ArmSpecific.pso4Arms
 import com.dacodingbeast.pidtuners.Mathematics.AngleRange
 import PSO_Algorithm.Particle
