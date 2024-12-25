@@ -14,7 +14,7 @@ sealed class Hardware {
     /**
      * Yellow Jacket Motors ranging from 84 - 1150 RPM
      */
-    object YellowJacket { //TODO: these all in kg in
+    object YellowJacket { //TODO: these all in kg cm
         @JvmField
         val RPM30 = MotorSpecs(
             30.0,250.0,
@@ -73,25 +73,25 @@ sealed class Hardware {
     }
 
     object TorqueNado { //torque in nm
-        val MAX = MotorSpecs(100.0, 4.94, 60.0, 1440.0)
+        val MAX = MotorSpecs(100.0, MathFunctions.nmToKgcm(4.94), 60.0, 1440.0)
     }
 
     object NeveRest {// in oz in
         val `Classic_60` = MotorSpecs(
             105.0, //free speed
-            3.707, 60.0, 1680.0
+            3.707, MathFunctions.ozInToKgcm(60.0), 1680.0
         )
         val `Classic_40` = MotorSpecs(
             160.0, //free speed
-            2.47, 40.0, 1120.0
+            2.47, MathFunctions.ozInToKgcm(40.0), 1120.0
         )
         val `Orbital_3_7` = MotorSpecs(
             1780.0, //free speed
-            0.228, 3.7, 103.6
+            MathFunctions.ozInToKgcm(0.228), 3.7, 103.6
         )
         val `Orbital_20` = MotorSpecs(
             340.0, //free speed
-            1.2357, 19.2, 537.6
+            MathFunctions.ozInToKgcm(1.2357), 19.2, 537.6
         )
     }
 
@@ -105,12 +105,12 @@ sealed class Hardware {
     /**
      * REV Spur Motors with gear ratios of 40:1 and 20:1
      */
-    object REVSpurMotor { //nm
+    object REVSpurMotor {
         @JvmField
-        val `40_1` = MotorSpecs(150.0, 4.2, 40.0, 28.0 *(1 / 40))
+        val `40_1` = MotorSpecs(150.0, MathFunctions.nmToKgcm(4.2), 40.0, 28.0 *(1 / 40))
 
         @JvmField
-        val `20_1` = MotorSpecs(300.0, 2.1, 20.0, 28.0 * (1/20))
+        val `20_1` = MotorSpecs(300.0, MathFunctions.nmToKgcm(2.1), 20.0, 28.0 * (1/20))
     }
 
     /**
@@ -123,7 +123,7 @@ sealed class Hardware {
         `5_1`(5.0)
     }
 
-    class HDHex(vararg grs: HDHexGearRatios) {
+    class HDHex(vararg grs: HDHexGearRatios) {//nm
         val motorSpecs: MotorSpecs
 
         init {
@@ -138,7 +138,7 @@ sealed class Hardware {
             val baseStallTorque = 0.105
             motorSpecs = MathFunctions.applyGearRatio(MotorSpecs(
                 rpm = baseRpm,
-                stallTorque = baseStallTorque,
+                stallTorque =MathFunctions.nmToKgcm( baseStallTorque),
                 customGearRatio = 1.0,
                 encoderTicksPerRotation = 28.0
             ),gearRatio)
@@ -163,7 +163,7 @@ sealed class Hardware {
         val name: String,
         private var motorDirection: DcMotorSimple.Direction,
         private val specs: MotorSpecs,
-        externalGearRatio:Double?,
+        externalGearRatio:Double, // should be 1 if no gear ratio
         private var encoderName: String?,
         private var encoderDirection: DcMotorSimple.Direction? = null
     ) {
@@ -192,8 +192,8 @@ sealed class Hardware {
             } else if (specs.encoderTicksPerRotation < 0.0) {
                 throw IllegalArgumentException("Encoder Ticks per Rotation cannot be negative")
             }
-            if (externalGearRatio != null|| externalGearRatio != 1.0) {
-                correctedSpecs = MathFunctions.applyGearRatio(specs,externalGearRatio?:1.0)
+            if (externalGearRatio != 1.0) {
+                correctedSpecs = MathFunctions.applyGearRatio(specs,externalGearRatio)
             }
         }
 
