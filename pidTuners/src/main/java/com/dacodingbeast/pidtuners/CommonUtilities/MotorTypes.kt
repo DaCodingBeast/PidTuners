@@ -155,7 +155,7 @@ sealed class Hardware {
     data class MotorSpecs(
         var rpm: Double,
         var stallTorque: Double,
-        var customGearRatio: Double = 1.0,
+        var customGearRatio: Double,
         val encoderTicksPerRotation: Double
     )
 
@@ -163,7 +163,7 @@ sealed class Hardware {
         val name: String,
         private var motorDirection: DcMotorSimple.Direction,
         private val specs: MotorSpecs,
-        private var externalGearRatio:Double? = 1.0,
+        externalGearRatio:Double?,
         private var encoderName: String?,
         private var encoderDirection: DcMotorSimple.Direction? = null
     ) {
@@ -192,7 +192,7 @@ sealed class Hardware {
             } else if (specs.encoderTicksPerRotation < 0.0) {
                 throw IllegalArgumentException("Encoder Ticks per Rotation cannot be negative")
             }
-            if (externalGearRatio != null) {
+            if (externalGearRatio != null|| externalGearRatio != 1.0) {
                 correctedSpecs = MathFunctions.applyGearRatio(specs,externalGearRatio?:1.0)
             }
         }
@@ -220,22 +220,5 @@ sealed class Hardware {
             val angle = AngleRange.wrap(ticks * (2 * Math.PI / this.specs.encoderTicksPerRotation))
             return AngleRange.wrap(angle + angleOffset)
         }
-    }
-
-    fun applyGearRatio(motorSpecs: MotorSpecs) : MotorSpecs {
-        return MotorSpecs(
-            rpm = motorSpecs.rpm * motorSpecs.customGearRatio,
-            stallTorque = motorSpecs.stallTorque * (1 / motorSpecs.customGearRatio),
-            customGearRatio =motorSpecs.customGearRatio,
-            encoderTicksPerRotation = motorSpecs.encoderTicksPerRotation*(1 / motorSpecs.customGearRatio)
-        )
-    }
-    fun undoGearRatio(motorSpecs: MotorSpecs) : MotorSpecs {
-        return MotorSpecs(
-            rpm = motorSpecs.rpm / motorSpecs.customGearRatio,
-            stallTorque = motorSpecs.stallTorque / (1 / motorSpecs.customGearRatio),
-            customGearRatio =motorSpecs.customGearRatio,
-            encoderTicksPerRotation = motorSpecs.encoderTicksPerRotation/(1 / motorSpecs.customGearRatio)
-        )
     }
 }
