@@ -1,4 +1,4 @@
-package com.dacodingbeast.pidtuners.CommonUtilities
+package ArmSpecific
 
 import com.dacodingbeast.pidtuners.Mathematics.AngleRange
 import com.dacodingbeast.pidtuners.Mathematics.MathFunctions
