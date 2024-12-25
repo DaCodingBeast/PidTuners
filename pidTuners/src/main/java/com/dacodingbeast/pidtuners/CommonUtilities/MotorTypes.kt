@@ -1,5 +1,6 @@
-package org.firstinspires.ftc.teamcode.customHardware.pso
+package com.dacodingbeast.pidtuners.CommonUtilities
 
+import com.dacodingbeast.pidtuners.Mathematics.AngleRange
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
@@ -212,6 +213,12 @@ sealed class Hardware {
 
         fun getCurrentPose(): Double {
             return encoder?.getCurrentPosition()?.toDouble() ?: motor.currentPosition.toDouble()
+        }
+
+        fun findAngle(angleOffset:Double = 0.0): Double {
+            val ticks = getCurrentPose()
+            val angle = AngleRange.wrap(ticks * (2 * Math.PI / this.encoderTicksPerRotation))
+            return AngleRange.wrap(angle + angleOffset)
         }
     }
 }
