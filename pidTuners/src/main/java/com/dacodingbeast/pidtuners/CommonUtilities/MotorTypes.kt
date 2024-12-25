@@ -13,7 +13,7 @@ sealed class Hardware {
     /**
      * Yellow Jacket Motors ranging from 84 - 1150 RPM
      */
-    object YellowJacket {
+    object YellowJacket { //TODO: add the encoder ticks to yellow jacket motors
         @JvmField
         val RPM30 = MotorSpecs(
             30.0,
@@ -155,9 +155,9 @@ sealed class Hardware {
         var rpm: Double,
         var stallTorque: Double,
         var customGearRatio: Double = 1.0,
-        private val encoderTicksPerRotation: Double? = null
+        private val encoderTicksPerRotation: Double
     ) {
-        fun getEncoderTicksPerRotation(): Double? {
+        fun getEncoderTicksPerRotation(): Double {
             return encoderTicksPerRotation
         }
     }
@@ -166,13 +166,15 @@ sealed class Hardware {
         val name: String,
         private var motorDirection: DcMotorSimple.Direction,
         private val specs: MotorSpecs,
-        private var encoderTicksPerRotation: Double = specs.getEncoderTicksPerRotation() ?: 28.0,
-        private var encoderName: String = name,
-        private var encoderDirection: DcMotorSimple.Direction? = DcMotorSimple.Direction.FORWARD
+//        private var encoderTicksPerRotation: Double?=specs.getEncoderTicksPerRotation(),
+        private var encoderName: String?,
+        private var encoderDirection: DcMotorSimple.Direction? = null
     ) {
+
         lateinit var motor: DcMotorEx
         private var encoder: Encoder? = null
         lateinit var ahwMap: HardwareMap
+        private var encoderTicksPerRotation = specs.getEncoderTicksPerRotation()
 
         fun setup(ahwMap: HardwareMap) {
             this.ahwMap = ahwMap
@@ -182,7 +184,7 @@ sealed class Hardware {
             motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
             motor.power = 0.0
             encoder =
-                if (encoderName != name) Encoder(encoderName, ahwMap, encoderDirection) else null
+                encoderName?.let { Encoder(it, ahwMap, encoderDirection) }
             if (encoder != null) {
                 specs.customGearRatio = 1.0
             }
