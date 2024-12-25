@@ -4,12 +4,9 @@ import android.util.Pair;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.dacodingbeast.pidtuners.CommonUtilities.Hardware;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-
-import org.firstinspires.ftc.teamcode.App.Constant;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,25 +15,23 @@ import CommonUtilities.Models;
 
 @TeleOp(name = "GravityTest", group = "Linear OpMode")
 public class GravityTest extends LinearOpMode {
+    com.dacodingbeast.pidtuners.CommonUtilities.PivotConstants constants;
+    public GravityTest(com.dacodingbeast.pidtuners.CommonUtilities.PivotConstants constants) {
+        this.constants = constants;
+    }
     @Override
     public void runOpMode() {
         MultipleTelemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), this.telemetry);
 
-        Constants constants = new Constants();
-
-        DcMotorEx motor = hardwareMap.get(DcMotorEx.class, constants.motorName);
-
-        motor.setDirection(constants.motorDirection);
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor.setPower(0.0);
+        constants.getMotor().setup(hardwareMap);
+        Hardware.Motor motor = constants.getMotor();
 
         ArrayList<Pair<Double, Double>> dataPairs = new ArrayList<>();
 
         waitForStart();
         while (opModeIsActive()) {
 
-            double angle = constants.armAngle.findAngle((int) ((motor.getCurrentPosition())/ Math.pow(constants.motor.getCustomGearRatio(),2)));
+            double angle = constants.getArmAngle().findAngle((int) ((motor.getCurrentPose())/ Math.pow(constants.getMotor().getSpecs().getCustomGearRatio(),2)));
             //todo double angle = get voltage and convert to Radians if using an absolute encoder
 
             telemetry.addLine("Press Record to store data points, and display data points when done.");
@@ -48,8 +43,8 @@ public class GravityTest extends LinearOpMode {
                         angle,
                         Models.calculateTmotor(
                                 motor.getPower(),
-                                constants.motor,
-                                Constant.frictionRPM
+                                constants.getMotor(),
+                                constants.frictionRPM //TODO
                         )
                 ));
                 Constants.gravityRecord = false;

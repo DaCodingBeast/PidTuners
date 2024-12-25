@@ -1,11 +1,12 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
+import static java.lang.Math.abs;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.dacodingbeast.pidtuners.CommonUtilities.Hardware;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.ArrayList;
@@ -14,19 +15,18 @@ import CommonUtilities.Models;
 import CommonUtilities.RemoveOutliers;
 
 @TeleOp(name = "FrictionTest", group = "Linear OpMode")
-public class FrictionTest(com.dacodingbeast.pidtuners.CommonUtilities.Constants constants) extends LinearOpMode {
+public class FrictionTest extends LinearOpMode {
+    com.dacodingbeast.pidtuners.CommonUtilities.PivotConstants constants;
+    public FrictionTest(com.dacodingbeast.pidtuners.CommonUtilities.PivotConstants constants) {
+        this.constants = constants;
+    }
 
     @Override
     public void runOpMode() {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        Constants constants = new Constants();
-
-        DcMotorEx motor = hardwareMap.get(DcMotorEx.class, constants.motorName);
-        motor.setDirection(constants.motorDirection);
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor.setPower(0.0);
+        constants.getMotor().setup(hardwareMap);
+        Hardware.Motor motor = constants.getMotor();
 
         ElapsedTime timer = new ElapsedTime();
         ArrayList<Double> RPMS = new ArrayList<>();
@@ -49,31 +49,31 @@ public class FrictionTest(com.dacodingbeast.pidtuners.CommonUtilities.Constants 
             telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
 
             // Running motor at half speed
-            double angle = constants.armAngle.findAngle((int) (motor.getCurrentPosition()/ Math.pow(constants.motor.getCustomGearRatio(),2)));
+            double angle = constants.getArmAngle().findAngle((int) (motor.getCurrentPose()/ Math.pow(constants.getMotor().getSpecs().getCustomGearRatio(),2)));
 
             //todo double angle = get voltage and convert to Radians if using an absolute encoder
 
             // Run motor
-            if(angle> constants.testingAngle.getTarget()){
+            if(angle> constants.getTestingAngle().getTarget()){
                 motor.setPower(0);
                 run = false;
             }
 
             if(run) {
                 motor.setPower(0.5);
-                telemetry.addData("Running", constants.motor.getRpm()*.5);
+                telemetry.addData("Running", constants.getMotor().getSpecs().getRpm()*.5);
                 telemetry.addData("Angle", angle);
             };
 
             // Measure RPM
-            double ticksPerRevolution = constants.motor.getEncoderTicksPerRotation(); // Encoder resolution (ticks per revolution)
-            double rpm = ((motor.getCurrentPosition() - lastPosition) / ticksPerRevolution) * (60.0 / timer.seconds());
-            lastPosition = motor.getCurrentPosition();
+            double ticksPerRevolution = constants.getMotor().getSpecs().getEncoderTicksPerRotation(); // Encoder resolution (ticks per revolution)
+            double rpm = ((motor.getCurrentPose() - lastPosition) / ticksPerRevolution) * (60.0 / timer.seconds());
+            lastPosition = (int) motor.getCurrentPose();
 
             telemetry.addData("rpm",rpm);
 
-            double theoreticalRpmMeasured = constants.motor.getRpm() * .5;
-            if (run && (rpm > theoreticalRpmMeasured*.5 && rpm<theoreticalRpmMeasured *1.5) && angle > (constants.testingAngle.getTarget()*.5)) {
+            double theoreticalRpmMeasured = constants.getMotor().getSpecs().getRpm() * .5;
+            if (run && (rpm > theoreticalRpmMeasured*.5 && rpm<theoreticalRpmMeasured *1.5) && angle > (constants.getTestingAngle().getTarget()*.5)) {
                 RPMS.add(rpm);
             }
             telemetry.addData("t",theoreticalRpmMeasured);
@@ -112,7 +112,7 @@ public class FrictionTest(com.dacodingbeast.pidtuners.CommonUtilities.Constants 
 
                 double rotationalInertia = Models.calculateTmotor(
                         .5,
-                        constants.motor,
+                        constants.getMotor(),
                         actualRpm
                 ) / averageAA;
 

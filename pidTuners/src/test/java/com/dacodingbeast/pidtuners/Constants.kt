@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.customHardware.pso.Hardware
 import org.junit.Test
 import kotlin.random.Random
 
-class TestingConstants{
+class TestingPivotConstants{
 
     /**
      * Make Sure MOTOR RPMS are reasonable

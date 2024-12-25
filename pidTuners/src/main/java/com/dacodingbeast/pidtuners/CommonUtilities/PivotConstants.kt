@@ -6,7 +6,7 @@ import ArmSpecific.pso4Arms
 import CommonUtilities.PIDFcontroller
 import com.dacodingbeast.pidtuners.Mathematics.AngleRange
 
-data class Constants(
+data class PivotConstants(
     val motor:Hardware.Motor,
     val testingAngle: AngleRange,
     val obstacle : AngleRange,
@@ -15,6 +15,6 @@ data class Constants(
     val gravityRecord:Boolean,
     val gravityDisplayDataPoints:Boolean,
     val gravityMotorPower:Double,
-    var pidFcontroller: PIDFcontroller,
+    var PIDFController: PIDFcontroller,
     val armAngle: ArmAngle
 )

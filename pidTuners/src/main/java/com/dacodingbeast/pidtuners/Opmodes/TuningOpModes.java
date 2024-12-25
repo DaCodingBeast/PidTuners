@@ -1,7 +1,9 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
-import com.dacodingbeast.pidtuners.CommonUtilities.Constants;
+import com.dacodingbeast.pidtuners.ArmSpecific.SystemConstants;
+import com.dacodingbeast.pidtuners.CommonUtilities.PivotConstants;
 import com.dacodingbeast.pidtuners.CommonUtilities.Hardware;
+import com.dacodingbeast.pidtuners.Mathematics.AngleRange;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
@@ -9,9 +11,31 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 
+import ArmSpecific.ArmAngle;
+import ArmSpecific.pso4Arms;
+import CommonUtilities.PIDFParams;
+import CommonUtilities.PIDFcontroller;
+
 public final class TuningOpModes {
     private static Hardware.Motor motor = new Hardware.Motor("Shoulder", DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,null,null,null);
 
+    static AngleRange testingAngle = AngleRange.Angles.fromDegrees(90, 180);
+
+    static AngleRange obstacleAngle = AngleRange.Angles.fromDegrees(0, 90);
+
+    static SystemConstants systemConstants = new SystemConstants();//TODO Fix
+
+    static pso4Arms pso4Arms = new pso4Arms();//TODO
+
+    static Boolean gravityRecord = false;
+
+    static Boolean gravityDisplayPoints = false;
+
+    static double gravityMotorPower = 0.5;
+
+    static PIDFcontroller pidfController = new PIDFcontroller(new PIDFParams(0.0,0.0,0.0,0.0),motor,obstacleAngle,0.0);
+
+    static ArmAngle armAngle = new  ArmAngle(motor,pidfController.getAngleOffset());
 
     private boolean pivotDisabled = false;
     private TuningOpModes() {
@@ -27,9 +51,12 @@ public final class TuningOpModes {
 
     @OpModeRegistrar
     public static void register(OpModeManager manager) {
-        Constants constants = new Constants(motor,);
+        PivotConstants constants = new PivotConstants(motor,testingAngle,obstacleAngle,systemConstants,pso4Arms,gravityRecord,gravityDisplayPoints,gravityMotorPower, pidfController,armAngle);
                 manager.register(
-                        metaForClass(FrictionTest.class),new FrictionTest()
+                        metaForClass(FrictionTest.class),new FrictionTest(constants)
+                );
+                manager.register(
+                        metaForClass(GravityTest.class),new GravityTest(constants)
                 );
     }
 
