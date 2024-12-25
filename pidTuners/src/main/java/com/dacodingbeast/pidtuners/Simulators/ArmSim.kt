@@ -5,20 +5,9 @@ import com.dacodingbeast.pidtuners.Mathematics.AngleRange
 import CommonUtilities.Models
 import CommonUtilities.PIDFParams
 import CommonUtilities.PIDFcontroller
+import com.dacodingbeast.pidtuners.Simulators.ArmSimData
 import kotlin.math.abs
 
-/**
- * An Enum Class Containing the two Directions the Arm can run in
- */
-enum class Direction {
-    Clockwise, CounterClockWise
-}
-
-/**
- *The simulation that translates the effect of [PIDFcontroller] on the Arm Angle
- */
-
-class ArmSimData(val armAngle: AngleRange, val motorPower: Double, val error: Double)
 
 
 class ArmSim(
@@ -44,20 +33,18 @@ class ArmSim(
          * @see Models.gravityTorque
          */
 
-        //todo no way - possibly gravity test to serious? NOPE
         Ttotal = if(angleRange.start >0 ) Models.calculateTmotor(controlEffort) - Models.gravityTorque(abs(angleRange.start))
         else Models.calculateTmotor(controlEffort) + Models.gravityTorque(abs(angleRange.start))
 
 
         angularAcceleration = Ttotal / SystemConstants.Inertia
         angularVelocity += angularAcceleration * Dt
-        angleRange = AngleRange(
+        angleRange = AngleRange.fromRadians(
             AngleRange.wrap(angleRange.start + angularVelocity * Dt),
             angleRange.target
         )
 //        println("d: $direction  c: $controlEffort  v: $angularVelocity a: ${angleRange.start}")
         return ArmSimData(angleRange, controlEffort, calculate.error)
     }
-
 
 }

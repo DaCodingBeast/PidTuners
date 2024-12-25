@@ -3,6 +3,8 @@ package com.dacodingbeast.pidtuners.ArmSpecific
 import ArmSpecific.pso4Arms
 import com.dacodingbeast.pidtuners.CommonUtilities.Hardware
 
+import org.firstinspires.ftc.teamcode.customHardware.pso.Hardware
+
 /**
  * The Constants needed to Simulate the Arm Mechanism
  * @param RPM The Motors Actual RPM, accounting for the affect of friction

@@ -1,91 +1,117 @@
-package com.example.pso4pid
+package com.dacodingbeast.pidtuners.Mathematics
 
-import com.dacodingbeast.pidtuners.Mathematics.AngleRange
+import ArmSpecific.Direction
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertTrue
+import junit.framework.TestCase.assertFalse
 import org.junit.Test
 import kotlin.math.PI
-import kotlin.random.Random
 
 class AngleRangeTests {
 
     /**
-     *  Creating Angle Ranges outside of -PI to PI
-     *  Expected Outcome: Illegal Argument Exception
+     * Test the creation of an AngleRange using radians.
      */
     @Test
-    fun createAngleRange_outsideRange() {
-        for (i in 0..100) {
-            val errorOccurred =
-                try {
-                    AngleRange(
-                        Random.nextDouble(PI, Double.MAX_VALUE), Random.nextDouble(
-                            Double.MIN_VALUE, -PI
-                        )
-                    )
-                    false
-                } catch (e: IllegalArgumentException) {
-                    true
-                }
-            assert(errorOccurred)
-        }
+    fun testFromRadians() {
+        val range = AngleRange.fromRadians(PI / 2, -PI / 2)
+        assertEquals(PI / 2, range.start)
+        assertEquals(-PI / 2, range.target)
     }
 
     /**
-     *  Testing the Normalizing of Angles for angles outside of -PI to PI
-     *  Expected Outcome: Angles in between 0 to 2pi
+     * Test the creation of an AngleRange using degrees.
      */
     @Test
-    fun normalizeRadians_outsideRange() {
-        for (i in 0..100) {
-            val angle = Random.nextDouble(-PI, PI)
-            val normalizedAngle = AngleRange.normalizeAngle(angle)
-            val expectedOutcome = if(angle <0) angle + 2* PI else angle
-            assertEquals(normalizedAngle,expectedOutcome)
-        }
+    fun testFromDegrees() {
+        val range = AngleRange.fromDegrees(90.0, -90.0)
+        assertEquals(PI / 2, range.start)
+        assertEquals(-PI / 2, range.target)
     }
 
     /**
-     *  Testing the Normalizing of Angles in between -PI to PI
-     *  Positive angles in between 0 to 2pi
+     * Test the wrap function to keep angles within the -PI to PI range.
      */
     @Test
-    fun normalizeRadians() {
-        for (i in 0..100) {
-            val angle = Random.nextDouble(-PI, PI)
-            val normalizedAngle = AngleRange.normalizeAngle(angle)
-            val expectedOutcome = if(angle <0) angle + 2* PI else angle
-            assertEquals(normalizedAngle,expectedOutcome)
-        }
+    fun testWrap() {
+        assertEquals(PI / 2, AngleRange.wrap(PI / 2))
+        assertEquals(-PI / 2, AngleRange.wrap(-PI / 2))
+        assertEquals(-PI, AngleRange.wrap(-PI))
+        assertEquals(PI, AngleRange.wrap(PI))
+        assertEquals(0.0, AngleRange.wrap(2 * PI))
+        assertEquals(-PI / 2, AngleRange.wrap(-3 * PI / 2))
     }
 
     /**
-     *  Test to see if Two Angle Ranges in different Regions of A circle Interfere
-     *  Expected Outcome: No interference, test will pass
+     * Test normalizing angles into the 0 to 2PI range.
      */
-
     @Test
-    fun inRange_NonInterferenceCase() {
-
-        //must pass - testing ranges that will not intersect
-        for (i in 0..100) {
-            val (a, b) = List(2) { Random.nextDouble(0.0, PI) }
-            val (c, d) = List(2) { Random.nextDouble(-PI, 0.0) }
-            assert(!AngleRange.inRange(AngleRange(a, b), AngleRange(c, d))) { println("$a $b $c $d") }
-        }
-
+    fun testNormalizeAngle() {
+        assertEquals(PI / 2, AngleRange.normalizeAngle(PI / 2))
+        assertEquals(3 * PI / 2, AngleRange.normalizeAngle(-PI / 2))
+        assertEquals(2 * PI, AngleRange.normalizeAngle(0.0))
+        assertEquals(PI, AngleRange.normalizeAngle(-PI))
     }
 
     /**
-     *  Test to see if Two Angle Ranges with the same angles are considered interfering
-     *  Expected Outcome: Interference detected
+     * Test the findMotorDirection function with and without obstacles.
      */
-
     @Test
-    fun inRange_InterferenceCase() {
+    fun testFindMotorDirection() {
+        val goal = AngleRange.fromRadians(PI / 4, 3 * PI / 4)
 
-        assert(AngleRange.inRange(AngleRange(0.0, PI), AngleRange(0.0, 1.0)))
-        assert(AngleRange.inRange(AngleRange(-0.0, -1.0), AngleRange(0.0, PI)))
-        assert(AngleRange.inRange(AngleRange(-0.0, -3.0), AngleRange(-3.0, PI)))
+        // No obstacle, should choose short route
+        assertEquals(Direction.CounterClockWise, AngleRange.findMotorDirection(goal, null))
 
+        val obstacle = AngleRange.fromRadians(PI / 2, PI)
+        // With obstacle, should choose long route
+        assertEquals(Direction.Clockwise, AngleRange.findMotorDirection(goal, obstacle))
+    }
+
+    /**
+     * Test if the inRange function detects interference.
+     */
+    @Test
+    fun testInRange() {
+        val goal = AngleRange.fromRadians(0.0, PI / 2)
+        val obstacle1 = AngleRange.fromRadians(PI / 4, PI / 3)
+        val obstacle2 = AngleRange.fromRadians(PI, -PI / 2)
+
+        assertTrue(AngleRange.inRange(goal, obstacle1)) // Overlapping range
+        assertFalse(AngleRange.inRange(goal, obstacle2)) // Non-overlapping range
+    }
+
+    /**
+     * Test the findPIDFAngleError function for both directions.
+     */
+    @Test
+    fun testFindPIDFAngleError() {
+        val range = AngleRange.fromRadians(0.0, PI / 2)
+
+        // CounterClockWise direction
+        assertEquals(PI / 2, AngleRange.findPIDFAngleError(Direction.CounterClockWise, range))
+
+        // Clockwise direction
+        assertEquals(-3 * PI / 2, AngleRange.findPIDFAngleError(Direction.Clockwise, range))
+    }
+
+    /**
+     * Test the toDegrees function for angle conversion.
+     */
+    @Test
+    fun testToDegrees() {
+        val range = AngleRange.fromRadians(PI / 2, -PI / 2)
+        val degrees = range.toDegrees()
+        assertEquals(90.0, degrees.first)
+        assertEquals(-90.0, degrees.second)
+    }
+
+    /**
+     * Test the toString function for proper formatting.
+     */
+    @Test
+    fun testToString() {
+        val range = AngleRange.fromRadians(PI / 4, -PI / 4)
+        assertEquals("(0.7853981633974483, -0.7853981633974483)", range.toString())
     }
 }

@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.PSO.Arm
 
 import com.dacodingbeast.pidtuners.Mathematics.AngleRange
-import com.dacodingbeast.pidtuners.ArmSpecific.GravityModelConstants
-import ArmSpecific.Hardware
-import com.dacodingbeast.pidtuners.ArmSpecific.SystemConstants
+import ArmSpecific.GravityModelConstants
+import ArmSpecific.SystemConstants
 import org.firstinspires.ftc.teamcode.PSO.Arm.Constants.GravityOpMode.gravityConstants
+import org.firstinspires.ftc.teamcode.customHardware.pso.Hardware
 import org.junit.Test
 import kotlin.random.Random
 

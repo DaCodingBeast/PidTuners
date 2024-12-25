@@ -1,5 +1,6 @@
-package PSO_Algorithm
+package com.dacodingbeast.pidtuners.Algorithm
 
+import com.dacodingbeast.pidtuners.Mathematics.Units.Ranges
 import kotlin.random.Random
 
 
