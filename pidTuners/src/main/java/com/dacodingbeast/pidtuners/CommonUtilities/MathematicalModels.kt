@@ -1,7 +1,7 @@
 package CommonUtilities
 
+import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
 import ArmSpecific.pso4Arms.System.SystemConstants
-import com.dacodingbeast.pidtuners.CommonUtilities.Hardware
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.pow

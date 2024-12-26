@@ -1,13 +1,14 @@
-package com.dacodingbeast.pidtuners.CommonUtilities
+package com.dacodingbeast.pidtuners.Arm
 
 import ArmSpecific.ArmAngle
 import com.dacodingbeast.pidtuners.ArmSpecific.SystemConstants
 import ArmSpecific.pso4Arms
 import CommonUtilities.PIDFcontroller
+import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
 import com.dacodingbeast.pidtuners.Mathematics.AngleRange
 
 data class PivotConstants(
-    val motor:Hardware.Motor,
+    val motor: Hardware.Motor,
     val testingAngle: AngleRange,
     val obstacle : AngleRange,
     val systemConstants: SystemConstants,

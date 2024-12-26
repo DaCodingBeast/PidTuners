@@ -4,6 +4,7 @@ import android.util.Pair;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.dacodingbeast.pidtuners.Arm.PivotConstants;
 import com.dacodingbeast.pidtuners.CommonUtilities.Hardware;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -15,8 +16,8 @@ import CommonUtilities.Models;
 
 @TeleOp(name = "GravityTest", group = "Linear OpMode")
 public class GravityTest extends LinearOpMode {
-    com.dacodingbeast.pidtuners.CommonUtilities.PivotConstants constants;
-    public GravityTest(com.dacodingbeast.pidtuners.CommonUtilities.PivotConstants constants) {
+    PivotConstants constants;
+    public GravityTest(PivotConstants constants) {
         this.constants = constants;
     }
     @Override

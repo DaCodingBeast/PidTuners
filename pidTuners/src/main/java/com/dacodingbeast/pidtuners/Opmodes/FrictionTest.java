@@ -4,20 +4,20 @@ import static java.lang.Math.abs;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.dacodingbeast.pidtuners.CommonUtilities.Hardware;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+import com.dacodingbeast.pidtuners.Arm.PivotConstants;
 import java.util.ArrayList;
 
+import com.dacodingbeast.pidtuners.HardwareSetup.Hardware;
 import CommonUtilities.Models;
 import CommonUtilities.RemoveOutliers;
 
 @TeleOp(name = "FrictionTest", group = "Linear OpMode")
 public class FrictionTest extends LinearOpMode {
-    com.dacodingbeast.pidtuners.CommonUtilities.PivotConstants constants;
-    public FrictionTest(com.dacodingbeast.pidtuners.CommonUtilities.PivotConstants constants) {
+    PivotConstants constants;
+    public FrictionTest(PivotConstants constants) {
         this.constants = constants;
     }
 

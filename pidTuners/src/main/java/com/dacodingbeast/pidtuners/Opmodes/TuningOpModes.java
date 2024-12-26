@@ -1,7 +1,7 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
 import com.dacodingbeast.pidtuners.ArmSpecific.SystemConstants;
-import com.dacodingbeast.pidtuners.CommonUtilities.PivotConstants;
+import com.dacodingbeast.pidtuners.Arm.PivotConstants;
 import com.dacodingbeast.pidtuners.CommonUtilities.Hardware;
 import com.dacodingbeast.pidtuners.Mathematics.AngleRange;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
