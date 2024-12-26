@@ -9,26 +9,23 @@ package com.dacodingbeast.pidtuners.HardwareSetup
  */
 data class MotorSpecs(
     var rpm: Double,
-    var stallTorque: Double,
+    var stallTorque: StallTorque,
     var customGearRatio: Double = 1.0,
-    val encoderTicksPerRotation: Double
+    var encoderTicksPerRotation: Double,
 ) {
-    fun applyGearRatio(): MotorSpecs {
-        return MotorSpecs(
-            rpm = this.rpm * this.customGearRatio,
-            stallTorque = this.stallTorque * (1 / this.customGearRatio),
-            customGearRatio = this.customGearRatio,
-            encoderTicksPerRotation = this.encoderTicksPerRotation * (1 / this.customGearRatio)
-        )
+    init {
+        stallTorque.to(TorqueUnit.KILOGRAM_CENTIMETER)
     }
 
-    fun undoGearRatio(): MotorSpecs {
-        return MotorSpecs(
-            rpm = this.rpm / this.customGearRatio,
-            stallTorque = this.stallTorque / (1 / this.customGearRatio),
-            customGearRatio = this.customGearRatio,
-            encoderTicksPerRotation = this.encoderTicksPerRotation / (1 / this.customGearRatio)
-        )
+    fun applyGearRatio() {
+        rpm *= customGearRatio
+        stallTorque.value *= (1 / customGearRatio)
+        encoderTicksPerRotation *= (1 / customGearRatio)
     }
 
+    fun undoGearRatio() {
+        rpm /= customGearRatio
+        stallTorque.value /= (1 / customGearRatio)
+        encoderTicksPerRotation /= (1 / customGearRatio)
+    }
 }

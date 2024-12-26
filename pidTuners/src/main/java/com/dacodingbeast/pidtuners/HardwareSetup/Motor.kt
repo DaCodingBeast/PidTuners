@@ -22,7 +22,7 @@ class Motor(
         }
 
         specs.customGearRatio = externalGearRatio
-        specs = specs.applyGearRatio()
+        specs.applyGearRatio()
     }
 
 
@@ -70,5 +70,4 @@ class Motor(
         val angle = AngleRange.wrap(stationaryAngle + (ticks * (2 * Math.PI / this.specs.encoderTicksPerRotation)))
         return if (inDegrees) angle * 180 / Math.PI else angle
     }
-
 }

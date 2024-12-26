@@ -2,6 +2,7 @@ package CommonUtilities
 
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
 import ArmSpecific.pso4Arms.System.SystemConstants
+import com.dacodingbeast.pidtuners.HardwareSetup.Motor
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.pow
@@ -49,7 +50,7 @@ object Models {
      * @param power Motor Power
      */
     @JvmStatic
-    fun calculateTmotor(power: Double, motor: Hardware.Motor, actualRPM: Double): Double {
+    fun calculateTmotor(power: Double, motor: Motor, actualRPM: Double): Double {
         require(power in -1.0..1.0) //obviously works
         //friction influenced max power
         val friction = actualRPM / motor.getSpecs().rpm

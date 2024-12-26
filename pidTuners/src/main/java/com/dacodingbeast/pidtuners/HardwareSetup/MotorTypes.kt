@@ -17,86 +17,86 @@ sealed class Hardware {
     object YellowJacket { //TODO: these all in kg cm
         @JvmField
         val RPM30 = MotorSpecs(
-            30.0,250.0,
+            30.0, StallTorque(250.0,TorqueUnit.KILOGRAM_CENTIMETER),
             ((((((1 + (46 / 17))) * (1 + (46 / 17))) * (1 + (46 / 17))) * (1 + (46 / 17))) * 28).toDouble(),
             5281.0
         )
 
         @JvmField
         val RPM43 = MotorSpecs(
-            43.0,185.0,
+            43.0,StallTorque(185.0,TorqueUnit.KILOGRAM_CENTIMETER),
             ((((1 + (46 / 11))) * (1 + (46 / 11))) * (1 + (46 / 11)) * 28).toDouble(),
             3895.9
         )
 
         @JvmField
         val RPM60 = MotorSpecs(
-            60.0,133.2,
+            60.0,StallTorque(133.2,TorqueUnit.KILOGRAM_CENTIMETER),
             ((((1 + (46 / 17))) * (1 + (46 / 11))) * (1 + (46 / 11)) * 28).toDouble(),
             2786.2
         )
 
         @JvmField
         val RPM84 = MotorSpecs(
-            84.0,93.6,
+            84.0,StallTorque(93.6,TorqueUnit.KILOGRAM_CENTIMETER),
             ((((1 + (46 / 17))) * (1 + (46 / 17))) * (1 + (46 / 11)) * 28).toDouble(),
             1993.6
         )
 
         @JvmField
         val RPM117 = MotorSpecs(
-            117.0,68.4,
+            117.0,StallTorque(68.4,TorqueUnit.KILOGRAM_CENTIMETER),
             ((((1 + (46 / 17))) * (1 + (46 / 17))) * (1 + (46 / 17)) * 28).toDouble(),
             1425.1
         )
 
         @JvmField
         val RPM223 =
-            MotorSpecs(223.0, 38.0,((((1 + (46 / 11))) * (1 + (46 / 11))) * 28).toDouble(),751.8 )
+            MotorSpecs(223.0, StallTorque(38.0,TorqueUnit.KILOGRAM_CENTIMETER),((((1 + (46 / 11))) * (1 + (46 / 11))) * 28).toDouble(),751.8 )
 
         @JvmField
         val RPM312 =
-            MotorSpecs(312.0,24.3, ((((1 + (46 / 17))) * (1 + (46 / 11))) * 28).toDouble(), 537.7)
+            MotorSpecs(312.0,StallTorque(24.3,TorqueUnit.KILOGRAM_CENTIMETER), ((((1 + (46 / 17))) * (1 + (46 / 11))) * 28).toDouble(), 537.7)
 
         @JvmField
         val RPM435 =
-            MotorSpecs(435.0,18.7, ((((1 + (46 / 17))) * (1 + (46 / 17))) * 28).toDouble(),384.5 )
+            MotorSpecs(435.0,StallTorque(18.7,TorqueUnit.KILOGRAM_CENTIMETER), ((((1 + (46 / 17))) * (1 + (46 / 17))) * 28).toDouble(),384.5 )
 
         @JvmField
-        val RPM1150 = MotorSpecs(1150.0,7.9, ((1 + (46 / 11)) * 28).toDouble(),145.1 )
+        val RPM1150 = MotorSpecs(1150.0,StallTorque(7.9,TorqueUnit.KILOGRAM_CENTIMETER), ((1 + (46 / 11)) * 28).toDouble(),145.1 )
 
         @JvmField
-        val RPM1620 = MotorSpecs(1620.0,5.4, ((1 + (46 / 17)) * 28).toDouble(),103.8 )
+        val RPM1620 = MotorSpecs(1620.0,StallTorque(5.4,TorqueUnit.KILOGRAM_CENTIMETER), ((1 + (46 / 17)) * 28).toDouble(),103.8 )
 
         @JvmField
-        val RPM6000 = MotorSpecs(6000.0, 1.47,1.0, 28.0)
+        val RPM6000 = MotorSpecs(6000.0, StallTorque(1.47,TorqueUnit.KILOGRAM_CENTIMETER),1.0, 28.0)
     }
 
     object TorqueNado { //torque in nm
         @JvmField
-        val MAX = MotorSpecs(100.0, 4.94, 60.0, 1440.0)
+        val MAX = MotorSpecs(100.0,  StallTorque(4.94,TorqueUnit.NEWTON_METER), 60.0, 1440.0)
     }
 
     object NeveRest {// in oz in
     @JvmField
         val `Classic_60` = MotorSpecs(
             105.0, //free speed
-            3.707, 60.0, 1680.0
+            StallTorque(3.707,TorqueUnit.OUNCE_INCH), 60.0, 1680.0
         )
         @JvmField
         val `Classic_40` = MotorSpecs(
             160.0, //free speed
-            2.47, 40.0, 1120.0
+            StallTorque(2.47,TorqueUnit.OUNCE_INCH), 40.0, 1120.0
         )
         @JvmField
         val `Orbital_3_7` = MotorSpecs(
             1780.0, //free speed
-            0.228, 3.7, 103.6
+            StallTorque(0.228,TorqueUnit.OUNCE_INCH), 3.7, 103.6
         )
         @JvmField
         val `Orbital_20` = MotorSpecs(
             340.0, //free speed
-            1.2357, 19.2, 537.6
+            StallTorque(1.2357,TorqueUnit.OUNCE_INCH), 19.2, 537.6
         )
     }
 
@@ -104,7 +104,7 @@ sealed class Hardware {
         @JvmField
         val CoreHexMotor = MotorSpecs(
             125.0,//free speed
-            3.2, 72.0, 288.0
+            StallTorque(3.2,TorqueUnit.KILOGRAM_CENTIMETER), 72.0, 288.0
         )
     }
 
@@ -113,10 +113,10 @@ sealed class Hardware {
      */
     object REVSpurMotor { //nm
         @JvmField
-        val `40_1` = MotorSpecs(150.0, 4.2, 40.0, 28.0 *(1 / 40))
+        val `40_1` = MotorSpecs(150.0, StallTorque(4.2,TorqueUnit.NEWTON_METER), 40.0, 28.0 *(1 / 40))
 
         @JvmField
-        val `20_1` = MotorSpecs(300.0, 2.1, 20.0, 28.0 * (1/20))
+        val `20_1` = MotorSpecs(300.0,  StallTorque(2.1,TorqueUnit.NEWTON_METER), 20.0, 28.0 * (1/20))
     }
 
     /**
@@ -148,10 +148,12 @@ sealed class Hardware {
 
             motorSpecs = MotorSpecs(
                 rpm = baseRpm,
-                stallTorque = baseStallTorque,
+                stallTorque =  StallTorque(baseStallTorque,TorqueUnit.NEWTON_METER),
                 customGearRatio = gearRatio,
                 encoderTicksPerRotation = baseEncPerRev
-            ).applyGearRatio()
+            )
+
+            motorSpecs.applyGearRatio()
         }
     }
 
