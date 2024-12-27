@@ -27,8 +27,8 @@ public class FrictionTest extends LinearOpMode {
     public void runOpMode() {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        constants.getMotor().init(hardwareMap,stationaryAngle);
         Motor motor = constants.getMotor();
+        motor.init(hardwareMap,stationaryAngle);
 
         ElapsedTime timer = new ElapsedTime();
         ArrayList<Double> RPMS = new ArrayList<>();
@@ -52,9 +52,11 @@ public class FrictionTest extends LinearOpMode {
 
             // Running motor at half speed
             double angle = constants.getMotor().findAngle(false);
+            double angle = motor.findAngle(false);
 
             //todo double angle = get voltage and convert to Radians if using an absolute encoder
 
+            //todo fix so it is done when angle is correctly in range (sometimes movement direction is reverse)
             // Run motor
             if(angle> constants.getTestingAngle().getTarget()){
                 motor.setPower(0);
@@ -63,7 +65,7 @@ public class FrictionTest extends LinearOpMode {
 
             if(run) {
                 motor.setPower(0.5);
-                telemetry.addData("Running", constants.getMotor().getRPM()*.5);
+                telemetry.addData("Running", constants.getMotor().getSpecs().getRpm()*.5);
                 telemetry.addData("Angle", angle);
             };
 
@@ -114,7 +116,7 @@ public class FrictionTest extends LinearOpMode {
 
                 double rotationalInertia = Models.calculateTmotor(
                         .5,
-                        constants.getMotor(),
+                        motor,
                         actualRpm
                 ) / averageAA;
 

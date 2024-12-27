@@ -1,10 +1,10 @@
 package ArmSpecific
 
-import com.dacodingbeast.pidtuners.Mathematics.AngleRange
+import com.dacodingbeast.pidtuners.Arm.AngleRange
 import PSO_Algorithm.PSO_Simulator
 import android.util.Log
-import com.dacodingbeast.pidtuners.ArmSpecific.SystemConstants
-import com.dacodingbeast.pidtuners.Mathematics.Units.Ranges
+import com.dacodingbeast.pidtuners.Arm.SystemConstants
+import com.dacodingbeast.pidtuners.Ranges
 
 
 const val error = "ERROR_IN_CONSTANTS"

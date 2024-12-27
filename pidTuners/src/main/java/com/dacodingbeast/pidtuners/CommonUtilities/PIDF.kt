@@ -1,7 +1,7 @@
 package CommonUtilities
 
 import ArmSpecific.Dt
-import com.dacodingbeast.pidtuners.Mathematics.AngleRange
+import com.dacodingbeast.pidtuners.Arm.AngleRange
 import android.util.Log
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor
 import kotlin.math.abs

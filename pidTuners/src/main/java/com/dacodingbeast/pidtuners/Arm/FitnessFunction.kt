@@ -1,6 +1,6 @@
 package ArmSpecific
 
-import com.dacodingbeast.pidtuners.Mathematics.AngleRange
+import com.dacodingbeast.pidtuners.Arm.AngleRange
 import CommonUtilities.PIDFParams
 import com.dacodingbeast.pidtuners.Algorithm.Particle
 import com.dacodingbeast.pidtuners.Simulators.ArmSimData

@@ -1,14 +1,18 @@
 package ArmSpecific
 
 import ArmSpecific.pso4Arms.System.SystemConstants
-import com.dacodingbeast.pidtuners.Mathematics.AngleRange
+import com.dacodingbeast.pidtuners.Arm.AngleRange
 import CommonUtilities.Models
 import CommonUtilities.PIDFParams
 import CommonUtilities.PIDFcontroller
-import com.dacodingbeast.pidtuners.Simulators.ArmSimData
 import kotlin.math.abs
 
 
+/**
+ *The simulation that translates the effect of [PIDFcontroller] on the Arm Angle
+ */
+
+class ArmSimData(val armAngle: AngleRange, val motorPower: Double, val error: Double)
 
 class ArmSim(
     private var angleRange: AngleRange,
@@ -47,4 +51,12 @@ class ArmSim(
         return ArmSimData(angleRange, controlEffort, calculate.error)
     }
 
+}
+
+
+/**
+ * An Enum Class Containing the two Directions the Arm can run in
+ */
+enum class Direction {
+    Clockwise, CounterClockWise
 }

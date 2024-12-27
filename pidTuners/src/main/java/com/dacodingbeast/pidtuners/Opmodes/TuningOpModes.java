@@ -1,11 +1,11 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
-import com.dacodingbeast.pidtuners.ArmSpecific.GravityModelConstants;
-import com.dacodingbeast.pidtuners.ArmSpecific.SystemConstants;
+import com.dacodingbeast.pidtuners.Arm.GravityModelConstants;
+import com.dacodingbeast.pidtuners.Arm.SystemConstants;
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
 import com.dacodingbeast.pidtuners.HardwareSetup.PivotConstants;
-import com.dacodingbeast.pidtuners.Mathematics.AngleRange;
+import com.dacodingbeast.pidtuners.Arm.AngleRange;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;

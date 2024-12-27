@@ -2,8 +2,8 @@ package PSO_Algorithm
 
 import ArmSpecific.FitnessFunction
 import com.dacodingbeast.pidtuners.Algorithm.Particle
-import com.dacodingbeast.pidtuners.Mathematics.AngleRange
-import com.dacodingbeast.pidtuners.Mathematics.Units.Ranges
+import com.dacodingbeast.pidtuners.Arm.AngleRange
+import com.dacodingbeast.pidtuners.Ranges
 import com.dacodingbeast.pidtuners.Algorithm.Vector
 import kotlin.random.Random.Default.nextDouble
 

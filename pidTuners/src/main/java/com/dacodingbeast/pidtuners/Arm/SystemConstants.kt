@@ -1,4 +1,4 @@
-package com.dacodingbeast.pidtuners.ArmSpecific
+package com.dacodingbeast.pidtuners.Arm
 
 import ArmSpecific.pso4Arms
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor

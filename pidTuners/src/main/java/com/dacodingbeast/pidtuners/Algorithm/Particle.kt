@@ -1,6 +1,6 @@
 package com.dacodingbeast.pidtuners.Algorithm
 
-import com.dacodingbeast.pidtuners.Mathematics.Units.Ranges
+import com.dacodingbeast.pidtuners.Ranges
 import kotlin.random.Random
 
 
