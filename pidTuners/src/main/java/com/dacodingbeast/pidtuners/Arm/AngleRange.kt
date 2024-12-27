@@ -1,6 +1,6 @@
 package com.dacodingbeast.pidtuners.Arm
 
-import com.dacodingbeast.pidtuners.Simulators.Direction
+import ArmSpecific.Direction
 import kotlin.math.PI
 
 /**

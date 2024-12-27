@@ -34,8 +34,8 @@ data class MotorSpecs(
 
     fun applyGearRatio(gearRatio: Double) {
         motorGearRatio *= gearRatio
-        rpm *= gearRatio
-        stallTorque.value *= (1 / gearRatio)
-        encoderTicksPerRotation *= (1 / gearRatio)
+        rpm *= 1/gearRatio
+        stallTorque.value *= gearRatio
+        encoderTicksPerRotation *= gearRatio
     }
 }

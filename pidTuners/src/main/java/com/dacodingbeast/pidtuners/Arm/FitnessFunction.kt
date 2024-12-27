@@ -3,8 +3,6 @@ package ArmSpecific
 import com.dacodingbeast.pidtuners.Arm.AngleRange
 import CommonUtilities.PIDFParams
 import com.dacodingbeast.pidtuners.Algorithm.Particle
-import com.dacodingbeast.pidtuners.Simulators.ArmSimData
-import com.dacodingbeast.pidtuners.Simulators.Direction
 import kotlin.math.abs
 import kotlin.math.pow
 
