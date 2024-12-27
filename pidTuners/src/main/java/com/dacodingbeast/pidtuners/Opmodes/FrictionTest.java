@@ -4,12 +4,14 @@ import static java.lang.Math.abs;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
+import com.dacodingbeast.pidtuners.HardwareSetup.PivotConstants;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 import java.util.ArrayList;
 
-import com.dacodingbeast.pidtuners.HardwareSetup.Hardware;
 import CommonUtilities.Models;
 import CommonUtilities.RemoveOutliers;
 
@@ -24,8 +26,8 @@ public class FrictionTest extends LinearOpMode {
     public void runOpMode() {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        constants.getMotor().setup(hardwareMap);
-        Hardware.Motor motor = constants.getMotor();
+        constants.getMotor().init(hardwareMap,constants.stationaryAngle);
+        Motor motor = constants.getMotor();
 
         ElapsedTime timer = new ElapsedTime();
         ArrayList<Double> RPMS = new ArrayList<>();
