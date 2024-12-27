@@ -51,7 +51,7 @@ public class FrictionTest extends LinearOpMode {
             telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
 
             // Running motor at half speed
-            double angle = constants.getArmAngle().findAngle((int) (motor.getCurrentPose()/ Math.pow(constants.getMotor().getSpecs().getCustomGearRatio(),2)));
+            double angle = constants.getMotor().findAngle(false);
 
             //todo double angle = get voltage and convert to Radians if using an absolute encoder
 
@@ -63,18 +63,18 @@ public class FrictionTest extends LinearOpMode {
 
             if(run) {
                 motor.setPower(0.5);
-                telemetry.addData("Running", constants.getMotor().getSpecs().getRpm()*.5);
+                telemetry.addData("Running", constants.getMotor().getRPM()*.5);
                 telemetry.addData("Angle", angle);
             };
 
             // Measure RPM
-            double ticksPerRevolution = constants.getMotor().getSpecs().getEncoderTicksPerRotation(); // Encoder resolution (ticks per revolution)
+            double ticksPerRevolution = constants.getMotor().getTicksPerRotation(); // Encoder resolution (ticks per revolution)
             double rpm = ((motor.getCurrentPose() - lastPosition) / ticksPerRevolution) * (60.0 / timer.seconds());
             lastPosition = (int) motor.getCurrentPose();
 
             telemetry.addData("rpm",rpm);
 
-            double theoreticalRpmMeasured = constants.getMotor().getSpecs().getRpm() * .5;
+            double theoreticalRpmMeasured = constants.getMotor().getRPM() * .5;
             if (run && (rpm > theoreticalRpmMeasured*.5 && rpm<theoreticalRpmMeasured *1.5) && angle > (constants.getTestingAngle().getTarget()*.5)) {
                 RPMS.add(rpm);
             }

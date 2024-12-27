@@ -11,9 +11,8 @@ data class PivotConstants(
     val obstacle : AngleRange,
     val systemConstants: SystemConstants,
     val sim :pso4Arms,
-    val gravityRecord:Boolean,
+    var gravityRecord:Boolean,
     val gravityDisplayDataPoints:Boolean,
     val gravityMotorPower:Double,
     var PIDFController: PIDFcontroller,
-    val armAngle: ArmAngle
 )
