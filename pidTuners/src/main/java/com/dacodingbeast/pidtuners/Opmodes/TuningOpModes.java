@@ -1,8 +1,8 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
 import com.dacodingbeast.pidtuners.ArmSpecific.SystemConstants;
-import com.dacodingbeast.pidtuners.Arm.PivotConstants;
-import com.dacodingbeast.pidtuners.CommonUtilities.Hardware;
+import com.dacodingbeast.pidtuners.HardwareSetup.Hardware;
+import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
 import com.dacodingbeast.pidtuners.Mathematics.AngleRange;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
@@ -11,13 +11,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 
-import ArmSpecific.ArmAngle;
 import ArmSpecific.pso4Arms;
 import CommonUtilities.PIDFParams;
 import CommonUtilities.PIDFcontroller;
 
 public final class TuningOpModes {
-    private static Hardware.Motor motor = new Hardware.Motor("Shoulder", DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,null,null,null);
+    private static Motor motor = new Motor("Shoulder", DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,1.0,null);
 
     static AngleRange testingAngle = AngleRange.Angles.fromDegrees(90, 180);
 

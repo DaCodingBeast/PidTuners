@@ -4,7 +4,7 @@ import ArmSpecific.FitnessFunction
 import ArmSpecific.pso4Arms
 import com.dacodingbeast.pidtuners.Mathematics.AngleRange
 import com.dacodingbeast.pidtuners.Algorithm.Particle
-import PSO_Algorithm.Ranges
+import com.dacodingbeast.pidtuners.Mathematics.Units.Ranges
 import org.firstinspires.ftc.teamcode.PSO.Arm.Constants
 import org.junit.Test
 import kotlin.math.PI

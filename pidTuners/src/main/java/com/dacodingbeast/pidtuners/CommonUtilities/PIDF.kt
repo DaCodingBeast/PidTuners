@@ -1,10 +1,9 @@
 package CommonUtilities
 
-import ArmSpecific.ArmAngle
 import ArmSpecific.Dt
 import com.dacodingbeast.pidtuners.Mathematics.AngleRange
 import android.util.Log
-import com.dacodingbeast.pidtuners.CommonUtilities.Hardware
+import com.dacodingbeast.pidtuners.HardwareSetup.Motor
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -27,7 +26,7 @@ data class PIDFParams(val kp: Double, val ki: Double, val kd: Double, val kf: Do
 
 class PIDFcontroller(
     private var params: PIDFParams,
-    private val motor: Hardware.Motor? = null,
+    private val motor: Motor? = null,
     private val obstacleRange: AngleRange? = null, val angleOffset: Double? = null
 ) {
 

@@ -4,6 +4,7 @@ import ArmSpecific.Direction
 import com.dacodingbeast.pidtuners.Mathematics.AngleRange
 import CommonUtilities.PIDFParams
 import CommonUtilities.PIDFcontroller
+import com.dacodingbeast.pidtuners.Simulators.Direction
 import org.junit.Test
 import kotlin.math.PI
 import kotlin.random.Random

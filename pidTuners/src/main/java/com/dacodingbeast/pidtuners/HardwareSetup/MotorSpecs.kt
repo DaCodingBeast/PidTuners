@@ -15,6 +15,21 @@ data class MotorSpecs(
 ) {
     init {
         stallTorque.to(TorqueUnit.KILOGRAM_CENTIMETER)
+        if (customGearRatio == 0.0) {
+            throw IllegalArgumentException("Gear Ratio cannot be 0")
+        } else if (customGearRatio < 0.0) {
+            throw IllegalArgumentException("Gear Ratio cannot be negative")
+        }
+        if (encoderTicksPerRotation == 0.0) {
+            throw IllegalArgumentException("Encoder Ticks per Rotation cannot be 0")
+        } else if (encoderTicksPerRotation < 0.0) {
+            throw IllegalArgumentException("Encoder Ticks per Rotation cannot be negative")
+        }
+        if (rpm == 0.0) {
+            throw IllegalArgumentException("RPM cannot be 0")
+        } else if (rpm < 0.0) {
+            throw IllegalArgumentException("RPM cannot be negative")
+        }
     }
 
     fun applyGearRatio() {

@@ -8,7 +8,7 @@ import org.junit.Test
 class MotorSpecs {
 
     @Test
-    fun `create_Motor_Spec_bjects`(){
+    fun create_Motor_Spec_bjects(){
 
         Hardware.REVSpurMotor.`20_1`
         Hardware.REVSpurMotor.`40_1`

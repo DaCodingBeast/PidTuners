@@ -3,6 +3,7 @@ package ArmSpecific
 import com.dacodingbeast.pidtuners.Mathematics.AngleRange
 import PSO_Algorithm.PSO_Simulator
 import android.util.Log
+import com.dacodingbeast.pidtuners.ArmSpecific.SystemConstants
 import com.dacodingbeast.pidtuners.Mathematics.Units.Ranges
 
 
@@ -30,7 +31,7 @@ class pso4Arms(
     val OneTest = angleRanges.size == 1
 
     init {
-        System.SystemConstants = systemConstants
+        SystemConstants = systemConstants
         if (obstacle != null) {
             angleRanges.forEach { angle ->
                 //inverse because we are checking if the angle is in the obstacle range

@@ -1,6 +1,5 @@
 package CommonUtilities
 
-import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
 import ArmSpecific.pso4Arms.System.SystemConstants
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor
 import kotlin.math.PI
@@ -18,9 +17,9 @@ object Models {
     fun calculateTmotor(power: Double): Double {
 //        require(power in -1.0..1.0) Obviously works
 
-        val maxTorque = SystemConstants.motor.stallTorque
-        val actualRPM = SystemConstants.RPM
-        val theoreticalRPM = SystemConstants.motor.rpm
+        val maxTorque = SystemConstants.motor
+        val actualRPM =SystemConstants.RPM
+        val theoreticalRPM = SystemConstants.motor.getSpecs().rpm
         //friction influenced max power
         val friction = actualRPM / theoreticalRPM
 

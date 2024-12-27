@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 
-class Encoder(val name: String, private val encoderDirection: DcMotorSimple.Direction?) {
+class Encoder(val name: String, private val encoderDirection: DcMotorSimple.Direction? = DcMotorSimple.Direction.FORWARD) {
     lateinit var motor: DcMotorEx
 
     fun init(awHmap : HardwareMap){

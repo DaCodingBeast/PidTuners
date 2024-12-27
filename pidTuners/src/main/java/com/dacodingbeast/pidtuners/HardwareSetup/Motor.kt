@@ -15,10 +15,10 @@ class Motor(
 ) {
 
     init {
-        if (specs.encoderTicksPerRotation == 0.0) {
-            throw IllegalArgumentException("Encoder Ticks per Rotation cannot be 0")
-        } else if (specs.encoderTicksPerRotation < 0.0) {
-            throw IllegalArgumentException("Encoder Ticks per Rotation cannot be negative")
+        if (externalGearRatio < 0) {
+            throw IllegalArgumentException("Gear ratio must be positive")
+        }else if (externalGearRatio == 0.0){
+            throw IllegalArgumentException("Gear ratio cannot be zero use 1 if not geared")
         }
 
         specs.customGearRatio = externalGearRatio
