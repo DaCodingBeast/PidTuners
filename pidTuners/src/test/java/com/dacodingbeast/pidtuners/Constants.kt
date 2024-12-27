@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.PSO.Arm
 
+import com.dacodingbeast.pidtuners.Arm.AngleRange.Angles.fromDegrees
 import com.dacodingbeast.pidtuners.Arm.GravityModelConstants
-import com.dacodingbeast.pidtuners.Arm.AngleRange
 import com.dacodingbeast.pidtuners.Arm.SystemConstants
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
+import com.dacodingbeast.pidtuners.HardwareSetup.Motor
+import com.qualcomm.robotcore.hardware.DcMotorSimple
 import org.firstinspires.ftc.teamcode.PSO.Arm.Constants.GravityOpMode.gravityConstants
 import org.junit.Test
 import kotlin.random.Random
@@ -18,11 +20,10 @@ class TestingPivotConstants{
     @Test
     fun checkIncorrectRPMS(){
         val errorOccured = try{
-            SystemConstants(
-                Random.nextDouble(),
-                Hardware.YellowJacket.RPM223,
+            SystemConstants(Motor("motor",DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM84, 1.0, null),
                 gravityConstants,
-                Constants.RotationalInertiaOpmode.Inertia
+                Constants.RotationalInertiaOpmode.Inertia,
+                Random.nextDouble(),
             )
             false
         }catch (e: IllegalArgumentException){
@@ -37,12 +38,12 @@ object Constants {
 
     object hardware {
         //TODO: Change RPM, Direction, and Name
-        val motor = Hardware.YellowJacket.RPM84
+        val motor = Motor("motor",DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM84, 1.0, null)
     }
 
     //todo List Angles Your arm cannot reach due to physical barriers - (IN RADIANS)
     object Obstacles{
-        val obstacles = arrayListOf(AngleRange(0.0,1.0))
+        val obstacles = fromDegrees(0.0, 90.0)
     }
 
     //todo change after running Friction OpMode
@@ -65,8 +66,9 @@ object Constants {
     }
 
     val constant = SystemConstants(
+        hardware.motor,
+        gravityConstants,
         FrictionOpMode.RPM,
-        hardware.motor,gravityConstants,
         RotationalInertiaOpmode.Inertia
     )
 
