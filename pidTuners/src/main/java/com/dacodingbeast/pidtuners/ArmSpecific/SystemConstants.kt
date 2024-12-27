@@ -16,10 +16,11 @@ data class SystemConstants(
     val motor: Motor,
     val gravityConstants: GravityModelConstants,
     val Inertia: Double,
-    val RPM: Double = motor.getSpecs().rpm,
 ) {
+    private val rpm:Double
     init {
         pso4Arms.SystemConstants = this
+        rpm = motor.getSpecs().rpm
     }
 }
 
