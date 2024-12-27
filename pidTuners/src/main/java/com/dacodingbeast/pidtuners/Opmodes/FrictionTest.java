@@ -1,5 +1,6 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
+import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.stationaryAngle;
 import static java.lang.Math.abs;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -26,7 +27,7 @@ public class FrictionTest extends LinearOpMode {
     public void runOpMode() {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        constants.getMotor().init(hardwareMap,constants.stationaryAngle);
+        constants.getMotor().init(hardwareMap,stationaryAngle);
         Motor motor = constants.getMotor();
 
         ElapsedTime timer = new ElapsedTime();

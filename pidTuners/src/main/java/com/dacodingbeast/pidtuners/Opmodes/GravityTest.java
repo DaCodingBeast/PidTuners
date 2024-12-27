@@ -1,5 +1,7 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
+import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.stationaryAngle;
+
 import android.util.Pair;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -24,7 +26,7 @@ public class GravityTest extends LinearOpMode {
     public void runOpMode() {
         MultipleTelemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), this.telemetry);
 
-        constants.getMotor().init(hardwareMap,constants.stationaryAngle);
+        constants.getMotor().init(hardwareMap,stationaryAngle);
         Motor motor = constants.getMotor();
 
         ArrayList<Pair<Double, Double>> dataPairs = new ArrayList<>();

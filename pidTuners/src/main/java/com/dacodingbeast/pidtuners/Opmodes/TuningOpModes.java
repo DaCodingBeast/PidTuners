@@ -3,6 +3,7 @@ package com.dacodingbeast.pidtuners.Opmodes;
 import com.dacodingbeast.pidtuners.ArmSpecific.SystemConstants;
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
+import com.dacodingbeast.pidtuners.HardwareSetup.PivotConstants;
 import com.dacodingbeast.pidtuners.Mathematics.AngleRange;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
@@ -21,6 +22,8 @@ public final class TuningOpModes {
     static AngleRange testingAngle = AngleRange.Angles.fromDegrees(90, 180);
 
     static AngleRange obstacleAngle = AngleRange.Angles.fromDegrees(0, 90);
+
+    static double stationaryAngle = Math.toRadians(0.0);
 
     static SystemConstants systemConstants = new SystemConstants();//TODO Fix
 
