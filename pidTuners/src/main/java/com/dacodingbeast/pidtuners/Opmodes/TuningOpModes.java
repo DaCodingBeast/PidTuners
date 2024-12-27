@@ -1,5 +1,6 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
+import com.dacodingbeast.pidtuners.ArmSpecific.GravityModelConstants;
 import com.dacodingbeast.pidtuners.ArmSpecific.SystemConstants;
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
@@ -25,9 +26,9 @@ public final class TuningOpModes {
 
     static double stationaryAngle = Math.toRadians(0.0);
 
-    static SystemConstants systemConstants = new SystemConstants();//TODO Fix
+    static SystemConstants systemConstants = new SystemConstants(motor, new  GravityModelConstants(),0.0);//TODO Fix
 
-    static pso4Arms pso4Arms = new pso4Arms();//TODO
+    static pso4Arms pso4Arms = new pso4Arms(systemConstants,testingAngle,);//TODO
 
     static Boolean gravityRecord = false;
 
@@ -39,7 +40,7 @@ public final class TuningOpModes {
 
     static ArmAngle armAngle = new  ArmAngle(motor,pidfController.getAngleOffset());
 
-    private boolean pivotDisabled = false;
+    private static boolean pivotDisabled = false;
     private TuningOpModes() {
     }
 
@@ -53,13 +54,15 @@ public final class TuningOpModes {
 
     @OpModeRegistrar
     public static void register(OpModeManager manager) {
-        PivotConstants constants = new PivotConstants(motor,testingAngle,obstacleAngle,systemConstants,pso4Arms,gravityRecord,gravityDisplayPoints,gravityMotorPower, pidfController,armAngle);
-                manager.register(
-                        metaForClass(FrictionTest.class),new FrictionTest(constants)
-                );
-                manager.register(
-                        metaForClass(GravityTest.class),new GravityTest(constants)
-                );
+        if (!pivotDisabled) {
+            PivotConstants constants = new PivotConstants(motor, testingAngle, obstacleAngle, systemConstants, pso4Arms, gravityRecord, gravityDisplayPoints, gravityMotorPower, pidfController, armAngle);
+            manager.register(
+                    metaForClass(FrictionTest.class), new FrictionTest(constants)
+            );
+            manager.register(
+                    metaForClass(GravityTest.class), new GravityTest(constants)
+            );
+        }
     }
 
 }

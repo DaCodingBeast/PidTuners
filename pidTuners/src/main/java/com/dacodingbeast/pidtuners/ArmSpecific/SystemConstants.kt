@@ -13,10 +13,10 @@ import com.dacodingbeast.pidtuners.HardwareSetup.Motor
  * @see Hardware.Motor
  */
 data class SystemConstants(
-    val RPM: Double,
     val motor: Motor,
     val gravityConstants: GravityModelConstants,
-    val Inertia: Double
+    val Inertia: Double,
+    val RPM: Double = motor.getSpecs().rpm,
 ) {
     init {
         pso4Arms.SystemConstants = this
