@@ -51,7 +51,6 @@ public class FrictionTest extends LinearOpMode {
             telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
 
             // Running motor at half speed
-            double angle = constants.getMotor().findAngle(false);
             double angle = motor.findAngle(false);
 
             //todo double angle = get voltage and convert to Radians if using an absolute encoder
@@ -65,7 +64,7 @@ public class FrictionTest extends LinearOpMode {
 
             if(run) {
                 motor.setPower(0.5);
-                telemetry.addData("Running", constants.getMotor().getSpecs().getRpm()*.5);
+                telemetry.addData("Running", constants.getMotor().getRPM()*.5);
                 telemetry.addData("Angle", angle);
             };
 
