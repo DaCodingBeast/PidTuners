@@ -1,11 +1,5 @@
 package com.dacodingbeast.pidtuners.HardwareSetup
 
-import com.dacodingbeast.pidtuners.Mathematics.AngleRange
-import com.qualcomm.robotcore.hardware.DcMotor
-import com.qualcomm.robotcore.hardware.DcMotorEx
-import com.qualcomm.robotcore.hardware.DcMotorSimple
-import com.qualcomm.robotcore.hardware.HardwareMap
-
 /**
  * A collection of Motor Brands and characteristics
  */

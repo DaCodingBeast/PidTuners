@@ -5,12 +5,12 @@ import static java.lang.Math.PI;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.dacodingbeast.pidtuners.CommonUtilities.Hardware;
-import com.dacodingbeast.pidtuners.Mathematics.AngleRange;
+import com.dacodingbeast.pidtuners.Arm.AngleRange;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import ArmSpecific.ArmAngle;
-import com.dacodingbeast.pidtuners.ArmSpecific.GravityModelConstants;
-import com.dacodingbeast.pidtuners.ArmSpecific.SystemConstants;
+import com.dacodingbeast.pidtuners.Arm.GravityModelConstants;
+import com.dacodingbeast.pidtuners.Arm.SystemConstants;
 import ArmSpecific.pso4Arms;
 import CommonUtilities.PIDFParams;
 import CommonUtilities.PIDFcontroller;

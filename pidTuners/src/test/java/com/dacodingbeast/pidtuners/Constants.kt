@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.PSO.Arm
 
-import com.dacodingbeast.pidtuners.ArmSpecific.GravityModelConstants
-import com.dacodingbeast.pidtuners.Mathematics.AngleRange
-import com.dacodingbeast.pidtuners.ArmSpecific.SystemConstants
+import com.dacodingbeast.pidtuners.Arm.GravityModelConstants
+import com.dacodingbeast.pidtuners.Arm.AngleRange
+import com.dacodingbeast.pidtuners.Arm.SystemConstants
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
 import org.firstinspires.ftc.teamcode.PSO.Arm.Constants.GravityOpMode.gravityConstants
 import org.junit.Test

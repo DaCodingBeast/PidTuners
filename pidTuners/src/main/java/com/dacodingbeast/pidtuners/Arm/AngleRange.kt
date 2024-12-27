@@ -1,6 +1,5 @@
-package com.dacodingbeast.pidtuners.Mathematics
+package com.dacodingbeast.pidtuners.Arm
 
-import android.util.Log
 import com.dacodingbeast.pidtuners.Simulators.Direction
 import kotlin.math.PI
 

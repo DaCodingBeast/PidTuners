@@ -27,8 +27,8 @@ public class FrictionTest extends LinearOpMode {
     public void runOpMode() {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        constants.getMotor().init(hardwareMap,stationaryAngle);
         Motor motor = constants.getMotor();
+        motor.init(hardwareMap,stationaryAngle);
 
         ElapsedTime timer = new ElapsedTime();
         ArrayList<Double> RPMS = new ArrayList<>();
@@ -51,10 +51,11 @@ public class FrictionTest extends LinearOpMode {
             telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
 
             // Running motor at half speed
-            double angle = constants.getArmAngle().findAngle((int) (motor.getCurrentPose()/ Math.pow(constants.getMotor().getSpecs().getCustomGearRatio(),2)));
+            double angle = motor.findAngle(false);
 
             //todo double angle = get voltage and convert to Radians if using an absolute encoder
 
+            //todo fix so it is done when angle is correctly in range (sometimes movement direction is reverse)
             // Run motor
             if(angle> constants.getTestingAngle().getTarget()){
                 motor.setPower(0);
@@ -114,7 +115,7 @@ public class FrictionTest extends LinearOpMode {
 
                 double rotationalInertia = Models.calculateTmotor(
                         .5,
-                        constants.getMotor(),
+                        motor,
                         actualRpm
                 ) / averageAA;
 

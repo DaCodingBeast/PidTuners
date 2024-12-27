@@ -1,14 +1,11 @@
 package com.dacodingbeast.pidtuners.Arm
 
-import ArmSpecific.ArmAngle
-import com.dacodingbeast.pidtuners.ArmSpecific.SystemConstants
 import ArmSpecific.pso4Arms
 import CommonUtilities.PIDFcontroller
-import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
-import com.dacodingbeast.pidtuners.Mathematics.AngleRange
+import com.dacodingbeast.pidtuners.HardwareSetup.Motor
 
 data class PivotConstants(
-    val motor: Hardware.Motor,
+    val motor: Motor,
     val testingAngle: AngleRange,
     val obstacle : AngleRange,
     val systemConstants: SystemConstants,
@@ -16,6 +13,5 @@ data class PivotConstants(
     val gravityRecord:Boolean,
     val gravityDisplayDataPoints:Boolean,
     val gravityMotorPower:Double,
-    var PIDFController: PIDFcontroller,
-    val armAngle: ArmAngle
+    var PIDFController: PIDFcontroller
 )

@@ -1,7 +1,6 @@
 package com.example.pso4pid
 
-import ArmSpecific.Direction
-import com.dacodingbeast.pidtuners.Mathematics.AngleRange
+import com.dacodingbeast.pidtuners.Arm.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.Direction
 import org.junit.Test
 import kotlin.math.PI
