@@ -12,7 +12,7 @@ import com.dacodingbeast.pidtuners.HardwareSetup.Motor
  * @see GravityModelConstants
  * @see Hardware.Motor
  */
-data class SystemConstants(
+data class PivotSystemConstants(
     val motor: Motor,
     val gravityConstants: GravityModelConstants,
     val Inertia: Double,

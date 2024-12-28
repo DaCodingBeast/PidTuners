@@ -1,7 +1,7 @@
 package com.example.pso4pid
 
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.GravityModelConstants
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.SystemConstants
+import com.dacodingbeast.pidtuners.TypeSpecific.Arm.PivotSystemConstants
 import ArmSpecific.pso4Arms
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import com.dacodingbeast.pidtuners.Algorithm.Particle
@@ -58,7 +58,7 @@ class PSOtests {
         val motor = Motor(117.0, 1425.05923061, 68.4, 2.0)
         val obstacle = AngleRange(-.5, Math.PI / 2 - .2) // = null;
 
-        val constant = SystemConstants(
+        val constant = PivotSystemConstants(
             frictionRPM,
             motor,
             GravityModelConstants(gravityA, gravityB, gravityK),

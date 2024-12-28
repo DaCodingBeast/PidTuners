@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.PSO.Arm
 
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange.Angles.fromDegrees
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.GravityModelConstants
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.SystemConstants
+import com.dacodingbeast.pidtuners.TypeSpecific.Arm.PivotSystemConstants
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
@@ -20,7 +20,7 @@ class TestingPivotConstants{
     @Test
     fun checkIncorrectRPMS(){
         val errorOccured = try{
-            SystemConstants(Motor("motor",DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM84, 1.0, null),
+            PivotSystemConstants(Motor("motor",DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM84, 1.0, null),
                 gravityConstants,
                 Constants.RotationalInertiaOpmode.Inertia,
                 Random.nextDouble(),
@@ -65,7 +65,7 @@ object Constants {
         var Inertia = 1.170751047881278
     }
 
-    val constant = SystemConstants(
+    val constant = PivotSystemConstants(
         hardware.motor,
         gravityConstants,
         FrictionOpMode.RPM,

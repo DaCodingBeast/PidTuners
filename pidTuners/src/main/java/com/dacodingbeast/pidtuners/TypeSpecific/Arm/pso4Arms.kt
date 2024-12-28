@@ -3,7 +3,7 @@ package ArmSpecific
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
 import android.util.Log
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.SystemConstants
+import com.dacodingbeast.pidtuners.TypeSpecific.Arm.PivotSystemConstants
 import com.dacodingbeast.pidtuners.Algorithm.Ranges
 
 
@@ -16,7 +16,7 @@ const val error = "ERROR_IN_CONSTANTS"
  * @param obstacle Provide any physical obstacles the system may face
  */
 class pso4Arms(
-    systemConstants: SystemConstants,
+    systemConstants: PivotSystemConstants,
     private val angleRanges: ArrayList<AngleRange>,
     private val time: Double,
     private val obstacle: AngleRange? = null, private val accuracy: Double = 3.5
@@ -25,7 +25,7 @@ class pso4Arms(
      * The Arm mechanism's characteristics
      */
     companion object System {
-        lateinit var SystemConstants: SystemConstants
+        lateinit var SystemConstants: PivotSystemConstants
     }
 
     val OneTest = angleRanges.size == 1

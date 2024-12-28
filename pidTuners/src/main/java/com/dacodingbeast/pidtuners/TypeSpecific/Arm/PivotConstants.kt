@@ -8,7 +8,7 @@ data class PivotConstants(
     val motor: Motor,
     val testingAngle: AngleRange,
     val obstacle : AngleRange,
-    val systemConstants: SystemConstants,
+    val systemConstants: PivotSystemConstants,
     val sim :pso4Arms,
     val gravityRecord:Boolean,
     val gravityDisplayDataPoints:Boolean,

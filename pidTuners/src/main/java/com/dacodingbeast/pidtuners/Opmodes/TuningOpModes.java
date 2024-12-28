@@ -1,7 +1,7 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.GravityModelConstants;
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.SystemConstants;
+import com.dacodingbeast.pidtuners.TypeSpecific.Arm.PivotSystemConstants;
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
 import com.dacodingbeast.pidtuners.HardwareSetup.PivotConstants;
@@ -28,9 +28,9 @@ public final class TuningOpModes {
 
     static double frictionRPM = 0.0;
 
-    static SystemConstants systemConstants = new SystemConstants(motor, new  GravityModelConstants(0.0,0.0,0.0),0.0,frictionRPM);
+    static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(motor, new  GravityModelConstants(0.0,0.0,0.0),0.0,frictionRPM);
 
-    static pso4Arms pso4Arms = new pso4Arms(systemConstants,testingAngle,30.0,obstacleAngle,4);//TODO
+    static pso4Arms pso4Arms = new pso4Arms(pivotSystemConstants,testingAngle,30.0,obstacleAngle,4);//TODO
 
     static Boolean gravityRecord = false;
 
@@ -55,7 +55,7 @@ public final class TuningOpModes {
     @OpModeRegistrar
     public static void register(OpModeManager manager) {
         if (!pivotDisabled) {
-            PivotConstants constants = new PivotConstants(motor, testingAngle, obstacleAngle, systemConstants, pso4Arms, gravityRecord, gravityDisplayPoints, gravityMotorPower, pidfController, armAngle);
+            PivotConstants constants = new PivotConstants(motor, testingAngle, obstacleAngle, pivotSystemConstants, pso4Arms, gravityRecord, gravityDisplayPoints, gravityMotorPower, pidfController, armAngle);
             manager.register(
                     metaForClass(FrictionTest.class), new FrictionTest(constants)
             );
