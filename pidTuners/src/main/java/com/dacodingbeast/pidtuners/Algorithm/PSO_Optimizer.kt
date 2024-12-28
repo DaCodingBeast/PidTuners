@@ -1,9 +1,7 @@
-package PSO_Algorithm
+package com.dacodingbeast.pidtuners.Algorithm
 
-import com.dacodingbeast.pidtuners.Algorithm.Particle
-import com.dacodingbeast.pidtuners.Algorithm.Ranges
-import com.dacodingbeast.pidtuners.Algorithm.Target
-import com.dacodingbeast.pidtuners.Algorithm.FitnessFunction
+import com.dacodingbeast.pidtuners.Simulators.SimulatorType
+import com.dacodingbeast.pidtuners.Simulators.Target
 
 
 /**
@@ -23,13 +21,13 @@ import com.dacodingbeast.pidtuners.Algorithm.FitnessFunction
 
 class PSO_Optimizer(
     private val parameterRanges: ArrayList<Ranges>,
-    private val simulationType: Enum,
+    private val simulationType: SimulatorType,
     time: Double,
-    targets: List<Target>,
+    targets: Target,
     obstacle: List<Target>
 ) {
     private val swarmSize = 1000000
-    private val particles = Array(swarmSize) { Particle(parameterRanges, FitnessFunction(time,targets,obstacle))}
+    private val particles = Array(swarmSize) { Particle(parameterRanges, FitnessFunction(time,targets,obstacle,simulationType))}
 
     //initialize
     private var gBestParticle = particles[0]

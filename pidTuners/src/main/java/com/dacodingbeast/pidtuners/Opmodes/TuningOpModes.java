@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 
 import ArmSpecific.pso4Arms;
-import CommonUtilities.PIDFParams;
+import CommonUtilities.PIDParams;
 import CommonUtilities.PIDFcontroller;
 
 public final class TuningOpModes {
@@ -38,7 +38,7 @@ public final class TuningOpModes {
 
     static double gravityMotorPower = 0.5;
 
-    static PIDFcontroller pidfController = new PIDFcontroller(new PIDFParams(0.0,0.0,0.0,0.0),motor,obstacleAngle,0.0);
+    static PIDFcontroller pidfController = new PIDFcontroller(new PIDParams(0.0,0.0,0.0,0.0),motor,obstacleAngle,0.0);
 
     private static boolean pivotDisabled = false;
     private TuningOpModes() {

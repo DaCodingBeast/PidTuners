@@ -14,7 +14,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.ArrayList;
 
 import CommonUtilities.Models;
-import CommonUtilities.RemoveOutliers;
 
 @TeleOp(name = "FrictionTest", group = "Linear OpMode")
 public class FrictionTest extends LinearOpMode {

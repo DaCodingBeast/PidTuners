@@ -8,7 +8,7 @@ import kotlin.random.Random
  * @param ranges The ranges that limit the PIDF Coefficients
  * @param multiplePids Boolean that creates 12 PIDF Coefficients for 3 Controllers vs 4 for 1
  */
-class Particle(private val ranges: List<Ranges>, fitnessFunction: FitnessFunction) {
+class Particle(private val ranges: List<Ranges>, val fitnessFunction: FitnessFunction) {
     /**
      * The initialized random position of the Particle.
      * Initialized values are in between [ranges]
@@ -29,7 +29,7 @@ class Particle(private val ranges: List<Ranges>, fitnessFunction: FitnessFunctio
     private lateinit var fitness : FitnessFunctionData
 
     fun updateFitness() {
-        fitness = FitnessFunction.findFitness(position) // ITAE
+        fitness = fitnessFunction.findFitness(this) // ITAE
         if (fitness.itae < bestResult) {
             pBestParam = position
         }
@@ -52,11 +52,9 @@ class Particle(private val ranges: List<Ranges>, fitnessFunction: FitnessFunctio
     }
 
     //to show algorithm in csv style (for a python script)
-    fun printArmSimStory(timeOfOptimization: Int){
+    fun printStory(timeOfOptimization: Int){
         (0 until fitness.history.size).forEach { c ->
-//                        println(" motor power: ${fitness.history[c].motorPower}")
-            println("[\"$timeOfOptimization\", ${Math.toDegrees(fitness.history[c].armAngle.start)}],")
-//                            println(" error: ${Math.toDegrees(fitness.second[c].third)}")
+            //todo format csv for python visual. It should include all of Simulator Data's components
         }
     }
 

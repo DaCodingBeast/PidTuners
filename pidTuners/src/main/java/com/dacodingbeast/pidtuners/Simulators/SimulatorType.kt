@@ -1,4 +1,4 @@
-package com.dacodingbeast.pidtuners.Algorithm
+package com.dacodingbeast.pidtuners.Simulators
 
 enum class SimulatorType {
     ArmSimulator, SlideSimulator

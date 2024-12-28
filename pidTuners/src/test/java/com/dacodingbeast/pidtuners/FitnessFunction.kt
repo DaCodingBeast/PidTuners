@@ -20,7 +20,7 @@ class FitnessFunction {
 
         val fitnessFunction = FitnessFunction(2.0, AngleRange(0.0,PI/2))
         pso4Arms.System.SystemConstants = Constants.constant
-        val result = fitnessFunction.computeParticle(particle)
+        val result = fitnessFunction.findFitness(particle)
         println(result.itae)
     }
 }

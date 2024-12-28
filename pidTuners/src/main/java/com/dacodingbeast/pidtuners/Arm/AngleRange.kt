@@ -1,7 +1,7 @@
 package com.dacodingbeast.pidtuners.Arm
 
 import ArmSpecific.Direction
-import com.dacodingbeast.pidtuners.Algorithm.Target
+import com.dacodingbeast.pidtuners.Simulators.Target
 import kotlin.math.PI
 
 /**

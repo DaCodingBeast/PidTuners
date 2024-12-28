@@ -3,6 +3,7 @@ package CommonUtilities
 import com.dacodingbeast.pidtuners.Algorithm.Dt
 import com.dacodingbeast.pidtuners.Arm.AngleRange
 import android.util.Log
+import com.dacodingbeast.pidtuners.Algorithm.Vector
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor
 import kotlin.math.abs
 import kotlin.math.max
@@ -16,16 +17,25 @@ import kotlin.math.sin
  * @param kd Derivative Term
  * @param kf FeedForward Term, used for fighting gravity forces based on angle
  */
-data class PIDFParams(val kp: Double, val ki: Double, val kd: Double, val kf: Double)
+class PIDParams (val kp: Double, val ki: Double, val kd: Double, val kf: Double = 0.0){
+    constructor(params: Vector): this(
+        params.particleParams[0],
+        params.particleParams[1],
+        params.particleParams[2],
+        params.particleParams.getOrNull(3)?: 0.0
+    )
+}
+
+
 
 /**
  * PIDF controller
  * @param params PIDF coefficients
- * @see PIDFParams
+ * @see PIDParams
  */
 
 class PIDFcontroller(
-    private var params: PIDFParams,
+    private var params: PIDParams,
     private val motor: Motor? = null,
     private val obstacleRange: AngleRange? = null, val angleOffset: Double? = null
 ) {
@@ -76,7 +86,7 @@ class PIDFcontroller(
     /**
      * This is for using the PIDF params in an opmode
      */
-    fun resetConstantsAndTarget(params: PIDFParams, target: AngleRange) {
+    fun resetConstantsAndTarget(params: PIDParams, target: AngleRange) {
         require(motor != null) { Log.d(ArmSpecific.error,"You did not instantiate the PIDF controller with the your motor type") }
         this.params = params
         this.target = target

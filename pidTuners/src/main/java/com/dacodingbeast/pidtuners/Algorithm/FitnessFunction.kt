@@ -1,10 +1,10 @@
 package com.dacodingbeast.pidtuners.Algorithm
 
 import ArmSpecific.ArmSim
-import ArmSpecific.ArmSimData
-import ArmSpecific.Direction
-import CommonUtilities.PIDFParams
 import com.dacodingbeast.pidtuners.Arm.AngleRange
+import com.dacodingbeast.pidtuners.Simulators.SimulatorData
+import com.dacodingbeast.pidtuners.Simulators.SimulatorType
+import com.dacodingbeast.pidtuners.Simulators.Target
 import kotlin.math.abs
 import kotlin.math.pow
 
@@ -13,7 +13,7 @@ import kotlin.math.pow
  */
 const val Dt = 0.01
 
-class FitnessFunctionData(val itae: Double,val history:ArrayList<ArmSimData>)
+class FitnessFunctionData(val itae: Double,val history:ArrayList<SimulatorData>)
 
 /**
  * The Fitness Function made specifically for Arm Mechanisms
@@ -23,39 +23,39 @@ class FitnessFunctionData(val itae: Double,val history:ArrayList<ArmSimData>)
  */
 class FitnessFunction(
     private val totalTime: Double,
-    private val targets: List<Target>,
+    private val target: Target,
     private val obstacle: List<Target>,
     private val simulatorType: SimulatorType
 ) {
 
-    val simulator = Simulator(totalTime,targets,obstacle)
+    private val simulator = when(simulatorType){
+        SimulatorType.ArmSimulator -> ArmSim(target as AngleRange,obstacle as List<AngleRange>)
+        SimulatorType.SlideSimulator -> TODO()
+    }
 
     /**
      * The Computation of the [param] to find the fitness score.
      * The lower the fitness score the better: This function minimizes the ITAE
      */
 
-    fun computeParticle(params: Particle): FitnessFunctionData {
+    fun findFitness(params: Particle): FitnessFunctionData {
         simulator.init(params)
 
         var itae = 0.0
-        val history = ArrayList<ArmSimData>()
+        val history = ArrayList<SimulatorData>()
 
         var time = Dt
         while (time <= totalTime) {
 
-            simulator.update()
+            val result = simulator.updateSimulator()
 
-            history.add(ArmSimData(simulator.mechanismPosition, simulator.motorPower, simulator.error))
+            history.add(result)
 
             itae += time.pow(3) * abs(simulator.error)
             time += Dt
         }
 
-        val error = simulator.error
-
-        if(error >= simulator.acceptableError)  itae += simulator.badAccuracy
-        if(simulator.mechanismVelcoity >= simulator.acceptableError) itae += simulator.badVelocity
+        itae+= simulator.punishSimulator()
 
         // Return ITAE as the fitness score (lower is better)
         return FitnessFunctionData(itae, history)

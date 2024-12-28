@@ -1,7 +1,7 @@
 package ArmSpecific
 
 import com.dacodingbeast.pidtuners.Arm.AngleRange
-import PSO_Algorithm.PSO_Optimizer
+import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
 import android.util.Log
 import com.dacodingbeast.pidtuners.Arm.SystemConstants
 import com.dacodingbeast.pidtuners.Algorithm.Ranges

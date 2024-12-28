@@ -1,7 +1,6 @@
-package CommonUtilities
+package com.dacodingbeast.pidtuners.Opmodes
 
 object RemoveOutliers {
-    @JvmStatic
     fun removeOutliers(data: ArrayList<Double>): ArrayList<Double> {
 
         if (data.isEmpty()) {
