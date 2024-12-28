@@ -1,42 +1,39 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
+import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.stationaryAngle;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
+import com.dacodingbeast.pidtuners.HardwareSetup.PivotConstants;
+import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.teamcode.App.Constant;
 
 import java.util.ArrayList;
 
-import CommonUtilities.AngleRange;
 @Config
-@TeleOp(name = "SampleOpMode", group = "Linear OpMode")
+@TeleOp(name = "PivotSampleOpMode", group = "Linear OpMode")
 public class SampleOpMode extends LinearOpMode {
-
+    PivotConstants constants;
     public static int x = 0;
+    public SampleOpMode(PivotConstants constants) {
+        this.constants = constants;
+    }
     @Override
     public void runOpMode() {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        Constants constants = new Constants();
+        Motor motor = constants.getMotor();
+        motor.init(hardwareMap,stationaryAngle);
 
-        // Code executed when initialized
-        DcMotorEx motor = hardwareMap.get(DcMotorEx.class, constants.motorName);
-        motor.setDirection(constants.motorDirection);
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor.setPower(0.0);
-
-        ArrayList<AngleRange> targets = Constant.angleRanges;
+        ArrayList<AngleRange> targets = constants.getTestingAngle();
         AngleRange target = targets.get(0);
         ElapsedTime timer = new ElapsedTime();
 
-        constants.pidfController.resetConstantsAndTarget(Constant.params.get(0), target);
+        constants.getPIDFController().resetConstantsAndTarget(constants.getPIDFController().getParams(), target);
         x=0;
         ElapsedTime timerTime = new ElapsedTime();
         while (opModeInInit()){
@@ -49,9 +46,9 @@ public class SampleOpMode extends LinearOpMode {
             double looptime = timer.seconds();
             timer.reset();
 
-            int encoder = (int) ((motor.getCurrentPosition())/ Math.pow(constants.motor.getCustomGearRatio(),2));
+            int encoder = (int) ((motor.getCurrentPose())/ Math.pow(constants.getMotor().getGearRatio(),2));
 
-            if (constants.pidfController.targetReached(encoder,8)){
+            if (constants.getPIDFController().targetReached(encoder,8)){
                 if(targets.size()> x+1 && timerTime.seconds() >= 1.0) {
                     x+=1;
                     target = targets.get(x);
@@ -61,12 +58,12 @@ public class SampleOpMode extends LinearOpMode {
 
             for (int i = 0; i < targets.size(); i++) {
                 if (target == targets.get(i)) {
-                    constants.pidfController.resetConstantsAndTarget(Constant.params.get(i), target);
+                    constants.getPIDFController().resetConstantsAndTarget(constants.getPIDFController().getParams(), target);
                     break;
                 }
             }
 
-            motor.setPower(constants.pidfController.calculateMotorPower(encoder, looptime));
+            motor.setPower(constants.getPIDFController().calculateMotorPower(encoder, looptime));
             telemetry.addData("X",x);
             telemetry.update();
         }

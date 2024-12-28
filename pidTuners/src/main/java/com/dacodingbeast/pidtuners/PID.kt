@@ -35,7 +35,7 @@ class PIDParams (val kp: Double, val ki: Double, val kd: Double, val kf: Double 
  */
 
 class PIDFcontroller(
-    private var params: PIDParams,
+    var params: PIDParams,
     private val motor: Motor? = null,
     private val obstacleRange: AngleRange? = null, val angleOffset: Double? = null
 ) {
