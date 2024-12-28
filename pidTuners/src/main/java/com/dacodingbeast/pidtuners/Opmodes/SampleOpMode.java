@@ -6,7 +6,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
-import com.dacodingbeast.pidtuners.HardwareSetup.PivotConstants;
+import com.dacodingbeast.pidtuners.CommonUtilities.PivotConstants;
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;

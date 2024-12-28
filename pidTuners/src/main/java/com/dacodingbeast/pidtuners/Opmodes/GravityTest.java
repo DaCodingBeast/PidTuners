@@ -7,7 +7,7 @@ import android.util.Pair;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
-import com.dacodingbeast.pidtuners.HardwareSetup.PivotConstants;
+import com.dacodingbeast.pidtuners.CommonUtilities.PivotConstants;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
