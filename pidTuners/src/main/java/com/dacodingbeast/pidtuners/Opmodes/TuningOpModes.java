@@ -13,6 +13,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import ArmSpecific.pso4Arms;
 import CommonUtilities.PIDParams;
 import CommonUtilities.PIDFcontroller;
@@ -30,7 +33,7 @@ public final class TuningOpModes {
 
     static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(motor, new  GravityModelConstants(0.0,0.0,0.0),0.0,frictionRPM);
 
-    static pso4Arms pso4Arms = new pso4Arms(pivotSystemConstants,testingAngle,30.0,obstacleAngle,4);//TODO
+    static pso4Arms pso4Arms = new pso4Arms(pivotSystemConstants,new ArrayList<AngleRange>(Arrays.asList(testingAngle)),30.0,obstacleAngle,3.5);
 
     static Boolean gravityRecord = false;
 
@@ -55,16 +58,16 @@ public final class TuningOpModes {
     @OpModeRegistrar
     public static void register(OpModeManager manager) {
         if (!pivotDisabled) {
-            PivotConstants constants = new PivotConstants(motor, testingAngle, obstacleAngle, pivotSystemConstants, pso4Arms, gravityRecord, gravityDisplayPoints, gravityMotorPower, pidfController, armAngle);
+            PivotConstants constants = new PivotConstants(motor, testingAngle, obstacleAngle, pivotSystemConstants, pso4Arms, gravityRecord, gravityDisplayPoints, gravityMotorPower, pidfController);
             manager.register(
                     metaForClass(FrictionTest.class), new FrictionTest(constants)
             );
             manager.register(
                     metaForClass(GravityTest.class), new GravityTest(constants)
             );
-            manager.register(
-                    metaForClass(SampleOpMode.class), new SampleOpMode(constants)
-            );
+//            manager.register(
+//                    metaForClass(SampleOpMode.class), new SampleOpMode(constants)
+//            );
         }
     }
 

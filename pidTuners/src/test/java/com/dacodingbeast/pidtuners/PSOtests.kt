@@ -6,9 +6,16 @@ import ArmSpecific.pso4Arms
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import com.dacodingbeast.pidtuners.Algorithm.Particle
 import android.util.Log
+import com.dacodingbeast.pidtuners.Algorithm.FitnessFunction
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor
 import com.dacodingbeast.pidtuners.Algorithm.Ranges
+import com.dacodingbeast.pidtuners.HardwareSetup.MotorSpecs
+import com.dacodingbeast.pidtuners.HardwareSetup.StallTorque
+import com.dacodingbeast.pidtuners.HardwareSetup.TorqueUnit
+import com.dacodingbeast.pidtuners.Simulators.SimulatorType
+import com.qualcomm.robotcore.hardware.DcMotorSimple
 import org.junit.Test
+import kotlin.math.PI
 import kotlin.random.Random
 
 class PSOtests {
@@ -21,7 +28,11 @@ class PSOtests {
     fun particleParamRanges() {
         for (i in 0..100) {
             val ranges = arrayListOf(Ranges(0.0, Random.nextDouble(0.0, Double.MAX_VALUE)))
-            val particle = Particle(ranges, false)
+            val particle = Particle(ranges, FitnessFunction(2.0, AngleRange.fromRadians(0.0, PI /2), AngleRange.fromRadians(
+                PI /6,
+                PI /4),
+                SimulatorType.ArmSimulator)
+            )
             particle.velocity.particleParams.forEach {
                 require(it == 0.0) {
                     Log.d(
@@ -52,17 +63,21 @@ class PSOtests {
         val gravityK = 7.13843
 
         val angleRanges: ArrayList<AngleRange> = arrayListOf(
-            AngleRange(Math.PI / 2, Math.PI), AngleRange(Math.PI - .1, Math.PI / 2)
+            AngleRange.fromRadians(Math.PI / 2, Math.PI), AngleRange.fromRadians(Math.PI - .1, Math.PI / 2)
         )
 
-        val motor = Motor(117.0, 1425.05923061, 68.4, 2.0)
-        val obstacle = AngleRange(-.5, Math.PI / 2 - .2) // = null;
+        val motor = Motor(
+            "motor", DcMotorSimple.Direction.FORWARD, MotorSpecs(300.0,
+                StallTorque(0.1, TorqueUnit.KILOGRAM_CENTIMETER), 1.0, 28.0
+            ), 2.0, null
+        )
+        val obstacle = AngleRange.fromRadians(-.5, Math.PI / 2 - .2) // = null;
 
         val constant = PivotSystemConstants(
-            frictionRPM,
             motor,
             GravityModelConstants(gravityA, gravityB, gravityK),
-            inertiaValue
+            inertiaValue,
+            frictionRPM,
         )
 
         val sim = pso4Arms(constant, angleRanges, 1.0, obstacle, 1.7)

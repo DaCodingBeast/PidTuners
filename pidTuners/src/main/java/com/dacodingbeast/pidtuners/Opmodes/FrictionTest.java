@@ -22,6 +22,7 @@ public class FrictionTest extends LinearOpMode {
         this.constants = constants;
     }
 
+    RemoveOutliers removeOutliers = new RemoveOutliers();
     @Override
     public void runOpMode() {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
@@ -84,7 +85,7 @@ public class FrictionTest extends LinearOpMode {
 
             // Make sure size is not returning something other than 0
             if (!RPMS.isEmpty()) {
-                ArrayList<Double> x = RemoveOutliers.removeOutliers(RPMS);
+                ArrayList<Double> x = removeOutliers.removeOutliers(RPMS);
                 double sum = 0;
                 for (double num : x) sum += num * 1/.5;
                 actualRpm = sum / x.size();
@@ -103,8 +104,8 @@ public class FrictionTest extends LinearOpMode {
             } else {
                 // Calculate if friction test is complete and find rotational Inertia
 
-                angularAccelerationData = RemoveOutliers.removeOutliers(angularAccelerationData);
-                motorPowers = RemoveOutliers.removeOutliers(motorPowers);
+                angularAccelerationData = removeOutliers.removeOutliers(angularAccelerationData);
+                motorPowers = removeOutliers.removeOutliers(motorPowers);
 
                 double sum = 0;
                 for (double num : angularAccelerationData) {

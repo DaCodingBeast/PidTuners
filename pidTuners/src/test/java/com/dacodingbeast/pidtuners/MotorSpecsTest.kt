@@ -1,5 +1,6 @@
 package com.dacodingbeast.pidtuners
 
+import com.dacodingbeast.pidtuners.HardwareSetup.Encoder
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor
 import com.dacodingbeast.pidtuners.HardwareSetup.MotorSpecs
@@ -7,6 +8,7 @@ import com.dacodingbeast.pidtuners.HardwareSetup.StallTorque
 import com.dacodingbeast.pidtuners.HardwareSetup.TorqueUnit
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import junit.framework.TestCase.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertThrows
 import org.junit.Test
 
@@ -134,6 +136,10 @@ val yellowJacket = Motor("motor", DcMotorSimple.Direction.FORWARD, Hardware.Yell
     }
     @Test
     fun testEncoder(){
-
+        val encoder = Encoder("encoder", DcMotorSimple.Direction.FORWARD)
+        val motor = Motor("motor", DcMotorSimple.Direction.FORWARD, MotorSpecs(200.0,
+            StallTorque(0.1,TorqueUnit.KILOGRAM_CENTIMETER),4.0,28.0), 1.0, encoder)
+        assertEquals(motor.getGearRatio() , 1.0)
+        assertEquals(motor.getRPM(), 200.0)
     }
 }

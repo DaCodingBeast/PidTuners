@@ -1,7 +1,7 @@
 package com.dacodingbeast.pidtuners.Opmodes
 
-object RemoveOutliers {
-    fun removeOutliers(data: ArrayList<Double>): ArrayList<Double> {
+public class RemoveOutliers {
+     fun removeOutliers(data: ArrayList<Double>): ArrayList<Double> {
 
         if (data.isEmpty()) {
             //todo log

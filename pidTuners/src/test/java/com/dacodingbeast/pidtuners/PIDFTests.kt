@@ -1,9 +1,10 @@
 package com.example.pso4pid
 
+import ArmSpecific.Direction
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import CommonUtilities.PIDParams
 import CommonUtilities.PIDFcontroller
-import com.dacodingbeast.pidtuners.Simulators.Direction
+
 import org.junit.Test
 import kotlin.math.PI
 import kotlin.random.Random
@@ -17,7 +18,7 @@ class PIDFTests {
     @Test
     fun clockWisePIDFError() {
         for (i in 0..100) {
-            val angle = AngleRange(Random.nextDouble(-PI, PI), Random.nextDouble(-PI,PI))
+            val angle = AngleRange.fromRadians(Random.nextDouble(-PI, PI), Random.nextDouble(-PI,PI))
             val actualError = AngleRange.findPIDFAngleError(Direction.Clockwise,angle)
 
             val wrappedAngle = AngleRange.wrap(angle.stop - angle.start)
@@ -36,7 +37,7 @@ class PIDFTests {
     @Test
     fun counterClockwisePIDFError() {
         for (i in 0..100) {
-            val angle = AngleRange(Random.nextDouble(-PI, PI), Random.nextDouble(-PI,PI))
+            val angle = AngleRange.fromRadians(Random.nextDouble(-PI, PI), Random.nextDouble(-PI,PI))
             val actualError = AngleRange.findPIDFAngleError(Direction.CounterClockWise,angle)
 
             val wrappedAngle = AngleRange.wrap(angle.stop - angle.start)
@@ -58,7 +59,7 @@ class PIDFTests {
             val randomNumbers = List(5) {Random.nextDouble(Double.MIN_VALUE, Double.MAX_VALUE)}
             val pidfController = PIDFcontroller(PIDParams(randomNumbers[1],randomNumbers[2],randomNumbers[3],randomNumbers[4]))
 
-            val angle = AngleRange(Random.nextDouble(-PI,PI),Random.nextDouble(-PI,PI))
+            val angle = AngleRange.fromRadians(Random.nextDouble(-PI,PI),Random.nextDouble(-PI,PI))
             val motorPower = pidfController.calculate(angle, null).motorPower
 
             assert(motorPower in -1.0 .. 1.0)
