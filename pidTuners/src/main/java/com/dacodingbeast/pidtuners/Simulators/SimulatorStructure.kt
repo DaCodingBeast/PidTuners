@@ -3,6 +3,8 @@ package com.dacodingbeast.pidtuners.Simulators
 import CommonUtilities.PIDParams
 import CommonUtilities.PIDFcontroller
 import com.dacodingbeast.pidtuners.Algorithm.Particle
+import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
+import com.qualcomm.robotcore.hardware.DcMotorSimple
 
 abstract class SimulatorStructure(open val target: Target, open val obstacle: List<Target>)
 {
