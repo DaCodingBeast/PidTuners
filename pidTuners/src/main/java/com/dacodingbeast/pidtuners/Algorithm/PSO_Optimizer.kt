@@ -24,7 +24,7 @@ class PSO_Optimizer(
     private val simulationType: SimulatorType,
     time: Double,
     targets: Target,
-    obstacle: List<Target>
+    obstacle: Target
 ) {
     private val swarmSize = 1000000
     private val particles = Array(swarmSize) { Particle(parameterRanges, FitnessFunction(time,targets,obstacle,simulationType))}
@@ -55,6 +55,11 @@ class PSO_Optimizer(
         }
         return lastPower
     }
+
+    fun getBest(): Particle {
+        return gBestParticle
+    }
 }
+
 
 //todo only have prints be the global best at the end

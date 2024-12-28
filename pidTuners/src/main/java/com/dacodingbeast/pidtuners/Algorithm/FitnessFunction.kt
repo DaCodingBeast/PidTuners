@@ -24,7 +24,7 @@ class FitnessFunctionData(val itae: Double,val history:ArrayList<SimulatorData>)
 class FitnessFunction(
     private val totalTime: Double,
     private val target: Target,
-    private val obstacle: List<Target>,
+    private val obstacle: Target,
     private val simulatorType: SimulatorType
 ) {
 

@@ -5,6 +5,8 @@ import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
 import android.util.Log
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.PivotSystemConstants
 import com.dacodingbeast.pidtuners.Algorithm.Ranges
+import com.dacodingbeast.pidtuners.Simulators.SimulatorType
+import com.dacodingbeast.pidtuners.Simulators.Target
 
 
 const val error = "ERROR_IN_CONSTANTS"
@@ -53,19 +55,19 @@ class pso4Arms(
          * Find the PIDF Constants for one Angle Target
          */
         if (OneTest) {
-            val psoSimulator = PSO_Optimizer(
-                50000,
-                arrayListOf(
-                    Ranges(0.0, accuracy),
-                    Ranges(0.0, accuracy/3.5),
-                    Ranges(0.0, accuracy),
-                    Ranges(0.0, accuracy)
-                ),
+            val psoSimulator = PSO_Optimizer(arrayListOf(
+                Ranges(0.0, accuracy),
+                Ranges(0.0, accuracy/3.5),
+                Ranges(0.0, accuracy),
+                Ranges(0.0, accuracy)
+            ),
+                SimulatorType.ArmSimulator,
                 time,
-                angleRanges[0], obstacle
+                angleRanges[0],
+                obstacle!!
             )
             psoSimulator.update(25)
-            println("(${psoSimulator.gBestParams})")
+            println("(${psoSimulator.getBest()})")
         }
         /**
          * Find the PIDF Constants for multiple Angle Targets
@@ -81,20 +83,20 @@ class pso4Arms(
 
             for (i in 0 until angleRanges.size) {
                 val psoSimulator = PSO_Optimizer(
-                    5000,
                     arrayListOf(
                         Ranges(0.0, accuracy),
                         Ranges(0.0, accuracy/2),
                         Ranges(0.0, accuracy),
                         Ranges(0.0, accuracy)
                     ),
+                    SimulatorType.ArmSimulator,
                     time,
                     angleRanges[i],
-                    obstacle
+                    obstacle!!
                 )
 
                 psoSimulator.update(25)
-                code.append("\n new PIDFParams(${psoSimulator.gBestParams}),")
+                code.append("\n new PIDFParams(${psoSimulator.getBest()}),")
             }
 
             code.deleteAt(code.lastIndex)
