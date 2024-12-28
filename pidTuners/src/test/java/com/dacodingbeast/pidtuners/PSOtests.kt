@@ -1,9 +1,9 @@
 package com.example.pso4pid
 
-import com.dacodingbeast.pidtuners.Arm.GravityModelConstants
-import com.dacodingbeast.pidtuners.Arm.SystemConstants
+import com.dacodingbeast.pidtuners.TypeSpecific.Arm.GravityModelConstants
+import com.dacodingbeast.pidtuners.TypeSpecific.Arm.SystemConstants
 import ArmSpecific.pso4Arms
-import com.dacodingbeast.pidtuners.Arm.AngleRange
+import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import com.dacodingbeast.pidtuners.Algorithm.Particle
 import android.util.Log
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor

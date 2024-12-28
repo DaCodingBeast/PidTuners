@@ -1,6 +1,6 @@
 package com.dacodingbeast.pidtuners.HardwareSetup
 
-import com.dacodingbeast.pidtuners.Arm.AngleRange
+import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple

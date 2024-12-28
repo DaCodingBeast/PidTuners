@@ -2,7 +2,7 @@ package com.example.pso4pid
 
 import com.dacodingbeast.pidtuners.Algorithm.FitnessFunction
 import ArmSpecific.pso4Arms
-import com.dacodingbeast.pidtuners.Arm.AngleRange
+import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import com.dacodingbeast.pidtuners.Algorithm.Particle
 import com.dacodingbeast.pidtuners.Algorithm.Ranges
 import org.firstinspires.ftc.teamcode.PSO.Arm.Constants

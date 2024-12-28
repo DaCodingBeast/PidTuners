@@ -1,4 +1,4 @@
-package com.dacodingbeast.pidtuners.Arm
+package com.dacodingbeast.pidtuners.TypeSpecific.Arm
 
 import ArmSpecific.Direction
 import com.dacodingbeast.pidtuners.Simulators.Target

@@ -1,7 +1,7 @@
 package com.dacodingbeast.pidtuners.Mathematics
 
 import ArmSpecific.Direction
-import com.dacodingbeast.pidtuners.Arm.AngleRange
+import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.assertFalse

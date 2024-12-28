@@ -3,7 +3,7 @@ package ArmSpecific
 import ArmSpecific.pso4Arms.System.SystemConstants
 import CommonUtilities.Models
 import com.dacodingbeast.pidtuners.Algorithm.Dt
-import com.dacodingbeast.pidtuners.Arm.AngleRange
+import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.SimulatorData
 import com.dacodingbeast.pidtuners.Simulators.SimulatorStructure
 import com.dacodingbeast.pidtuners.Simulators.Target

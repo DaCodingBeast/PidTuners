@@ -1,7 +1,7 @@
 package CommonUtilities
 
 import com.dacodingbeast.pidtuners.Algorithm.Dt
-import com.dacodingbeast.pidtuners.Arm.AngleRange
+import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import android.util.Log
 import com.dacodingbeast.pidtuners.Algorithm.Vector
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor

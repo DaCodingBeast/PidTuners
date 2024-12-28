@@ -1,4 +1,4 @@
-package com.dacodingbeast.pidtuners.Arm
+package com.dacodingbeast.pidtuners.TypeSpecific.Arm
 
 import ArmSpecific.pso4Arms
 import CommonUtilities.PIDFcontroller
