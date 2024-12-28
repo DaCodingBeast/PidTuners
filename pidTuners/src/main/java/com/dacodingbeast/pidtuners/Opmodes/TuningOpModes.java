@@ -26,7 +26,9 @@ public final class TuningOpModes {
 
     static double stationaryAngle = Math.toRadians(0.0);
 
-    static SystemConstants systemConstants = new SystemConstants(motor, new  GravityModelConstants(0.0,0.0,0.0),0.0);
+    static double frictionRPM = 0.0;
+
+    static SystemConstants systemConstants = new SystemConstants(motor, new  GravityModelConstants(0.0,0.0,0.0),0.0,frictionRPM);
 
     static pso4Arms pso4Arms = new pso4Arms(systemConstants,testingAngle,30.0,obstacleAngle,4);//TODO
 

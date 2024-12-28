@@ -33,9 +33,6 @@ class PIDFcontroller(
     private var prevError = 0.0
     private var integral = 0.0
     private var target: AngleRange? = null
-    private val armAngle =
-        if (motor != null && angleOffset != null) ArmAngle(motor, angleOffset) else null
-
     class Result(val motorPower: Double, val error: Double)
 
     /**

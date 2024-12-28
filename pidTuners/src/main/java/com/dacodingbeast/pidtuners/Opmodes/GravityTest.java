@@ -34,26 +34,26 @@ public class GravityTest extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
-            double angle = constants.getArmAngle().findAngle((int) ((motor.getCurrentPose())/ Math.pow(constants.getMotor().getSpecs().getCustomGearRatio(),2)));
+            double angle = constants.getMotor().findAngle(false);
             //todo double angle = get voltage and convert to Radians if using an absolute encoder
 
             telemetry.addLine("Press Record to store data points, and display data points when done.");
 
-            motor.setPower(Constants.gravityMotorPower);
+            motor.setPower(constants.getGravityMotorPower());
 
-            if (Constants.gravityRecord) {
+            if (constants.getGravityRecord()) {
                 dataPairs.add(new Pair<>(
                         angle,
                         Models.calculateTmotor(
                                 motor.getPower(),
                                 constants.getMotor(),
-                                constants.frictionRPM //TODO
+                                constants.getSystemConstants().getFrictionRPM()
                         )
                 ));
-                Constants.gravityRecord = false;
+                constants.setGravityRecord(false);
             }
 
-            if (Constants.gravityDisplayDataPoints) {
+            if (constants.getGravityDisplayDataPoints()) {
                 for (Pair<Double, Double> dataPoint : dataPairs) {
                     double [] d = new double[]{dataPoint.first,dataPoint.second};
                     telemetry.addLine(Arrays.toString(d));

@@ -6,11 +6,21 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 
+/**
+ * The Motor class is used to define the motor object, and its properties
+ * @param name The name of the motor in the hardware map
+ * @param motorDirection The direction of the motor
+ * @param specs The specs of the motor, as found on website
+ * @param externalGearRatio The external gear ratio of the motor, 1.0 if not geared
+ * @param encoder The encoder object
+ * @see MotorSpecs
+ * @see Encoder
+ */
 class Motor(
     val name: String,
     private var motorDirection: DcMotorSimple.Direction,
-    private var specs: MotorSpecs,
-    externalGearRatio: Double = 1.0,
+    var specs: MotorSpecs,
+    private var externalGearRatio: Double = 1.0,
     private val encoder: Encoder?
 ) {
 
@@ -20,9 +30,12 @@ class Motor(
         }else if (externalGearRatio == 0.0){
             throw IllegalArgumentException("Gear ratio cannot be zero use 1 if not geared")
         }
-
-        specs.customGearRatio = externalGearRatio
-        specs.applyGearRatio()
+        if (encoder != null) { // if using an external encoder, the motor gear ratio is 1 as nothing is geared past that
+            externalGearRatio = 1.0
+            specs.motorGearRatio = 1.0
+        }else { // else, apply the external gear ratio to the motor gear ratio, to find total gear ratio
+            specs.applyGearRatio(externalGearRatio)
+        }
     }
 
 
@@ -41,9 +54,14 @@ class Motor(
         encoder?.init(ahwMap)
     }
 
-
-    fun getSpecs(): MotorSpecs {
-        return specs
+    fun getRPM(): Double {
+        return specs.rpm
+    }
+    fun getGearRatio(): Double {
+        return specs.motorGearRatio
+    }
+    fun getStallTorque(): Double {
+        return specs.stallTorque.value
     }
 
     fun getTicksPerRotation(): Double {

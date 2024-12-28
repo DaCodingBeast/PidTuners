@@ -143,11 +143,11 @@ sealed class Hardware {
             motorSpecs = MotorSpecs(
                 rpm = baseRpm,
                 stallTorque =  StallTorque(baseStallTorque,TorqueUnit.NEWTON_METER),
-                customGearRatio = gearRatio,
+                motorGearRatio = 1.0,
                 encoderTicksPerRotation = baseEncPerRev
             )
 
-            motorSpecs.applyGearRatio()
+            motorSpecs.applyGearRatio(gearRatio)
         }
     }
 

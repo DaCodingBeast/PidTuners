@@ -17,9 +17,9 @@ object Models {
     fun calculateTmotor(power: Double): Double {
 //        require(power in -1.0..1.0) Obviously works
 
-        val maxTorque = SystemConstants.motor.getSpecs().stallTorque.value
-        val actualRPM =SystemConstants.RPM
-        val theoreticalRPM = SystemConstants.motor.getSpecs().rpm
+        val maxTorque = SystemConstants.motor.getStallTorque()
+        val actualRPM =SystemConstants.motor.getRPM()
+        val theoreticalRPM = SystemConstants.motor.getRPM()
         //friction influenced max power
         val friction = actualRPM / theoreticalRPM
 
@@ -52,8 +52,8 @@ object Models {
     fun calculateTmotor(power: Double, motor: Motor, actualRPM: Double): Double {
         require(power in -1.0..1.0) //obviously works
         //friction influenced max power
-        val friction = actualRPM / motor.getSpecs().rpm
+        val friction = actualRPM / motor.getRPM()
 
-        return motor.getSpecs().rpm * friction * power
+        return motor.getRPM() * friction * power
     }
 }
