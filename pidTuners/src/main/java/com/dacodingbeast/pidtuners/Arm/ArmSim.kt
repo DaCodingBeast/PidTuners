@@ -5,6 +5,7 @@ import com.dacodingbeast.pidtuners.Arm.AngleRange
 import CommonUtilities.Models
 import CommonUtilities.PIDFParams
 import CommonUtilities.PIDFcontroller
+import com.dacodingbeast.pidtuners.Algorithm.Dt
 import kotlin.math.abs
 
 
@@ -45,7 +46,7 @@ class ArmSim(
         angularVelocity += angularAcceleration * Dt
         angleRange = AngleRange.fromRadians(
             AngleRange.wrap(angleRange.start + angularVelocity * Dt),
-            angleRange.target
+            angleRange.stop
         )
 //        println("d: $direction  c: $controlEffort  v: $angularVelocity a: ${angleRange.start}")
         return ArmSimData(angleRange, controlEffort, calculate.error)

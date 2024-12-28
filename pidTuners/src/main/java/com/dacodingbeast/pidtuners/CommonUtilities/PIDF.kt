@@ -1,6 +1,6 @@
 package CommonUtilities
 
-import ArmSpecific.Dt
+import com.dacodingbeast.pidtuners.Algorithm.Dt
 import com.dacodingbeast.pidtuners.Arm.AngleRange
 import android.util.Log
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor
@@ -89,7 +89,7 @@ class PIDFcontroller(
      * This function should be after reset, needs to access a non null Angle Range
      */
     fun calculateMotorPower(encoder: Int, looptime: Double): Double {
-        val angleRange = AngleRange(armAngle!!.findAngle(encoder), target!!.target)
+        val angleRange = AngleRange(armAngle!!.findAngle(encoder), target!!.stop)
         return calculate(angleRange, obstacleRange, looptime).motorPower
     }
 
@@ -99,7 +99,7 @@ class PIDFcontroller(
      */
 
     fun targetReached(encoder: Int, degreeAccuracy: Double = 5.0): Boolean{
-        val angleRange = AngleRange(armAngle!!.findAngle(encoder), target!!.target)
+        val angleRange = AngleRange(armAngle!!.findAngle(encoder), target!!.stop)
         val direction  = AngleRange.findMotorDirection(angleRange, obstacleRange)
         return (abs(AngleRange.findPIDFAngleError(direction, angleRange)) < Math.toRadians(degreeAccuracy))
     }

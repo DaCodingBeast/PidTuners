@@ -1,12 +1,14 @@
 package com.dacodingbeast.pidtuners.Arm
 
-import com.dacodingbeast.pidtuners.Simulators.Direction
+import ArmSpecific.Direction
+import com.dacodingbeast.pidtuners.Algorithm.Target
 import kotlin.math.PI
 
 /**
  * Angle Unit used throughout simulation
  */
-class AngleRange private constructor(val start: Double, val target: Double) {
+
+class AngleRange private constructor(override val start: Double, override val stop: Double): Target(start,stop) {
 
     companion object Angles{
 
@@ -58,7 +60,7 @@ class AngleRange private constructor(val start: Double, val target: Double) {
          * @return The route the arm must take, while still avoiding any obstacles
          */
         fun findMotorDirection(goal: AngleRange, obstacle: AngleRange?): Direction {
-            val (shortRoute, longRoute) = if (wrap(goal.target - goal.start) > 0.0) {
+            val (shortRoute, longRoute) = if (wrap(goal.stop - goal.start) > 0.0) {
                 Direction.CounterClockWise to Direction.Clockwise
             } else {
                 Direction.Clockwise to Direction.CounterClockWise
@@ -76,12 +78,12 @@ class AngleRange private constructor(val start: Double, val target: Double) {
          */
         fun inRange(goal: AngleRange, obstacle: AngleRange): Boolean {
 
-            val shortestAngleChange = wrap(goal.target - goal.start)
-            for(o in listOf(obstacle.start, obstacle.target)){
+            val shortestAngleChange = wrap(goal.stop - goal.start)
+            for(o in listOf(obstacle.start, obstacle.stop)){
                 return if (shortestAngleChange>0){
-                    o >= goal.start && o<= goal.target
+                    o >= goal.start && o<= goal.stop
                 } else{
-                    o <= goal.start && o>= goal.target
+                    o <= goal.start && o>= goal.stop
                 }
             }
             return false
@@ -94,7 +96,7 @@ class AngleRange private constructor(val start: Double, val target: Double) {
          * @return Error in Radians
          */
         fun findPIDFAngleError(direction: Direction, angleRange: AngleRange): Double {
-            val angleChange = wrap(angleRange.target - angleRange.start)
+            val angleChange = wrap(angleRange.stop - angleRange.start)
             return when (direction) {
                 Direction.CounterClockWise -> {
                     if (angleChange>0){
@@ -118,11 +120,11 @@ class AngleRange private constructor(val start: Double, val target: Double) {
      * To String method to display changes in Arms positions
      */
     override fun toString(): String {
-        return "(${this.start}, ${this.target})"
+        return "(${this.start}, ${this.stop})"
     }
 
     fun toDegrees(): Pair<Double, Double> {
-        return Pair(start * RAD_TO_DEG, target * RAD_TO_DEG)
+        return Pair(start * RAD_TO_DEG, stop * RAD_TO_DEG)
     }
 
 }

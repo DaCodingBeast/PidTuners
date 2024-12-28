@@ -7,7 +7,7 @@ import com.dacodingbeast.pidtuners.Arm.AngleRange
 import com.dacodingbeast.pidtuners.Algorithm.Particle
 import android.util.Log
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor
-import com.dacodingbeast.pidtuners.Ranges
+import com.dacodingbeast.pidtuners.Algorithm.Ranges
 import org.junit.Test
 import kotlin.random.Random
 

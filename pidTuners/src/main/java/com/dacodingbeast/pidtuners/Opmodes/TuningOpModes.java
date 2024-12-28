@@ -38,8 +38,6 @@ public final class TuningOpModes {
 
     static PIDFcontroller pidfController = new PIDFcontroller(new PIDFParams(0.0,0.0,0.0,0.0),motor,obstacleAngle,0.0);
 
-    static ArmAngle armAngle = new  ArmAngle(motor,pidfController.getAngleOffset());
-
     private static boolean pivotDisabled = false;
     private TuningOpModes() {
     }
@@ -61,6 +59,9 @@ public final class TuningOpModes {
             );
             manager.register(
                     metaForClass(GravityTest.class), new GravityTest(constants)
+            );
+            manager.register(
+                    metaForClass(SampleOpMode.class), new SampleOpMode(constants)
             );
         }
     }

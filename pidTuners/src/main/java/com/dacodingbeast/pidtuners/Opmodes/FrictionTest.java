@@ -57,7 +57,7 @@ public class FrictionTest extends LinearOpMode {
 
             //todo fix so it is done when angle is correctly in range (sometimes movement direction is reverse)
             // Run motor
-            if(angle> constants.getTestingAngle().getTarget()){
+            if(angle> constants.getTestingAngle().getStop()){
                 motor.setPower(0);
                 run = false;
             }
@@ -76,7 +76,7 @@ public class FrictionTest extends LinearOpMode {
             telemetry.addData("rpm",rpm);
 
             double theoreticalRpmMeasured = constants.getMotor().getSpecs().getRpm() * .5;
-            if (run && (rpm > theoreticalRpmMeasured*.5 && rpm<theoreticalRpmMeasured *1.5) && angle > (constants.getTestingAngle().getTarget()*.5)) {
+            if (run && (rpm > theoreticalRpmMeasured*.5 && rpm<theoreticalRpmMeasured *1.5) && angle > (constants.getTestingAngle().getStop()*.5)) {
                 RPMS.add(rpm);
             }
             telemetry.addData("t",theoreticalRpmMeasured);

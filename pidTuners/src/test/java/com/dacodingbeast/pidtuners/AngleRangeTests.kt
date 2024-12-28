@@ -17,7 +17,7 @@ class AngleRangeTests {
     fun testFromRadians() {
         val range = AngleRange.fromRadians(PI / 2, -PI / 2)
         assertEquals(PI / 2, range.start)
-        assertEquals(-PI / 2, range.target)
+        assertEquals(-PI / 2, range.stop)
     }
 
     /**
@@ -27,7 +27,7 @@ class AngleRangeTests {
     fun testFromDegrees() {
         val range = AngleRange.fromDegrees(90.0, -90.0)
         assertEquals(PI / 2, range.start)
-        assertEquals(-PI / 2, range.target)
+        assertEquals(-PI / 2, range.stop)
     }
 
     /**

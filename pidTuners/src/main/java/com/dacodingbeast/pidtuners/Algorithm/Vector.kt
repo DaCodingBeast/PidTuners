@@ -5,8 +5,17 @@ import kotlin.math.abs
 /**
  * Changing the PIDF Coefficients [particleParams] through vector translations
  */
-class Vector(val particleParams: DoubleArray) {
+class Vector(var particleParams: DoubleArray) {
     private var numOfVelos = particleParams.size
+
+    fun ensureNonNegativePosition(swarmBestPosition: Vector, particlePosition: Vector) {
+        particleParams = particleParams.mapIndexed { index, value ->
+            if (value < 0) {
+                if (swarmBestPosition.particleParams[index] < 0) abs(particlePosition.particleParams[index])
+                else swarmBestPosition.particleParams[index]
+            } else value
+        }.toDoubleArray()
+    }
 
     /**
      * Adding by a vector
@@ -16,6 +25,7 @@ class Vector(val particleParams: DoubleArray) {
         0.until(numOfVelos).forEach { final[it] = particleParams[it] + velo.particleParams[it] }
         return Vector(final)
     }
+
     /**
      * Subtracting by a vector
      */
@@ -24,6 +34,7 @@ class Vector(val particleParams: DoubleArray) {
         0.until(numOfVelos).forEach { final[it] = particleParams[it] - v.particleParams[it] }
         return Vector(final)
     }
+
     /**
      * Multiplying by a vector
      */
@@ -36,11 +47,6 @@ class Vector(val particleParams: DoubleArray) {
     override fun toString(): String {
         return "${particleParams[0]}, ${particleParams[1]}, ${particleParams[2]}, ${particleParams[3]}"
     }
-    fun makePositive(): Vector {
-        return Vector(particleParams.map { abs(it) }.toDoubleArray())
-    }
 
-    fun isNegative(): Boolean{
-        return particleParams.any { it<0 }
-    }
+
 }

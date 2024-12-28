@@ -20,7 +20,7 @@ class PIDFTests {
             val angle = AngleRange(Random.nextDouble(-PI, PI), Random.nextDouble(-PI,PI))
             val actualError = AngleRange.findPIDFAngleError(Direction.Clockwise,angle)
 
-            val wrappedAngle = AngleRange.wrap(angle.target - angle.start)
+            val wrappedAngle = AngleRange.wrap(angle.stop - angle.start)
 
             if(wrappedAngle >0 ){
                 assert(actualError in -2* PI .. 0.0){ println("$angle $wrappedAngle  $actualError") }
@@ -39,7 +39,7 @@ class PIDFTests {
             val angle = AngleRange(Random.nextDouble(-PI, PI), Random.nextDouble(-PI,PI))
             val actualError = AngleRange.findPIDFAngleError(Direction.CounterClockWise,angle)
 
-            val wrappedAngle = AngleRange.wrap(angle.target - angle.start)
+            val wrappedAngle = AngleRange.wrap(angle.stop - angle.start)
 
             if(wrappedAngle <0 ){
                 assert(actualError in 0.0 .. 2 * PI){ println("$angle $wrappedAngle  $actualError") }

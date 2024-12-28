@@ -1,10 +1,10 @@
 package ArmSpecific
 
 import com.dacodingbeast.pidtuners.Arm.AngleRange
-import PSO_Algorithm.PSO_Simulator
+import PSO_Algorithm.PSO_Optimizer
 import android.util.Log
 import com.dacodingbeast.pidtuners.Arm.SystemConstants
-import com.dacodingbeast.pidtuners.Ranges
+import com.dacodingbeast.pidtuners.Algorithm.Ranges
 
 
 const val error = "ERROR_IN_CONSTANTS"
@@ -53,7 +53,7 @@ class pso4Arms(
          * Find the PIDF Constants for one Angle Target
          */
         if (OneTest) {
-            val psoSimulator = PSO_Simulator(
+            val psoSimulator = PSO_Optimizer(
                 50000,
                 arrayListOf(
                     Ranges(0.0, accuracy),
@@ -80,7 +80,7 @@ class pso4Arms(
 
 
             for (i in 0 until angleRanges.size) {
-                val psoSimulator = PSO_Simulator(
+                val psoSimulator = PSO_Optimizer(
                     5000,
                     arrayListOf(
                         Ranges(0.0, accuracy),
