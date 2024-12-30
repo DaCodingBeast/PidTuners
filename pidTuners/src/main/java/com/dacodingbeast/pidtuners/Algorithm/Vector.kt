@@ -45,7 +45,14 @@ class Vector(var particleParams: DoubleArray) {
     }
 
     override fun toString(): String {
-        return "${particleParams[0]}, ${particleParams[1]}, ${particleParams[2]}, ${particleParams[3]}"
+        var returnable = ""
+        for (i in particleParams) {
+            returnable += "$i, "
+        }
+        if (returnable.split(",").size%2==0) {
+            returnable += "0.0"
+        }
+        return returnable
     }
 
 
