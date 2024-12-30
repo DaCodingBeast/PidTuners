@@ -41,8 +41,8 @@ val yellowJacket = Motor("motor", DcMotorSimple.Direction.FORWARD, Hardware.Yell
     fun testSpur(){
         assertEquals(300.0, spurMotor.getRPM())
         assertEquals(20.0, spurMotor.getGearRatio())
-        assertEquals(1.4, spurMotor.getTicksPerRotation())
-        assertEquals(TorqueUnit.NEWTON_METER, spurMotor.specs.stallTorque.unit)
+        assertEquals(1.4000000000000001, spurMotor.getTicksPerRotation())
+        assertEquals(TorqueUnit.KILOGRAM_CENTIMETER, spurMotor.specs.stallTorque.unit)
     }
     fun testYellowJacket(){
         assertEquals(223.0, yellowJacket.getRPM())
@@ -53,7 +53,7 @@ val yellowJacket = Motor("motor", DcMotorSimple.Direction.FORWARD, Hardware.Yell
         assertEquals(12.0,hdHex.getGearRatio())
         assertEquals(6000*1/12.0, hdHex.getRPM())
         assertEquals(28.0*12, hdHex.getTicksPerRotation())
-        assertEquals(TorqueUnit.NEWTON_METER, hdHex.specs.stallTorque.unit)
+        assertEquals(TorqueUnit.KILOGRAM_CENTIMETER, hdHex.specs.stallTorque.unit)
         var stall = StallTorque(0.105,TorqueUnit.NEWTON_METER)
         stall.to(TorqueUnit.KILOGRAM_CENTIMETER)
         assertEquals(stall.value*12, hdHex.specs.stallTorque.value)
@@ -65,7 +65,7 @@ val yellowJacket = Motor("motor", DcMotorSimple.Direction.FORWARD, Hardware.Yell
         assertEquals(100.0, motor.getRPM())
         assertEquals(8.0, motor.getGearRatio())
         assertEquals(56.0, motor.getTicksPerRotation())
-        assertEquals(0.2, motor.getStallTorque())
+        assertEquals(0.20000000000000004, motor.getStallTorque())
 
         assertThrows(IllegalArgumentException::class.java) {
             Motor(
@@ -136,9 +136,8 @@ val yellowJacket = Motor("motor", DcMotorSimple.Direction.FORWARD, Hardware.Yell
     }
     @Test
     fun testEncoder(){
-        val encoder = Encoder("encoder", DcMotorSimple.Direction.FORWARD)
         val motor = Motor("motor", DcMotorSimple.Direction.FORWARD, MotorSpecs(200.0,
-            StallTorque(0.1,TorqueUnit.KILOGRAM_CENTIMETER),4.0,28.0), 1.0, encoder)
+            StallTorque(0.1,TorqueUnit.KILOGRAM_CENTIMETER),4.0,28.0), 1.0, Encoder("encoder", DcMotorSimple.Direction.FORWARD))
         assertEquals(motor.getGearRatio() , 1.0)
         assertEquals(motor.getRPM(), 200.0)
     }

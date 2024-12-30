@@ -107,10 +107,10 @@ sealed class Hardware {
      */
     object REVSpurMotor { //nm
         @JvmField
-        val `40_1` = MotorSpecs(150.0, StallTorque(4.2,TorqueUnit.NEWTON_METER), 40.0, 28.0 *(1 / 40))
+        val `40_1` = MotorSpecs(150.0, StallTorque(4.2,TorqueUnit.NEWTON_METER), 40.0, 28.0 *(1.0 / 40.0))
 
         @JvmField
-        val `20_1` = MotorSpecs(300.0,  StallTorque(2.1,TorqueUnit.NEWTON_METER), 20.0, 28.0 * (1/20))
+        val `20_1` = MotorSpecs(300.0,  StallTorque(2.1,TorqueUnit.NEWTON_METER), 20.0, 28.0 * (1.0/20.0))
     }
 
     /**
