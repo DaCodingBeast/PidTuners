@@ -63,9 +63,6 @@ public final class TuningOpModes {
                     metaForClass(FrictionTest.class), new FrictionTest(constants)
             );
             manager.register(
-                    metaForClass(GravityTest.class), new GravityTest(constants)
-            );
-            manager.register(
                     metaForClass(SampleOpMode.class), new SampleOpMode(constants)
             );
         }
