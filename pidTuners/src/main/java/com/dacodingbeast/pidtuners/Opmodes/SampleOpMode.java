@@ -29,7 +29,7 @@ public class SampleOpMode extends LinearOpMode {
         Motor motor = constants.getMotor();
         motor.init(hardwareMap,stationaryAngle);
 
-        ArrayList<AngleRange> targets = constants.getTestingAngle();
+        ArrayList<AngleRange> targets = constants.getTestingAngle().asArrayList();
         AngleRange target = targets.get(0);
         ElapsedTime timer = new ElapsedTime();
 

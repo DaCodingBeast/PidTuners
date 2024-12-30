@@ -5,9 +5,6 @@ import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
 import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import ArmSpecific.pso4Slides;
 
 public class SlideTestingOpMode extends LinearOpMode {
@@ -15,7 +12,7 @@ public class SlideTestingOpMode extends LinearOpMode {
     pso4Slides pso4Slides;
     public SlideTestingOpMode(SlideConstants constants) {
         this.constants = constants;
-        pso4Slides = new pso4Slides(constants.getSlideSystemConstants(),new ArrayList<>(Arrays.asList(constants.getTarget())),30.0,constants.getObstacle(),3.5 );
+        pso4Slides = new pso4Slides(constants.getSlideSystemConstants(),constants.getTarget().asArrayList(),30.0,constants.getObstacle(),3.5 );
     }
     @Override
     public void runOpMode() throws InterruptedException {

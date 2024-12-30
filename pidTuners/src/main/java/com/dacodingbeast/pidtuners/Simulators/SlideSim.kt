@@ -3,6 +3,7 @@ package com.dacodingbeast.pidtuners.Simulators
 import ArmSpecific.pso4Arms.System.SystemConstants
 import ArmSpecific.pso4Slides.System.slideSystemConstants
 import CommonUtilities.Models
+import android.transition.Slide
 import com.dacodingbeast.pidtuners.Algorithm.Dt
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange
@@ -13,7 +14,7 @@ enum class Direction{
     EXTENDING, RETRACTING
 }
 
-class SlideSim(override var target: Target, override val obstacle: List<Target>):SimulatorStructure(target,obstacle) {
+class SlideSim(override var target: AngleRange, override val obstacle: List<AngleRange>):SimulatorStructure(target,obstacle) {
     override fun updateSimulator(): SimulatorData {
         val calculate = pidController.calculate(target,obstacle.getOrNull(0))
         val controlEffort = calculate.motorPower
@@ -26,7 +27,7 @@ class SlideSim(override var target: Target, override val obstacle: List<Target>)
         val acceleration = torqueApplied / slideSystemConstants.Inertia
         velocity += acceleration * Dt
 
-        target = SlideRange.fromTicks(target.start + velocity * Dt, target.stop)
+        target = SlideRange.fromTicks(target.start + velocity * Dt, target.stop).toAngleRange()
 
         return SimulatorData(target.start, controlEffort, error, velocity)
     }
