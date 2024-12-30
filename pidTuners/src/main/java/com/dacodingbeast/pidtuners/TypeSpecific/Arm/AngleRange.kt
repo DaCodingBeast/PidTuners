@@ -2,6 +2,7 @@ package com.dacodingbeast.pidtuners.TypeSpecific.Arm
 
 import ArmSpecific.Direction
 import com.dacodingbeast.pidtuners.Simulators.Target
+import java.util.ArrayList
 import kotlin.math.PI
 
 /**
@@ -126,5 +127,7 @@ class AngleRange private constructor(override val start: Double, override val st
     fun toDegrees(): Pair<Double, Double> {
         return Pair(start * RAD_TO_DEG, stop * RAD_TO_DEG)
     }
-
+    fun asArrayList(): ArrayList<AngleRange> {
+        return arrayListOf(this)
+    }
 }

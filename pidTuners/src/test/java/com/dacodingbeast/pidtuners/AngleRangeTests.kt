@@ -50,7 +50,7 @@ class AngleRangeTests {
     fun testNormalizeAngle() {
         assertEquals(PI / 2, AngleRange.normalizeAngle(PI / 2))
         assertEquals(3 * PI / 2, AngleRange.normalizeAngle(-PI / 2))
-        assertEquals(2 * PI, AngleRange.normalizeAngle(0.0))
+        assertEquals(0.0, AngleRange.normalizeAngle(0.0))
         assertEquals(PI, AngleRange.normalizeAngle(-PI))
     }
 
