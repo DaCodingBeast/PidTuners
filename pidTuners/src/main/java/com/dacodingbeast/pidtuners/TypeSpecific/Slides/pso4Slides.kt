@@ -1,12 +1,11 @@
 package ArmSpecific
 
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
 import android.util.Log
 import com.dacodingbeast.pidtuners.Algorithm.Ranges
 import com.dacodingbeast.pidtuners.Simulators.SimulatorType
 import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange
-import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideSystemConstants
+import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
 
 
 const val errorSlides = "ERROR_IN_CONSTANTS"

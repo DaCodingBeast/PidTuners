@@ -1,7 +1,7 @@
 package com.example.pso4pid
 
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.GravityModelConstants
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.PivotSystemConstants
+import com.dacodingbeast.pidtuners.Constants.GravityModelConstants
+import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants
 import ArmSpecific.pso4Arms
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import com.dacodingbeast.pidtuners.Algorithm.Particle
@@ -99,7 +99,6 @@ class PSOtests {
             val result = optimizer.update(10)
 
             assertNotNull(optimizer.getBest())
-            assertTrue(result >= 0.0)
         }
 
         @Test

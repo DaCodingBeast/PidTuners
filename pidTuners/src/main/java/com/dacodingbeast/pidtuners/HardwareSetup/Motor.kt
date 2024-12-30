@@ -1,5 +1,7 @@
 package com.dacodingbeast.pidtuners.HardwareSetup
 
+import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
+import com.dacodingbeast.pidtuners.Constants.Constants
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
@@ -16,6 +18,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap
  * @see MotorSpecs
  * @see Encoder
  */
+
+//todo jvm overload so no null
+
 class Motor(
     val name: String,
     private var motorDirection: DcMotorSimple.Direction,
@@ -88,4 +93,28 @@ class Motor(
         val angle = AngleRange.wrap(stationaryAngle + (ticks * (2 * Math.PI / this.specs.encoderTicksPerRotation)))
         return if (inDegrees) angle * 180 / Math.PI else angle
     }
+
+    /**
+     * Find the motors torque
+     * @param power The power applied to the Motor, derived from the PIDF Controller
+     */
+    fun calculateTmotor(power: Double): Double {
+        return calculateTmotor(power,PSO_Optimizer.constants.systemSpecific.frictionRPM)
+    }
+
+    /**
+     * Finding the Motor Torque based on the Systems Constants.
+     * This function will need to be ran in the Gravity OpMode, so it must take the constants as parameters
+     * @see Hardware.Motor Motor being used
+     * @param actualRPM Non-theoretical RPM, tested through Friction OpMode
+     * @param power Motor Power
+     */
+    fun calculateTmotor(power: Double, actualRPM: Double): Double {
+        require(power in -1.0..1.0) //obviously works
+        //friction influenced max power
+        val friction = actualRPM / getRPM()
+
+        return getStallTorque() * friction * power
+    }
+
 }

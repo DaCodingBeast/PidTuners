@@ -25,7 +25,8 @@ class FitnessFunction(
     private val totalTime: Double,
     private val target: Target,
     private val obstacle: Target,
-    private val simulatorType: SimulatorType
+    private val simulatorType: SimulatorType,
+
 ) {
 
     private val simulator = when(simulatorType){

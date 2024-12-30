@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.PSO.Arm
 
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange.Angles.fromDegrees
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.GravityModelConstants
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.PivotSystemConstants
+import com.dacodingbeast.pidtuners.Constants.GravityModelConstants
+import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor
 import com.qualcomm.robotcore.hardware.DcMotorSimple

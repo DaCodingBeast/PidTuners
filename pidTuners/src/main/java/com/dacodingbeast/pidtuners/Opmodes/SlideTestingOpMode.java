@@ -1,6 +1,6 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
-import com.dacodingbeast.pidtuners.CommonUtilities.SlideConstants;
+import com.dacodingbeast.pidtuners.Constants.SlideConstants;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
 import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;

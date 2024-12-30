@@ -3,6 +3,7 @@ package ArmSpecific
 import ArmSpecific.pso4Arms.System.SystemConstants
 import CommonUtilities.Models
 import com.dacodingbeast.pidtuners.Algorithm.Dt
+import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.SimulatorData
 import com.dacodingbeast.pidtuners.Simulators.SimulatorStructure
@@ -27,7 +28,9 @@ class ArmSim(override var target: AngleRange, override val obstacle: ArrayList<A
         val calculate = pidController.calculate(target,obstacle.getOrNull(0))
         val controlEffort = calculate.motorPower
 
-        val motorTorque = Models.calculateTmotor(controlEffort)
+        val constants = PSO_Optimizer.constants
+
+        val motorTorque = constants.motor.calculateTmotor(controlEffort)
         val gravityTorque = Models.gravityTorque(abs(target.start)) * if (target.start > 0) -1 else 1
 
         val torqueApplied = motorTorque + gravityTorque

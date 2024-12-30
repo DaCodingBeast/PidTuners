@@ -1,5 +1,6 @@
 package com.dacodingbeast.pidtuners.Algorithm
 
+import com.dacodingbeast.pidtuners.Constants.Constants
 import com.dacodingbeast.pidtuners.Simulators.SimulatorType
 import com.dacodingbeast.pidtuners.Simulators.Target
 
@@ -24,17 +25,24 @@ class PSO_Optimizer(
     private val simulationType: SimulatorType,
     time: Double,
     targets: Target,
-    obstacle: Target
+    obstacle: Target,
+    constant: Constants
 ) {
+    init {
+        constants = constant
+    }
+
+    companion object {
+        lateinit var constants: Constants
+    }
+
     private val swarmSize = 1000000
     private val particles = Array(swarmSize) { Particle(parameterRanges, FitnessFunction(time,targets,obstacle,simulationType))}
 
     //initialize
     private var gBestParticle = particles[0]
 
-    private var lastPower = 0.0
-
-    fun update(times: Int): Double {
+    fun update(times: Int) {
         (0 until times).forEach { b ->
 
             for (particle in particles) {
@@ -53,7 +61,6 @@ class PSO_Optimizer(
 
 
         }
-        return lastPower
     }
 
     fun getBest(): Particle {

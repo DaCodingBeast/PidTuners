@@ -6,8 +6,8 @@ import static java.lang.Math.abs;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.dacodingbeast.pidtuners.CommonUtilities.RemoveOutliers;
+import com.dacodingbeast.pidtuners.Constants.Constants;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
-import com.dacodingbeast.pidtuners.CommonUtilities.PivotConstants;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -18,8 +18,8 @@ import CommonUtilities.Models;
 
 @TeleOp(name = "FrictionTest", group = "Linear OpMode")
 public class FrictionTest extends LinearOpMode {
-    PivotConstants constants;
-    public FrictionTest(PivotConstants constants) {
+    Constants constants;
+    public FrictionTest(Constants constants) {
         this.constants = constants;
     }
 
@@ -58,10 +58,14 @@ public class FrictionTest extends LinearOpMode {
 
             //todo fix so it is done when angle is correctly in range (sometimes movement direction is reverse)
             // Run motor
-            if(angle> constants.getTestingAngle().getTarget()){
-                motor.setPower(0);
-                run = false;
-            }
+
+//            if(angle> constants.getAngles().get(0)
+//
+//
+//            ){
+//                motor.setPower(0);
+//                run = false;
+//            }
 
             if(run) {
                 motor.setPower(0.5);
@@ -77,7 +81,7 @@ public class FrictionTest extends LinearOpMode {
             telemetry.addData("rpm",rpm);
 
             double theoreticalRpmMeasured = constants.getMotor().getRPM() * .5;
-            if (run && (rpm > theoreticalRpmMeasured*.5 && rpm<theoreticalRpmMeasured *1.5) && angle > (constants.getTestingAngle().getTarget()*.5)) {
+            if (run && (rpm > theoreticalRpmMeasured*.5 && rpm<theoreticalRpmMeasured *1.5) && angle > (constants.getAngles().get(0).getStop()*.5)) {
                 RPMS.add(rpm);
             }
             telemetry.addData("t",theoreticalRpmMeasured);

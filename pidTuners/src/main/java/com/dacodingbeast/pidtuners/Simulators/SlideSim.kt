@@ -1,13 +1,10 @@
 package com.dacodingbeast.pidtuners.Simulators
 
-import ArmSpecific.pso4Arms.System.SystemConstants
 import ArmSpecific.pso4Slides.System.slideSystemConstants
 import CommonUtilities.Models
-import android.transition.Slide
 import com.dacodingbeast.pidtuners.Algorithm.Dt
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange
-import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideSystemConstants
 import kotlin.math.abs
 
 enum class Direction{
