@@ -1,11 +1,11 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.GravityModelConstants;
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.PivotSystemConstants;
+import com.dacodingbeast.pidtuners.CommonUtilities.PivotConstants;
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
-import com.dacodingbeast.pidtuners.CommonUtilities.PivotConstants;
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange;
+import com.dacodingbeast.pidtuners.TypeSpecific.Arm.GravityModelConstants;
+import com.dacodingbeast.pidtuners.TypeSpecific.Arm.PivotSystemConstants;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
@@ -13,12 +13,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import ArmSpecific.pso4Arms;
-import CommonUtilities.PIDParams;
 import CommonUtilities.PIDFcontroller;
+import CommonUtilities.PIDParams;
 
 public final class TuningOpModes {
     private static Motor motor = new Motor("Shoulder", DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,1.0,null);
@@ -33,7 +30,7 @@ public final class TuningOpModes {
 
     static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(motor, new  GravityModelConstants(0.0,0.0,0.0),0.0,frictionRPM);
 
-    static pso4Arms pso4Arms = new pso4Arms(pivotSystemConstants,new ArrayList<AngleRange>(Arrays.asList(testingAngle)),30.0,obstacleAngle,3.5);
+    static pso4Arms pso4Arms = new pso4Arms(pivotSystemConstants,testingAngle.asArrayList(),30.0,obstacleAngle,3.5);
 
     static Boolean gravityRecord = false;
 
