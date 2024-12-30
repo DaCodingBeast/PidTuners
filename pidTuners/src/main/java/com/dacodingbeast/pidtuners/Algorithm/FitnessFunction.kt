@@ -29,7 +29,7 @@ class FitnessFunction(
 ) {
 
     private val simulator = when(simulatorType){
-        SimulatorType.ArmSimulator -> ArmSim(target as AngleRange,obstacle as List<AngleRange>)
+        SimulatorType.ArmSimulator -> ArmSim(target as AngleRange,(obstacle as AngleRange).asArrayList())
         SimulatorType.SlideSimulator -> TODO()
     }
 

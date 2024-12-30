@@ -16,7 +16,7 @@ enum class Direction {
     Clockwise, CounterClockWise
 }
 
-class ArmSim(override var target: AngleRange, override val obstacle: List<AngleRange>) :
+class ArmSim(override var target: AngleRange, override val obstacle: ArrayList<AngleRange>) :
     SimulatorStructure(target, obstacle) {
 
     /**
