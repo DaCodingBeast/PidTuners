@@ -17,3 +17,4 @@ data class PivotConstants(
     val gravityMotorPower:Double,
     var PIDFController: PIDFcontroller,
 )
+//todo remove PIDF controller, have sample opmode take results in the registrar
