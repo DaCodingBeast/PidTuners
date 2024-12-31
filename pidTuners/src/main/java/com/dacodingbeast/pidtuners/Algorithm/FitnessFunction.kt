@@ -1,12 +1,13 @@
 package com.dacodingbeast.pidtuners.Algorithm
 
 import ArmSpecific.ArmSim
+import android.transition.Slide
 import com.dacodingbeast.pidtuners.Simulators.SimulatorData
 import com.dacodingbeast.pidtuners.Simulators.SimulatorType
 import com.dacodingbeast.pidtuners.Simulators.Target
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
+import com.dacodingbeast.pidtuners.Simulators.SlideRange
 import com.dacodingbeast.pidtuners.Simulators.SlideSim
-import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange
 import kotlin.math.abs
 import kotlin.math.pow
 
@@ -26,7 +27,7 @@ class FitnessFunctionData(val itae: Double,val history:ArrayList<SimulatorData>)
 class FitnessFunction(
     private val totalTime: Double,
     private val target: Target,
-    private val obstacle: Target,
+    private val obstacle: Target?,
     private val simulatorType: SimulatorType,
 
 ) {

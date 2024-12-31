@@ -61,7 +61,7 @@ public final class TuningOpModes {
 
     @OpModeRegistrar
     public static void register(OpModeManager manager) {
-            Constants constants = new Constants(motor, testingAngle.asArrayList(), obstacleAngle.asArrayList(),(simulatorType == SimulatorType.ArmSimulator)  ?pivotSystemConstants : slideSystemConstants);
+            Constants constants = new Constants(motor, testingAngle.asArrayList(), obstacleAngle,(simulatorType == SimulatorType.ArmSimulator)  ?pivotSystemConstants : slideSystemConstants);
             manager.register(
                     metaForClass(FrictionTest.class), new FrictionTest(constants)
             );

@@ -47,7 +47,7 @@ public class SampleOpMode extends LinearOpMode {
             timer.reset();
 
 
-            if (motor.targetReached(target,8)){
+            if (motor.targetReached(8)){
                 if(targets.size()> x+1 && timerTime.seconds() >= 1.0) {
                     x+=1;
                     target = targets.get(x);

@@ -1,5 +1,7 @@
 package com.dacodingbeast.pidtuners.HardwareSetup
 
+import ArmSpecific.ArmSim
+import ArmSpecific.Direction
 import CommonUtilities.PIDFcontroller
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
@@ -10,6 +12,7 @@ import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.SimulatorType
 import com.dacodingbeast.pidtuners.Simulators.Target
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
+import com.dacodingbeast.pidtuners.Simulators.SlideSim
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
@@ -37,6 +40,7 @@ class Motor(
     private var motorDirection: DcMotorSimple.Direction,
     var specs: MotorSpecs,
     private var externalGearRatio: Double = 1.0,
+    val obstacle: Target?,
     private val encoder: Encoder?
 ) {
     private var slideParams: PIDParams? = null
@@ -85,7 +89,7 @@ class Motor(
 
     fun runMotor(target: Target){
         pidFcontroller!!.params = if (slideParams != null) slideParams!! else pivotParams!!
-        motor.power=pidFcontroller!!.calculate(target).motorPower
+        motor.power=pidFcontroller!!.calculate(target, obstacle).motorPower
     }
 
     fun setParams(params: PIDParams){
@@ -149,48 +153,28 @@ class Motor(
         return getStallTorque() * friction * power
     }
 
+    var target: Double = 0.0
     /**
      * Check if Angle Target has been relatively reached, so user can change their own custom states
      * @param degreeAccuracy Angle Accuracy for system to return true In Degrees
+     * This will not work if you have an obstacle that is thinner than the given angle
      */
 
-    fun targetReached(endAngle:Double,degreeAccuracy: Double = 5.0): Boolean{
-        val angleRange = AngleRange.fromRadians(findAngle(), endAngle)
-        val direction  = armDirection
-        return (abs(AngleRange.findPIDFAngleError(direction, angleRange)) < Math.toRadians(degreeAccuracy))
-    }
-    var integral: Double = 0.0
-    var prevError: Double = 0.0
+    fun targetReached(degreeAccuracy: Double = 5.0): Boolean{
+        when(simulationType){
+            SimulatorType.ArmSimulator ->{
 
+                //todo - This will not work if you have an obstacle that is thinner than the given angle
 
-    fun userCalculate(
-        position: Target,
-        loopTime: Double
-    ): Double {
-        val params:PIDParams = if (slideParams != null) slideParams!! else pivotParams!!
-
-        var ff=0.0
-        val error = when(position){
-            is AngleRange -> {
-                val direction = armDirection
-                ff = if(position.start>0 ) max(0.0, sin(position.start)) * params.kf else min(0.0, sin(position.start)) * params.kf
-                AngleRange.findPIDFAngleError(direction, position)
+                val angle  = AngleRange.fromRadians(findAngle(), this.target)
+                val direction = AngleRange.findMotorDirection(angle, obstacle as AngleRange?)
+                return abs(AngleRange.findPIDFAngleError(direction,angle)) < Math.toRadians(degreeAccuracy)
             }
-            is SlideRange ->{
-                position.stop - position.start
+            SimulatorType.SlideSimulator ->{
+                return false //SlideRange.fromTicks(motor.currentPosition.toDouble(), this.target)
             }
-
         }
-
-        integral += (error * loopTime)
-
-        val derivative = (error - prevError) / loopTime
-        prevError = error
-
-        return ((derivative * params.kd + integral * params.ki + error * params.kp) + ff).coerceIn(
-            -1.0,
-            1.0
-        )
     }
+
 
 }

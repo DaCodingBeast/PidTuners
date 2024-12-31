@@ -5,8 +5,8 @@ import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Algorithm.Vector
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor
+import com.dacodingbeast.pidtuners.Simulators.SlideRange
 import com.dacodingbeast.pidtuners.Simulators.Target
-import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
@@ -50,12 +50,13 @@ class PIDFcontroller(var params: PIDParams) {
      */
     fun calculate(
         position: Target,
+        obstacle: Target?
     ): Result {
 
         var ff=0.0
         val error = when(position){
             is AngleRange -> {
-                val direction = AngleRange.findMotorDirection(position, constants.obstacle as AngleRange?)
+                val direction = AngleRange.findMotorDirection(position, obstacle as AngleRange?)
                 ff = if(position.start>0 ) max(0.0, sin(position.start)) * params.kf else min(0.0, sin(position.start)) * params.kf
                 AngleRange.findPIDFAngleError(direction, position)
             }

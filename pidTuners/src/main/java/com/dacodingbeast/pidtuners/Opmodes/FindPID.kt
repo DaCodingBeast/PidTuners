@@ -21,7 +21,7 @@ class FindPID(val constants: Constants, private val accuracy:Double, private val
                 Ranges(0.0, accuracy/3.5),
                 Ranges(0.0, accuracy),
                 Ranges(0.0, accuracy)
-            ),sim,Time,angleRange,constants.obstacle,constants)
+            ),sim,Time,angleRange,constants.motor.obstacle,constants)
 
             algorithm.update(25)
             telemetry.addLine(algorithm.getBest().toString())

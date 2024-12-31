@@ -25,7 +25,7 @@ class PSO_Optimizer(
     private val simulationType: SimulatorType,
     time: Double,
     targets: Target,
-    obstacle: Target,
+    obstacle: Target?,
     constant: Constants
 ) {
     init {
