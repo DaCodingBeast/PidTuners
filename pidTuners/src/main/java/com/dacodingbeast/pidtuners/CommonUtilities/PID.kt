@@ -87,7 +87,7 @@ class PIDFcontroller(
      * This is for using the PIDF params in an opmode
      */
     fun resetConstantsAndTarget(params: PIDParams, target: AngleRange) {
-        require(motor != null) { Log.d(ArmSpecific.error,"You did not instantiate the PIDF controller with the your motor type") }
+        require(motor != null) { throw IllegalArgumentException("You did not instantiate the PIDF controller with the your motor type") }
         this.params = params
         this.target = target
     }

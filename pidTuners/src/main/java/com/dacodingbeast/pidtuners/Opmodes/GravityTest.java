@@ -1,62 +1,60 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
+import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.gravityDisplayPoints;
+import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.gravityMotorPower;
+import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.gravityRecord;
+import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.stationaryAngle;
+
 import android.util.Pair;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.dacodingbeast.pidtuners.Constants.Constants;
+import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-
-import org.firstinspires.ftc.teamcode.Constants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import ArmSpecific.ArmAngle;
-import CommonUtilities.Models;
 
 @TeleOp(name = "GravityTest", group = "Linear OpMode")
 public class GravityTest extends LinearOpMode {
+    Constants constants;
+    public GravityTest(Constants constants) {
+        this.constants = constants;
+    }
     @Override
     public void runOpMode() {
-        MultipleTelemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), this.telemetry);
+        MultipleTelemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), this.telemetry);;
 
-        Constants constants = new Constants();
-
-        DcMotorEx motor = hardwareMap.get(DcMotorEx.class, constants.motorName);
-
-        motor.setDirection(constants.motorDirection);
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor.setPower(0.0);
+        Motor motor = constants.getMotor();
+        motor.init(hardwareMap,stationaryAngle);
 
         ArrayList<Pair<Double, Double>> dataPairs = new ArrayList<>();
 
         waitForStart();
         while (opModeIsActive()) {
 
-            double angle = constants.armAngle.findAngle(motor.getCurrentPosition());
+            double angle = motor.findAngle(false);
             //todo double angle = get voltage and convert to Radians if using an absolute encoder
 
             telemetry.addLine("Press Record to store data points, and display data points when done.");
 
-            motor.setPower(Constants.gravityMotorPower);
+            motor.setPower(gravityMotorPower);
 
-            if (Constants.gravityRecord) {
+            if (gravityRecord) {
                 dataPairs.add(new Pair<>(
                         angle,
-                        Models.calculateTmotor(
+                        motor.calculateTmotor(
                                 motor.getPower(),
-                                constants.motor,
-                                Constants.frictionRPM
+                                constants.getSystemSpecific().getFrictionRPM()
                         )
                 ));
-                Constants.gravityRecord = false;
+                gravityRecord = false;
             }
 
-            if (Constants.gravityDisplayDataPoints) {
+            if (gravityDisplayPoints) {
                 for (Pair<Double, Double> dataPoint : dataPairs) {
                     double [] d = new double[]{dataPoint.first,dataPoint.second};
                     telemetry.addLine(Arrays.toString(d));
