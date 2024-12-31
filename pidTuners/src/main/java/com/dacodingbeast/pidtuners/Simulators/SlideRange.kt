@@ -1,7 +1,5 @@
-package com.dacodingbeast.pidtuners.TypeSpecific.Slides
+package com.dacodingbeast.pidtuners.Simulators
 
-import com.dacodingbeast.pidtuners.Simulators.Target
-import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import java.util.ArrayList
 
 class SlideRange private constructor(override val start: Double, override val stop: Double): Target(start,stop){

@@ -1,9 +1,15 @@
 package com.dacodingbeast.pidtuners.HardwareSetup
 
+import CommonUtilities.PIDFcontroller
+import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
+import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.armDirection
+import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.pidParams
+import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.simulatorType
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
+import com.dacodingbeast.pidtuners.Simulators.SimulatorType
 import com.dacodingbeast.pidtuners.Simulators.Target
-import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange
+import com.dacodingbeast.pidtuners.Simulators.SlideRange
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
@@ -33,8 +39,21 @@ class Motor(
     private var externalGearRatio: Double = 1.0,
     private val encoder: Encoder?
 ) {
+    private var slideParams: PIDParams? = null
+    private var pivotParams: PIDParams? = null
+    private var pidFcontroller: PIDFcontroller? = null
+    private val simulationType: SimulatorType = simulatorType
 
     init {
+        when (simulationType){
+            SimulatorType.SlideSimulator -> slideParams = PIDParams(0.0,0.0,0.0,0.0)
+            SimulatorType.ArmSimulator -> pivotParams = PIDParams(0.0,0.0,0.0,0.0)
+        }
+
+        setParams(pidParams)
+
+        pidFcontroller = if (slideParams != null) PIDFcontroller(slideParams!!) else PIDFcontroller(pivotParams!!)
+
         if (externalGearRatio < 0) {
             throw IllegalArgumentException("Gear ratio must be positive")
         }else if (externalGearRatio == 0.0){
@@ -64,6 +83,18 @@ class Motor(
         encoder?.init(ahwMap)
     }
 
+    fun runMotor(target: Target){
+        pidFcontroller!!.params = if (slideParams != null) slideParams!! else pivotParams!!
+        motor.power=pidFcontroller!!.calculate(target).motorPower
+    }
+
+    fun setParams(params: PIDParams){
+        if (slideParams != null) slideParams = params else pivotParams = params
+    }
+
+    fun getCurrentPose(): Double {
+        return encoder?.getCurrentPosition()?.toDouble() ?: motor.currentPosition.toDouble()
+    }
     fun getRPM(): Double {
         return specs.rpm
     }
@@ -76,10 +107,6 @@ class Motor(
 
     fun getTicksPerRotation(): Double {
         return specs.encoderTicksPerRotation
-    }
-
-    fun getCurrentPose(): Double {
-        return encoder?.getCurrentPosition()?.toDouble() ?: motor.currentPosition.toDouble()
     }
 
     fun setPower(power: Double) {
@@ -122,32 +149,30 @@ class Motor(
         return getStallTorque() * friction * power
     }
 
-
-
-
-
-
     /**
      * Check if Angle Target has been relatively reached, so user can change their own custom states
      * @param degreeAccuracy Angle Accuracy for system to return true In Degrees
      */
 
-    fun targetReached(encoder: Int, degreeAccuracy: Double = 5.0): Boolean{
-        val angleRange = AngleRange.fromRadians(motor!!.findAngle(), target!!.stop)
-        val direction  = AngleRange.findMotorDirection(angleRange, obstacleRange)
+    fun targetReached(endAngle:Double,degreeAccuracy: Double = 5.0): Boolean{
+        val angleRange = AngleRange.fromRadians(findAngle(), endAngle)
+        val direction  = armDirection
         return (abs(AngleRange.findPIDFAngleError(direction, angleRange)) < Math.toRadians(degreeAccuracy))
     }
+    var integral: Double = 0.0
+    var prevError: Double = 0.0
 
 
     fun userCalculate(
         position: Target,
         loopTime: Double
     ): Double {
+        val params:PIDParams = if (slideParams != null) slideParams!! else pivotParams!!
 
         var ff=0.0
         val error = when(position){
             is AngleRange -> {
-                val direction = AngleRange.findMotorDirection(position, )
+                val direction = armDirection
                 ff = if(position.start>0 ) max(0.0, sin(position.start)) * params.kf else min(0.0, sin(position.start)) * params.kf
                 AngleRange.findPIDFAngleError(direction, position)
             }

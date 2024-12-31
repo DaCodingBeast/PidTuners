@@ -1,5 +1,7 @@
 package com.dacodingbeast.pidtuners.Constants
 
+import ArmSpecific.ArmSim
+import ArmSpecific.Direction
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor
 import kotlin.math.PI
 import kotlin.math.abs
@@ -17,7 +19,8 @@ import kotlin.math.pow
 data class PivotSystemConstants(
     override val Inertia: Double,
     override val frictionRPM:Double,
-    val gravityConstants: GravityModelConstants
+    val gravityConstants: GravityModelConstants,
+    val motorDirection: Direction,
 ) : ConstantsSuper(Inertia, frictionRPM)
 
 /**

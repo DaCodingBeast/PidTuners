@@ -3,7 +3,6 @@ package com.dacodingbeast.pidtuners.Simulators
 import android.transition.Slide
 import com.dacodingbeast.pidtuners.Algorithm.Dt
 import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
-import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange
 import kotlin.math.abs
 
 enum class Direction{

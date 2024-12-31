@@ -2,13 +2,13 @@ package com.dacodingbeast.pidtuners.Opmodes;
 
 
 import com.dacodingbeast.pidtuners.Constants.Constants;
+import com.dacodingbeast.pidtuners.Constants.GravityModelConstants;
+import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants;
 import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants;
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
+import com.dacodingbeast.pidtuners.Simulators.AngleRange;
 import com.dacodingbeast.pidtuners.Simulators.SimulatorType;
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange;
-import com.dacodingbeast.pidtuners.Constants.GravityModelConstants;
-import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
@@ -16,17 +16,20 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 
-import CommonUtilities.PIDFcontroller;
+import ArmSpecific.Direction;
 import CommonUtilities.PIDParams;
 
 public final class TuningOpModes {
     private static Motor motor = new Motor("Shoulder", DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,1.0,null);
 
+    public static PIDParams pidParams = new PIDParams(0.0,0.0,0.0,0.0);
     static AngleRange testingAngle = AngleRange.Angles.fromDegrees(90, 180);
 
     static AngleRange obstacleAngle = AngleRange.Angles.fromDegrees(0, 90);
 
     static double stationaryAngle = Math.toRadians(0.0);
+
+    public static Direction armDirection = Direction.Clockwise;
 
     static double frictionRPM = 0.0;
 
@@ -34,7 +37,7 @@ public final class TuningOpModes {
 
     static double time = 30.0;
 
-    static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(0.0,frictionRPM, new  GravityModelConstants(0.0,0.0,0.0));
+    static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(0.0,frictionRPM, new  GravityModelConstants(0.0,0.0,0.0),armDirection);
     static SlideSystemConstants slideSystemConstants = new SlideSystemConstants(0.0,frictionRPM);
     static Boolean gravityRecord = false;
 
@@ -42,9 +45,9 @@ public final class TuningOpModes {
 
     static double gravityMotorPower = 0.5;
 
-    static PIDFcontroller pidfController = new PIDFcontroller(new PIDParams(0.0,0.0,0.0,0.0),motor,obstacleAngle,0.0);
+//    static PIDFcontroller pidfController = new PIDFcontroller(new PIDParams(0.0,0.0,0.0,0.0),motor,obstacleAngle,0.0);
 
-    private static SimulatorType simulatorType = SimulatorType.ArmSimulator;
+    public static SimulatorType simulatorType = SimulatorType.ArmSimulator;
     private TuningOpModes() {
     }
 
@@ -68,7 +71,7 @@ public final class TuningOpModes {
                 );
             }
             manager.register(
-                    metaForClass(SampleOpMode.class), new SampleOpMode(constants, pidfController)
+                    metaForClass(SampleOpMode.class), new SampleOpMode(constants)
             );
             manager.register(
                     metaForClass(FindPID.class), new FindPID(constants,accuracy,simulatorType,time)
