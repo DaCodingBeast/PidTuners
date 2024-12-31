@@ -1,5 +1,8 @@
 package com.dacodingbeast.pidtuners.HardwareSetup
 
+import com.dacodingbeast.pidtuners.HardwareSetup.torque.StallTorque
+import com.dacodingbeast.pidtuners.HardwareSetup.torque.TorqueUnit
+
 /**
  * Holds the necessary specs needed for this simulation, all which can be found on the vendor's website
  * @param rpm Theoretical rpm

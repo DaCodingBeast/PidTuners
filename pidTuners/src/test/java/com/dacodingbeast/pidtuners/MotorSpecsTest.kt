@@ -4,11 +4,10 @@ import com.dacodingbeast.pidtuners.HardwareSetup.Encoder
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor
 import com.dacodingbeast.pidtuners.HardwareSetup.MotorSpecs
-import com.dacodingbeast.pidtuners.HardwareSetup.StallTorque
-import com.dacodingbeast.pidtuners.HardwareSetup.TorqueUnit
+import com.dacodingbeast.pidtuners.HardwareSetup.torque.StallTorque
+import com.dacodingbeast.pidtuners.HardwareSetup.torque.TorqueUnit
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import junit.framework.TestCase.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertThrows
 import org.junit.Test
 

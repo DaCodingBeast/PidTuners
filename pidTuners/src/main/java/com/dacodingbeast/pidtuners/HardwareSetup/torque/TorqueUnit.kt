@@ -1,4 +1,4 @@
-package com.dacodingbeast.pidtuners.HardwareSetup
+package com.dacodingbeast.pidtuners.HardwareSetup.torque
 
 enum class TorqueUnit(val symbol: String, private val toNewtonMeterFactor: Double) {
     NEWTON_METER("Nm", 1.0),
