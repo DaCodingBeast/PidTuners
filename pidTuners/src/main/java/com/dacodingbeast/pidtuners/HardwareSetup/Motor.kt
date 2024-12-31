@@ -1,26 +1,19 @@
 package com.dacodingbeast.pidtuners.HardwareSetup
 
-import ArmSpecific.ArmSim
-import ArmSpecific.Direction
 import CommonUtilities.PIDFcontroller
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
-import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.armDirection
 import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.pidParams
 import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.simulatorType
+import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.spoolDiameter
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.SimulatorType
 import com.dacodingbeast.pidtuners.Simulators.Target
-import com.dacodingbeast.pidtuners.Simulators.SlideRange
-import com.dacodingbeast.pidtuners.Simulators.SlideSim
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.sin
 
 /**
  * The Motor class is used to define the motor object, and its properties
@@ -48,6 +41,9 @@ class Motor(
     private var pidFcontroller: PIDFcontroller? = null
     private val simulationType: SimulatorType = simulatorType
 
+    var ticksPerIn :Double = 1.0
+    private var inPerTick:Double = 1.0
+
     init {
         when (simulationType){
             SimulatorType.SlideSimulator -> slideParams = PIDParams(0.0,0.0,0.0,0.0)
@@ -69,6 +65,8 @@ class Motor(
         }else { // else, apply the external gear ratio to the motor gear ratio, to find total gear ratio
             specs.applyGearRatio(externalGearRatio)
         }
+        ticksPerIn = EncoderMath(spoolDiameter,this).ticksPerInch
+        inPerTick = EncoderMath(spoolDiameter,this).inchesPerTick
     }
 
 
@@ -171,10 +169,18 @@ class Motor(
                 return abs(AngleRange.findPIDFAngleError(direction,angle)) < Math.toRadians(degreeAccuracy)
             }
             SimulatorType.SlideSimulator ->{
-                return false //SlideRange.fromTicks(motor.currentPosition.toDouble(), this.target)
+                val ticksAccuracy = degreeAccuracy*10
+                val current = this.getCurrentPose()
+                return current in (target - ticksAccuracy)..(target + ticksAccuracy)
             }
         }
     }
 
 
+}
+data class EncoderMath(val spoolDiameter:Double, val motor:Motor){
+    val counts = motor.getTicksPerRotation()
+    val diameter = spoolDiameter
+    val ticksPerInch: Double = counts / (diameter * Math.PI)
+    val inchesPerTick: Double = 1.0 / ticksPerInch
 }

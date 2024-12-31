@@ -20,12 +20,11 @@ import ArmSpecific.Direction;
 import CommonUtilities.PIDParams;
 
 public final class TuningOpModes {
-    private static Motor motor = new Motor("Shoulder", DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,1.0,null);
-
+    static AngleRange obstacleAngle = AngleRange.Angles.fromDegrees(0, 90);
+    public static Motor motor = new Motor("Shoulder", DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,1.0,obstacleAngle,null);
+    public static Double spoolDiameter = 1.0;
     public static PIDParams pidParams = new PIDParams(0.0,0.0,0.0,0.0);
     static AngleRange testingAngle = AngleRange.Angles.fromDegrees(90, 180);
-
-    static AngleRange obstacleAngle = AngleRange.Angles.fromDegrees(0, 90);
 
     static double stationaryAngle = Math.toRadians(0.0);
 
@@ -55,7 +54,7 @@ public final class TuningOpModes {
 
     @OpModeRegistrar
     public static void register(OpModeManager manager) {
-            Constants constants = new Constants(motor, testingAngle.asArrayList(), obstacleAngle,(simulatorType == SimulatorType.ArmSimulator)  ?pivotSystemConstants : slideSystemConstants);
+            Constants constants = new Constants(motor, testingAngle.asArrayList(), (simulatorType == SimulatorType.ArmSimulator)  ?pivotSystemConstants : slideSystemConstants);
             manager.register(
                     metaForClass(FrictionTest.class), new FrictionTest(constants)
             );
