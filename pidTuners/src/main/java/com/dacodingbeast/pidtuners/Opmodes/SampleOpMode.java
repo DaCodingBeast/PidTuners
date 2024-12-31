@@ -5,24 +5,27 @@ import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.stationaryAngle;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
+import com.dacodingbeast.pidtuners.Constants.Constants;
 import com.dacodingbeast.pidtuners.Constants.PivotConstants;
+import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
+import com.dacodingbeast.pidtuners.Simulators.Target;
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import CommonUtilities.PIDFcontroller;
 
 @Config
 @TeleOp(name = "PivotSampleOpMode", group = "Linear OpMode")
 public class SampleOpMode extends LinearOpMode {
-    PivotConstants constants;
+    Constants constants;
     PIDFcontroller pidFcontroller;
     public static int x = 0;
-    public SampleOpMode(PivotConstants constants, PIDFcontroller pidFcontroller) {
+    public SampleOpMode(Constants constants, PIDFcontroller pidFcontroller) {
         this.constants = constants;
         this.pidFcontroller = pidFcontroller;
     }
@@ -33,12 +36,12 @@ public class SampleOpMode extends LinearOpMode {
         Motor motor = constants.getMotor();
         motor.init(hardwareMap,stationaryAngle);
 
-        ArrayList<AngleRange> targets = constants.getTestingAngle().asArrayList();
-        AngleRange target = targets.get(0);
+        List<Target> targets = constants.getAngles();
         ElapsedTime timer = new ElapsedTime();
 
-        pidFcontroller.resetConstantsAndTarget(pidFcontroller.getParams(), target);
         x=0;
+
+
         ElapsedTime timerTime = new ElapsedTime();
         while (opModeInInit()){
             timerTime.reset();

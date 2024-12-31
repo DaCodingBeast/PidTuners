@@ -14,8 +14,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.ArrayList;
 
-import CommonUtilities.Models;
-
 @TeleOp(name = "FrictionTest", group = "Linear OpMode")
 public class FrictionTest extends LinearOpMode {
     Constants constants;
@@ -118,9 +116,8 @@ public class FrictionTest extends LinearOpMode {
                 }
                 double averageAA = sum / angularAccelerationData.size();
 
-                double rotationalInertia = Models.calculateTmotor(
+                double rotationalInertia = constants.getMotor().calculateTmotor(
                         .5,
-                        motor,
                         actualRpm
                 ) / averageAA;
 

@@ -1,18 +1,18 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
+import com.dacodingbeast.pidtuners.Constants.Constants;
 import com.dacodingbeast.pidtuners.Constants.SlideConstants;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
 import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+
 import ArmSpecific.pso4Slides;
 
 public class SlideTestingOpMode extends LinearOpMode {
-    SlideConstants constants;
-    pso4Slides pso4Slides;
-    public SlideTestingOpMode(SlideConstants constants) {
+    Constants constants;
+    public SlideTestingOpMode(Constants constants) {
         this.constants = constants;
-        pso4Slides = new pso4Slides(constants.getSlideSystemConstants(),constants.getTarget().asArrayList(),30.0,constants.getObstacle(),3.5 );
     }
     @Override
     public void runOpMode() throws InterruptedException {

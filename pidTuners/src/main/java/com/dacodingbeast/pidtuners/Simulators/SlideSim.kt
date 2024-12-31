@@ -1,8 +1,7 @@
 package com.dacodingbeast.pidtuners.Simulators
 
-import ArmSpecific.pso4Slides.System.slideSystemConstants
-import CommonUtilities.Models
 import com.dacodingbeast.pidtuners.Algorithm.Dt
+import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange
 import kotlin.math.abs
@@ -12,16 +11,18 @@ enum class Direction{
 }
 
 class SlideSim(override var target: AngleRange, override val obstacle: List<AngleRange>):SimulatorStructure(target,obstacle) {
+
+    private val c = constants.systemSpecific as SlideSystemConstants
+
     override fun updateSimulator(): SimulatorData {
         val calculate = pidController.calculate(target,obstacle.getOrNull(0))
         val controlEffort = calculate.motorPower
 
-        val motorTorque = Models.calculateTmotor(controlEffort)
-        val gravityTorque = Models.gravityTorque(target.start) * if (target.start > 0) -1 else 1
+        val motorTorque = constants.motor.calculateTmotor(controlEffort)
 
-        val torqueApplied = motorTorque + gravityTorque
+        val torqueApplied = motorTorque
 
-        val acceleration = torqueApplied / slideSystemConstants.Inertia
+        val acceleration = torqueApplied / c.Inertia
         velocity += acceleration * Dt
 
         target = SlideRange.fromTicks(target.start + velocity * Dt, target.stop).toAngleRange()

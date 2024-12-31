@@ -2,13 +2,13 @@ package com.dacodingbeast.pidtuners.Opmodes
 
 import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
 import com.dacodingbeast.pidtuners.Algorithm.Ranges
-import com.dacodingbeast.pidtuners.Constants.PivotConstants
+import com.dacodingbeast.pidtuners.Constants.Constants
 import com.dacodingbeast.pidtuners.Simulators.SimulatorType
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 
 @Autonomous
-class FindPID(val constants: PivotConstants, private val accuracy:Double, private val sim:SimulatorType, private val Time:Double) : LinearOpMode() {
+class FindPID(val constants: Constants, private val accuracy:Double, private val sim:SimulatorType, private val Time:Double) : LinearOpMode() {
 
     override fun runOpMode() {
 

@@ -2,7 +2,9 @@ package com.dacodingbeast.pidtuners.Simulators
 
 import CommonUtilities.PIDParams
 import CommonUtilities.PIDFcontroller
+import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
 import com.dacodingbeast.pidtuners.Algorithm.Particle
+import com.dacodingbeast.pidtuners.Constants.Constants
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
@@ -13,6 +15,8 @@ abstract class SimulatorStructure(open val target: Target, open val obstacle: Li
     fun init(params: Particle){
         pidController = PIDFcontroller(PIDParams(params.position))
     }
+
+    val constants = PSO_Optimizer.constants
 
     /**
      * Simulate Robot
