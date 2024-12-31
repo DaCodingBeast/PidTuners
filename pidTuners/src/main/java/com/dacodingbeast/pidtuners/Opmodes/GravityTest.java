@@ -1,8 +1,6 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
-import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.gravityDisplayPoints;
 import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.gravityMotorPower;
-import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.gravityRecord;
 import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.stationaryAngle;
 
 import android.util.Pair;
@@ -43,7 +41,6 @@ public class GravityTest extends LinearOpMode {
 
             motor.setPower(gravityMotorPower);
 
-            if (gravityRecord) {
                 dataPairs.add(new Pair<>(
                         angle,
                         motor.calculateTmotor(
@@ -51,10 +48,7 @@ public class GravityTest extends LinearOpMode {
                                 constants.getSystemSpecific().getFrictionRPM()
                         )
                 ));
-                gravityRecord = false;
-            }
 
-            if (gravityDisplayPoints) {
                 for (Pair<Double, Double> dataPoint : dataPairs) {
                     double [] d = new double[]{dataPoint.first,dataPoint.second};
                     telemetry.addLine(Arrays.toString(d));
@@ -63,7 +57,7 @@ public class GravityTest extends LinearOpMode {
                 telemetry.addLine("Copy and paste the below equation, and place a,b,k in the config");
                 telemetry.addLine("y_{1}~a(x_{1}-b)^2+k");
                 telemetry.addLine("All done!!");
-            }
+
             telemetry.update();
         }
     }

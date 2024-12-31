@@ -39,14 +39,8 @@ public final class TuningOpModes {
 
     static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(0.0,frictionRPM, new  GravityModelConstants(0.0,0.0,0.0),armDirection);
     static SlideSystemConstants slideSystemConstants = new SlideSystemConstants(0.0,frictionRPM);
-    static Boolean gravityRecord = false;
-
-    static Boolean gravityDisplayPoints = false;
 
     static double gravityMotorPower = 0.5;
-
-//    static PIDFcontroller pidfController = new PIDFcontroller(new PIDParams(0.0,0.0,0.0,0.0),motor,obstacleAngle,0.0);
-
     public static SimulatorType simulatorType = SimulatorType.ArmSimulator;
     private TuningOpModes() {
     }

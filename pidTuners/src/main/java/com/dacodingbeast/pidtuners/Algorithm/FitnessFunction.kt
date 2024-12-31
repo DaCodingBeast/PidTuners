@@ -5,6 +5,8 @@ import com.dacodingbeast.pidtuners.Simulators.SimulatorData
 import com.dacodingbeast.pidtuners.Simulators.SimulatorType
 import com.dacodingbeast.pidtuners.Simulators.Target
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
+import com.dacodingbeast.pidtuners.Simulators.SlideRange
+import com.dacodingbeast.pidtuners.Simulators.SlideSim
 import kotlin.math.abs
 import kotlin.math.pow
 
@@ -31,7 +33,7 @@ class FitnessFunction(
 
     private val simulator = when(simulatorType){
         SimulatorType.ArmSimulator -> ArmSim(target as AngleRange,(obstacle as List<AngleRange>))
-        SimulatorType.SlideSimulator -> TODO()
+        SimulatorType.SlideSimulator -> SlideSim(target as SlideRange,(obstacle as List<SlideRange>))
     }
 
     /**

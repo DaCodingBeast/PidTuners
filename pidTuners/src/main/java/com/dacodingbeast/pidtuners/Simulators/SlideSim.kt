@@ -8,7 +8,7 @@ enum class Direction{
     EXTENDING, RETRACTING
 }
 
-class SlideSim(override var target: AngleRange, override val obstacle: List<AngleRange>):SimulatorStructure(target,obstacle) {
+class SlideSim(override var target: SlideRange, override val obstacle: List<SlideRange>):SimulatorStructure(target,obstacle) {
 
     private val c = constants.systemSpecific as SlideSystemConstants
 
@@ -23,7 +23,7 @@ class SlideSim(override var target: AngleRange, override val obstacle: List<Angl
         val acceleration = torqueApplied / c.Inertia
         velocity += acceleration * Dt
 
-        target = SlideRange.fromTicks(target.start + velocity * Dt, target.stop).toAngleRange()
+        target = SlideRange.fromTicks(target.start + velocity * Dt, target.stop)
 
         return SimulatorData(target.start, controlEffort, error, velocity)
     }
