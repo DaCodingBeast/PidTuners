@@ -6,8 +6,9 @@ import com.dacodingbeast.pidtuners.Constants.Constants
 import com.dacodingbeast.pidtuners.Simulators.SimulatorType
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
-@Autonomous
+@TeleOp
 class FindPID(val constants: Constants, private val accuracy:Double, private val sim:SimulatorType, private val Time:Double) : LinearOpMode() {
 
     override fun runOpMode() {
