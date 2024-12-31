@@ -2,7 +2,6 @@ package com.dacodingbeast.pidtuners.Simulators
 
 import com.dacodingbeast.pidtuners.Algorithm.Dt
 import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
-import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange
 import kotlin.math.abs
 
 enum class Direction{
@@ -14,7 +13,7 @@ class SlideSim(override var target: AngleRange, override val obstacle: List<Angl
     private val c = constants.systemSpecific as SlideSystemConstants
 
     override fun updateSimulator(): SimulatorData {
-        val calculate = pidController.calculate(target,obstacle.getOrNull(0))
+        val calculate = pidController.calculate(target)
         val controlEffort = calculate.motorPower
 
         val motorTorque = constants.motor.calculateTmotor(controlEffort)

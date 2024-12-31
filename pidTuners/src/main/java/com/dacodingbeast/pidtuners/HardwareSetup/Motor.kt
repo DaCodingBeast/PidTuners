@@ -4,6 +4,7 @@ import CommonUtilities.PIDFcontroller
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
 import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.armDirection
+import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.pidParams
 import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.simulatorType
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.SimulatorType
@@ -48,7 +49,11 @@ class Motor(
             SimulatorType.SlideSimulator -> slideParams = PIDParams(0.0,0.0,0.0,0.0)
             SimulatorType.ArmSimulator -> pivotParams = PIDParams(0.0,0.0,0.0,0.0)
         }
+
+        setParams(pidParams)
+
         pidFcontroller = if (slideParams != null) PIDFcontroller(slideParams!!) else PIDFcontroller(pivotParams!!)
+
         if (externalGearRatio < 0) {
             throw IllegalArgumentException("Gear ratio must be positive")
         }else if (externalGearRatio == 0.0){
@@ -83,7 +88,7 @@ class Motor(
         motor.power=pidFcontroller!!.calculate(target).motorPower
     }
 
-    fun sendParams(params: PIDParams){
+    fun setParams(params: PIDParams){
         if (slideParams != null) slideParams = params else pivotParams = params
     }
 

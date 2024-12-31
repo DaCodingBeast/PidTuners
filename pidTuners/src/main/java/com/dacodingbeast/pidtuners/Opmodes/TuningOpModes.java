@@ -17,12 +17,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 
 import ArmSpecific.Direction;
-import CommonUtilities.PIDFcontroller;
 import CommonUtilities.PIDParams;
 
 public final class TuningOpModes {
     private static Motor motor = new Motor("Shoulder", DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,1.0,null);
 
+    public static PIDParams pidParams = new PIDParams(0.0,0.0,0.0,0.0);
     static AngleRange testingAngle = AngleRange.Angles.fromDegrees(90, 180);
 
     static AngleRange obstacleAngle = AngleRange.Angles.fromDegrees(0, 90);
@@ -45,7 +45,7 @@ public final class TuningOpModes {
 
     static double gravityMotorPower = 0.5;
 
-    static PIDFcontroller pidfController = new PIDFcontroller(new PIDParams(0.0,0.0,0.0,0.0),motor,obstacleAngle,0.0);
+//    static PIDFcontroller pidfController = new PIDFcontroller(new PIDParams(0.0,0.0,0.0,0.0),motor,obstacleAngle,0.0);
 
     public static SimulatorType simulatorType = SimulatorType.ArmSimulator;
     private TuningOpModes() {
@@ -71,7 +71,7 @@ public final class TuningOpModes {
                 );
             }
             manager.register(
-                    metaForClass(SampleOpMode.class), new SampleOpMode(constants, pidfController)
+                    metaForClass(SampleOpMode.class), new SampleOpMode(constants)
             );
             manager.register(
                     metaForClass(FindPID.class), new FindPID(constants,accuracy,simulatorType,time)

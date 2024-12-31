@@ -6,7 +6,6 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.dacodingbeast.pidtuners.Constants.Constants;
-import com.dacodingbeast.pidtuners.Constants.PivotConstants;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
 import com.dacodingbeast.pidtuners.Simulators.Target;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -15,17 +14,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.List;
 
-import CommonUtilities.PIDFcontroller;
-
 @Config
 @TeleOp(name = "PivotSampleOpMode", group = "Linear OpMode")
 public class SampleOpMode extends LinearOpMode {
     Constants constants;
-    PIDFcontroller pidFcontroller;
     public static int x = 0;
-    public SampleOpMode(Constants constants, PIDFcontroller pidFcontroller) {
+    public SampleOpMode(Constants constants) {
         this.constants = constants;
-        this.pidFcontroller = pidFcontroller;
     }
     @Override
     public void runOpMode() {
@@ -52,7 +47,7 @@ public class SampleOpMode extends LinearOpMode {
             timer.reset();
 
 
-            if (pidFcontroller.targetReached(encoder,8)){
+            if (motor.targetReached(target,8)){
                 if(targets.size()> x+1 && timerTime.seconds() >= 1.0) {
                     x+=1;
                     target = targets.get(x);
@@ -60,14 +55,13 @@ public class SampleOpMode extends LinearOpMode {
                 }
             }
 
-            for (int i = 0; i < targets.size(); i++) {
+            for (int i = 0; i < targets.size(); i++) { //TODO this not needed anymore?
                 if (target == targets.get(i)) {
                     pidFcontroller.resetConstantsAndTarget(pidFcontroller.getParams(), target);
                     break;
                 }
             }
-
-            motor.setPower(pidFcontroller.calculateMotorPower(encoder, looptime));
+            motor.runMotor(target);
             telemetry.addData("X",x);
             telemetry.update();
         }
