@@ -129,4 +129,7 @@ class AngleRange private constructor(override val start: Double, override val st
     fun asArrayList(): ArrayList<AngleRange> {
         return arrayListOf(this)
     }
+    fun asList(): List<AngleRange> {
+        return listOf(this)
+    }
 }
