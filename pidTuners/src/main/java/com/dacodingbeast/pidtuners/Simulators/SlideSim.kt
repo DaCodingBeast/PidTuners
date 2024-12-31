@@ -1,5 +1,6 @@
 package com.dacodingbeast.pidtuners.Simulators
 
+import android.transition.Slide
 import com.dacodingbeast.pidtuners.Algorithm.Dt
 import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
 import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange
@@ -9,12 +10,12 @@ enum class Direction{
     EXTENDING, RETRACTING
 }
 
-class SlideSim(override var target: AngleRange, override val obstacle: List<AngleRange>):SimulatorStructure(target,obstacle) {
+class SlideSim(override var target: SlideRange):SimulatorStructure(target) {
 
     private val c = constants.systemSpecific as SlideSystemConstants
 
     override fun updateSimulator(): SimulatorData {
-        val calculate = pidController.calculate(target,obstacle.getOrNull(0))
+        val calculate = pidController.calculate(target)
         val controlEffort = calculate.motorPower
 
         val motorTorque = constants.motor.calculateTmotor(controlEffort)
@@ -24,7 +25,7 @@ class SlideSim(override var target: AngleRange, override val obstacle: List<Angl
         val acceleration = torqueApplied / c.Inertia
         velocity += acceleration * Dt
 
-        target = SlideRange.fromTicks(target.start + velocity * Dt, target.stop).toAngleRange()
+        target = SlideRange.fromTicks(target.start + velocity * Dt, target.stop)
 
         return SimulatorData(target.start, controlEffort, error, velocity)
     }

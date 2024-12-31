@@ -6,6 +6,6 @@ import com.dacodingbeast.pidtuners.Simulators.Target
 data class Constants(
     val motor: Motor,
     val angles: List<Target>,
-    val obstacle: List<Target>,
+    val obstacle: Target?,
     val systemSpecific: ConstantsSuper
 )

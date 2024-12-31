@@ -8,7 +8,7 @@ import com.dacodingbeast.pidtuners.Constants.Constants
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
-abstract class SimulatorStructure(open val target: Target, open val obstacle: List<Target>)
+abstract class SimulatorStructure(open val target: Target)
 {
     lateinit var pidController : PIDFcontroller
 

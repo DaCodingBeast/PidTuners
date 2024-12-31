@@ -1,13 +1,12 @@
 package CommonUtilities
 
 import com.dacodingbeast.pidtuners.Algorithm.Dt
+import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
-import android.util.Log
 import com.dacodingbeast.pidtuners.Algorithm.Vector
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor
 import com.dacodingbeast.pidtuners.Simulators.Target
 import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange
-import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
@@ -34,17 +33,13 @@ class PIDParams (val kp: Double, val ki: Double, val kd: Double, val kf: Double 
  * @param params PIDF coefficients
  * @see PIDParams
  */
-
-class PIDFcontroller(
-    var params: PIDParams,
-    private val motor: Motor? = null,
-    private val obstacleRange: AngleRange? = null, val angleOffset: Double? = null
-) {
+class Result(val motorPower: Double, val error: Double)
+class PIDFcontroller(var params: PIDParams) {
 
     private var prevError = 0.0
     private var integral = 0.0
-    private var target: AngleRange? = null
-    class Result(val motorPower: Double, val error: Double)
+
+    val constants = PSO_Optimizer.constants
 
     /**
      * @param angleRange Used to determine the feedforward term to fight gravity
@@ -60,7 +55,7 @@ class PIDFcontroller(
         var ff=0.0
         val error = when(position){
             is AngleRange -> {
-                val direction = AngleRange.findMotorDirection(position, )
+                val direction = AngleRange.findMotorDirection(position, constants.obstacle as AngleRange?)
                 ff = if(position.start>0 ) max(0.0, sin(position.start)) * params.kf else min(0.0, sin(position.start)) * params.kf
                 AngleRange.findPIDFAngleError(direction, position)
             }
@@ -83,12 +78,4 @@ class PIDFcontroller(
         return Result(controlEffort, error)
     }
 
-    /**
-     * This is for using the PIDF params in an opmode
-     */
-    fun resetConstantsAndTarget(params: PIDParams, target: AngleRange) {
-        require(motor != null) { throw IllegalArgumentException("You did not instantiate the PIDF controller with the your motor type") }
-        this.params = params
-        this.target = target
-    }
 }

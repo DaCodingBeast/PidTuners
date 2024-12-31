@@ -14,8 +14,8 @@ enum class Direction {
     Clockwise, CounterClockWise
 }
 
-class ArmSim(override var target: AngleRange, override val obstacle: List<AngleRange>) :
-    SimulatorStructure(target, obstacle) {
+class ArmSim(override var target: AngleRange) :
+    SimulatorStructure(target) {
 
     private val armSpecific = constants.systemSpecific as PivotSystemConstants
 
@@ -25,7 +25,7 @@ class ArmSim(override var target: AngleRange, override val obstacle: List<AngleR
      */
 
     override fun updateSimulator(): SimulatorData {
-        val calculate = pidController.calculate(target,obstacle.getOrNull(0))
+        val calculate = pidController.calculate(target)
         val controlEffort = calculate.motorPower
 
         val motorTorque = constants.motor.calculateTmotor(controlEffort)
