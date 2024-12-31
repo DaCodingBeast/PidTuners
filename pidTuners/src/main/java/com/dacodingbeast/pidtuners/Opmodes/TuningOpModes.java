@@ -2,13 +2,13 @@ package com.dacodingbeast.pidtuners.Opmodes;
 
 
 import com.dacodingbeast.pidtuners.Constants.Constants;
+import com.dacodingbeast.pidtuners.Constants.GravityModelConstants;
+import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants;
 import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants;
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
+import com.dacodingbeast.pidtuners.Simulators.AngleRange;
 import com.dacodingbeast.pidtuners.Simulators.SimulatorType;
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange;
-import com.dacodingbeast.pidtuners.Constants.GravityModelConstants;
-import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 
+import ArmSpecific.Direction;
 import CommonUtilities.PIDFcontroller;
 import CommonUtilities.PIDParams;
 
@@ -28,13 +29,15 @@ public final class TuningOpModes {
 
     static double stationaryAngle = Math.toRadians(0.0);
 
+    public static Direction armDirection = Direction.Clockwise;
+
     static double frictionRPM = 0.0;
 
     static double accuracy = 3.5;
 
     static double time = 30.0;
 
-    static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(0.0,frictionRPM, new  GravityModelConstants(0.0,0.0,0.0));
+    static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(0.0,frictionRPM, new  GravityModelConstants(0.0,0.0,0.0),armDirection);
     static SlideSystemConstants slideSystemConstants = new SlideSystemConstants(0.0,frictionRPM);
     static Boolean gravityRecord = false;
 
@@ -44,7 +47,7 @@ public final class TuningOpModes {
 
     static PIDFcontroller pidfController = new PIDFcontroller(new PIDParams(0.0,0.0,0.0,0.0),motor,obstacleAngle,0.0);
 
-    private static SimulatorType simulatorType = SimulatorType.ArmSimulator;
+    public static SimulatorType simulatorType = SimulatorType.ArmSimulator;
     private TuningOpModes() {
     }
 
