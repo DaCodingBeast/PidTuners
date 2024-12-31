@@ -1,12 +1,17 @@
 package com.dacodingbeast.pidtuners.HardwareSetup
 
 import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
-import com.dacodingbeast.pidtuners.Constants.Constants
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
+import com.dacodingbeast.pidtuners.Simulators.AngleRange
+import com.dacodingbeast.pidtuners.Simulators.Target
+import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.sin
 
 /**
  * The Motor class is used to define the motor object, and its properties
@@ -115,6 +120,52 @@ class Motor(
         val friction = actualRPM / getRPM()
 
         return getStallTorque() * friction * power
+    }
+
+
+
+
+
+
+    /**
+     * Check if Angle Target has been relatively reached, so user can change their own custom states
+     * @param degreeAccuracy Angle Accuracy for system to return true In Degrees
+     */
+
+    fun targetReached(encoder: Int, degreeAccuracy: Double = 5.0): Boolean{
+        val angleRange = AngleRange.fromRadians(motor!!.findAngle(), target!!.stop)
+        val direction  = AngleRange.findMotorDirection(angleRange, obstacleRange)
+        return (abs(AngleRange.findPIDFAngleError(direction, angleRange)) < Math.toRadians(degreeAccuracy))
+    }
+
+
+    fun userCalculate(
+        position: Target,
+        loopTime: Double
+    ): Double {
+
+        var ff=0.0
+        val error = when(position){
+            is AngleRange -> {
+                val direction = AngleRange.findMotorDirection(position, )
+                ff = if(position.start>0 ) max(0.0, sin(position.start)) * params.kf else min(0.0, sin(position.start)) * params.kf
+                AngleRange.findPIDFAngleError(direction, position)
+            }
+            is SlideRange ->{
+                position.stop - position.start
+            }
+
+        }
+
+        integral += (error * loopTime)
+
+        val derivative = (error - prevError) / loopTime
+        prevError = error
+
+        return ((derivative * params.kd + integral * params.ki + error * params.kp) + ff).coerceIn(
+            -1.0,
+            1.0
+        )
     }
 
 }

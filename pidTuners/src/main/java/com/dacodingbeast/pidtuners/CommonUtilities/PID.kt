@@ -1,10 +1,12 @@
 package CommonUtilities
 
 import com.dacodingbeast.pidtuners.Algorithm.Dt
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
+import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import android.util.Log
 import com.dacodingbeast.pidtuners.Algorithm.Vector
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor
+import com.dacodingbeast.pidtuners.Simulators.Target
+import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -25,7 +27,6 @@ class PIDParams (val kp: Double, val ki: Double, val kd: Double, val kf: Double 
         params.particleParams.getOrNull(3)?: 0.0
     )
 }
-
 
 
 /**
@@ -53,28 +54,27 @@ class PIDFcontroller(
      * @return A motor power that is in the range of 1 to -1
      */
     fun calculate(
-        angleRange: AngleRange,
-        badAngleRange: AngleRange?,
-        dt: Double = Dt
+        position: Target,
     ): Result {
 
-        val direction = AngleRange.findMotorDirection(angleRange, badAngleRange)
-        val error = AngleRange.findPIDFAngleError(direction, angleRange)
+        var ff=0.0
+        val error = when(position){
+            is AngleRange -> {
+                val direction = AngleRange.findMotorDirection(position, )
+                ff = if(position.start>0 ) max(0.0, sin(position.start)) * params.kf else min(0.0, sin(position.start)) * params.kf
+                AngleRange.findPIDFAngleError(direction, position)
+            }
+            is SlideRange ->{
+                position.stop - position.start
+            }
 
-        /**
-         * A way to prevent integral windup.
-         * It only applies the integral term when the motor power is being dampened
-         */
-        integral += (error * dt)
+        }
 
-        val derivative = (error - prevError) / dt
-//        println(derivative)
+        integral += (error * Dt)
+
+        val derivative = (error - prevError) / Dt
         prevError = error
 
-        //TODO BOOOOOOOOOOOOOOOOM
-        val ff = if(angleRange.start>0 ) max(0.0, sin(angleRange.start)) * params.kf else min(0.0, sin(angleRange.start)) * params.kf
-
-//        println(" d: ${derivative * params.kd}  i: ${integral * params.ki}   f: $ff   p: ${error*params.kp} angle: ${Math.toDegrees(angleRange.start)}")
         val controlEffort =
             ((derivative * params.kd + integral * params.ki + error * params.kp) + ff).coerceIn(
                 -1.0,
@@ -91,30 +91,4 @@ class PIDFcontroller(
         this.params = params
         this.target = target
     }
-
-    /**
-     * This function should be after reset, needs to access a non null Angle Range
-     */
-    fun calculateMotorPower(encoder: Int, looptime: Double): Double {
-
-        val angleRange = AngleRange.fromRadians(motor!!.findAngle(), target!!.stop)
-        return calculate(angleRange, obstacleRange, looptime).motorPower
-    }
-
-    /**
-     * Check if Angle Target has been relatively reached, so user can change their own custom states
-     * @param degreeAccuracy Angle Accuracy for system to return true In Degrees
-     */
-
-    fun targetReached(encoder: Int, degreeAccuracy: Double = 5.0): Boolean{
-        val angleRange = AngleRange.fromRadians(motor!!.findAngle(), target!!.stop)
-        val direction  = AngleRange.findMotorDirection(angleRange, obstacleRange)
-        return (abs(AngleRange.findPIDFAngleError(direction, angleRange)) < Math.toRadians(degreeAccuracy))
-    }
-
 }
-
-
-
-
-

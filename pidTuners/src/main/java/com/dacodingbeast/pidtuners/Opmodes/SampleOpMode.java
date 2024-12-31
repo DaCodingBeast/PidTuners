@@ -9,12 +9,10 @@ import com.dacodingbeast.pidtuners.Constants.Constants;
 import com.dacodingbeast.pidtuners.Constants.PivotConstants;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
 import com.dacodingbeast.pidtuners.Simulators.Target;
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import CommonUtilities.PIDFcontroller;
@@ -53,7 +51,6 @@ public class SampleOpMode extends LinearOpMode {
             double looptime = timer.seconds();
             timer.reset();
 
-            int encoder = (int) ((motor.getCurrentPose())/ Math.pow(constants.getMotor().getGearRatio(),2));
 
             if (pidFcontroller.targetReached(encoder,8)){
                 if(targets.size()> x+1 && timerTime.seconds() >= 1.0) {

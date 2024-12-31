@@ -3,7 +3,7 @@ package com.example.pso4pid
 import com.dacodingbeast.pidtuners.Constants.GravityModelConstants
 import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants
 import ArmSpecific.pso4Arms
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
+import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Algorithm.Particle
 import android.util.Log
 import com.dacodingbeast.pidtuners.Algorithm.FitnessFunction

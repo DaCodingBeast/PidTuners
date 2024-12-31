@@ -1,7 +1,6 @@
-package com.dacodingbeast.pidtuners.TypeSpecific.Arm
+package com.dacodingbeast.pidtuners.Simulators
 
 import ArmSpecific.Direction
-import com.dacodingbeast.pidtuners.Simulators.Target
 import java.util.ArrayList
 import kotlin.math.PI
 

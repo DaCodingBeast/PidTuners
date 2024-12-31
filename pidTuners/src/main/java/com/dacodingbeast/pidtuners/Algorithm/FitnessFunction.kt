@@ -4,7 +4,7 @@ import ArmSpecific.ArmSim
 import com.dacodingbeast.pidtuners.Simulators.SimulatorData
 import com.dacodingbeast.pidtuners.Simulators.SimulatorType
 import com.dacodingbeast.pidtuners.Simulators.Target
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
+import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import kotlin.math.abs
 import kotlin.math.pow
 

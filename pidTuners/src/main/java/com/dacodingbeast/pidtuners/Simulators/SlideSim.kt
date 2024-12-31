@@ -2,7 +2,6 @@ package com.dacodingbeast.pidtuners.Simulators
 
 import com.dacodingbeast.pidtuners.Algorithm.Dt
 import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
 import com.dacodingbeast.pidtuners.TypeSpecific.Slides.SlideRange
 import kotlin.math.abs
 

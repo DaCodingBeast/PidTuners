@@ -2,7 +2,7 @@ package ArmSpecific
 
 import com.dacodingbeast.pidtuners.Algorithm.Dt
 import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange
+import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.SimulatorData
 import com.dacodingbeast.pidtuners.Simulators.SimulatorStructure
 import kotlin.math.abs
@@ -23,6 +23,7 @@ class ArmSim(override var target: AngleRange, override val obstacle: List<AngleR
      * This function calculates the sum of two integers.
      * @return Arms Angle, Error, and motor power
      */
+
     override fun updateSimulator(): SimulatorData {
         val calculate = pidController.calculate(target,obstacle.getOrNull(0))
         val controlEffort = calculate.motorPower

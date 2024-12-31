@@ -3,7 +3,7 @@ package com.dacodingbeast.pidtuners.Opmodes;
 import com.dacodingbeast.pidtuners.Constants.PivotConstants;
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
-import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange;
+import com.dacodingbeast.pidtuners.Simulators.AngleRange;
 import com.dacodingbeast.pidtuners.Constants.GravityModelConstants;
 import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -56,6 +56,7 @@ public final class TuningOpModes {
     public static void register(OpModeManager manager) {
         if (!pivotDisabled) {
             PivotConstants constants = new PivotConstants(motor, testingAngle, obstacleAngle, pivotSystemConstants, pso4Arms, gravityRecord, gravityDisplayPoints, gravityMotorPower);
+
             manager.register(
                     metaForClass(FrictionTest.class), new FrictionTest(constants)
             );
