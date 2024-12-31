@@ -1,8 +1,11 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
-import com.dacodingbeast.pidtuners.Constants.PivotConstants;
+
+import com.dacodingbeast.pidtuners.Constants.Constants;
+import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants;
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
+import com.dacodingbeast.pidtuners.Simulators.SimulatorType;
 import com.dacodingbeast.pidtuners.TypeSpecific.Arm.AngleRange;
 import com.dacodingbeast.pidtuners.Constants.GravityModelConstants;
 import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants;
@@ -13,7 +16,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 
-import ArmSpecific.pso4Arms;
 import CommonUtilities.PIDFcontroller;
 import CommonUtilities.PIDParams;
 
@@ -28,10 +30,12 @@ public final class TuningOpModes {
 
     static double frictionRPM = 0.0;
 
-    static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(motor, new  GravityModelConstants(0.0,0.0,0.0),0.0,frictionRPM);
+    static double accuracy = 3.5;
 
-    static pso4Arms pso4Arms = new pso4Arms(pivotSystemConstants,testingAngle.asArrayList(),30.0,obstacleAngle,3.5);
+    static double time = 30.0;
 
+    static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(0.0,frictionRPM, new  GravityModelConstants(0.0,0.0,0.0));
+    static SlideSystemConstants slideSystemConstants = new SlideSystemConstants(0.0,frictionRPM);
     static Boolean gravityRecord = false;
 
     static Boolean gravityDisplayPoints = false;
@@ -40,7 +44,7 @@ public final class TuningOpModes {
 
     static PIDFcontroller pidfController = new PIDFcontroller(new PIDParams(0.0,0.0,0.0,0.0),motor,obstacleAngle,0.0);
 
-    private static boolean pivotDisabled = false;
+    private static SimulatorType simulatorType = SimulatorType.ArmSimulator;
     private TuningOpModes() {
     }
 
@@ -54,15 +58,21 @@ public final class TuningOpModes {
 
     @OpModeRegistrar
     public static void register(OpModeManager manager) {
-        if (!pivotDisabled) {
-            PivotConstants constants = new PivotConstants(motor, testingAngle, obstacleAngle, pivotSystemConstants, pso4Arms, gravityRecord, gravityDisplayPoints, gravityMotorPower);
+            Constants constants = new Constants(motor, testingAngle.asArrayList(), obstacleAngle.asArrayList(),(simulatorType == SimulatorType.ArmSimulator)  ?pivotSystemConstants : slideSystemConstants);
             manager.register(
                     metaForClass(FrictionTest.class), new FrictionTest(constants)
             );
+            if (simulatorType == SimulatorType.ArmSimulator) {
+                manager.register(
+                        metaForClass(GravityTest.class), new GravityTest(constants)
+                );
+            }
             manager.register(
                     metaForClass(SampleOpMode.class), new SampleOpMode(constants, pidfController)
             );
-        }
+            manager.register(
+                    metaForClass(FindPID.class), new FindPID(constants,accuracy,simulatorType,time)
+            );
     }
 
 }
