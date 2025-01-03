@@ -36,7 +36,7 @@ public final class TuningOpModes {
 
     static double time = 30.0;
 
-    static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(0.0,frictionRPM, new  GravityModelConstants(0.0,0.0,0.0),armDirection);
+    static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(0.0,frictionRPM, new  GravityModelConstants(0.0,0.0,0.0));
     static SlideSystemConstants slideSystemConstants = new SlideSystemConstants(0.0,frictionRPM);
 
     static double gravityMotorPower = 0.5;
@@ -54,7 +54,7 @@ public final class TuningOpModes {
 
     @OpModeRegistrar
     public static void register(OpModeManager manager) {
-            Constants constants = new Constants(motor, testingAngle.asArrayList(), (simulatorType == SimulatorType.ArmSimulator)  ?pivotSystemConstants : slideSystemConstants);
+            Constants constants = new Constants(motor, testingAngle.asArrayList(), (simulatorType == SimulatorType.ArmSimulator)  ?pivotSystemConstants : slideSystemConstants, simulatorType);
             manager.register(
                     metaForClass(FrictionTest.class), new FrictionTest(constants)
             );

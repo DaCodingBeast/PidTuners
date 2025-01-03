@@ -20,7 +20,6 @@ data class PivotSystemConstants(
     override val Inertia: Double,
     override val frictionRPM:Double,
     val gravityConstants: GravityModelConstants,
-    val motorDirection: Direction,
 ) : ConstantsSuper(Inertia, frictionRPM)
 
 /**

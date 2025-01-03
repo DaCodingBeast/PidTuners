@@ -37,7 +37,7 @@ class PSO_Optimizer(
     }
 
     private val swarmSize = 1000000
-    private val particles = Array(swarmSize) { Particle(parameterRanges, FitnessFunction(time,targets,obstacle,simulationType))}
+    val particles = Array(swarmSize) { Particle(parameterRanges, FitnessFunction(time,targets,obstacle,simulationType))}
 
     //initialize
     private var gBestParticle = particles[0]

@@ -45,25 +45,25 @@ public class SampleOpMode extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
             double looptime = timer.seconds();
             timer.reset();
-
-
-            if (motor.targetReached(8)){
-                if(targets.size()> x+1 && timerTime.seconds() >= 1.0) {
-                    x+=1;
-                    target = targets.get(x);
-                    timerTime.reset();
-                }
-            }
-
-            for (int i = 0; i < targets.size(); i++) { //TODO this not needed anymore?
-                if (target == targets.get(i)) {
-                    pidFcontroller.resetConstantsAndTarget(pidFcontroller.getParams(), target);
-                    break;
-                }
-            }
-            motor.runMotor(target);
-            telemetry.addData("X",x);
-            telemetry.update();
+//
+//
+//            if (motor.targetReached(8)){
+//                if(targets.size()> x+1 && timerTime.seconds() >= 1.0) {
+//                    x+=1;
+//                    target = targets.get(x);
+//                    timerTime.reset();
+//                }
+//            }
+//
+//            for (int i = 0; i < targets.size(); i++) { //TODO this not needed anymore?
+//                if (target == targets.get(i)) {
+//                    pidFcontroller.resetConstantsAndTarget(pidFcontroller.getParams(), target);
+//                    break;
+//                }
+//            }
+//            motor.runMotor(target);
+//            telemetry.addData("X",x);
+//            telemetry.update();
         }
     }
 }

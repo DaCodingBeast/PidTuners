@@ -15,9 +15,9 @@ class FitnessFunction {
     fun itaeReturnValue(){
         val range = Ranges(0.0, Random.nextDouble(0.0,1.0))
         val ranges = arrayListOf(range,range,range,range)
-        val particle = Particle(ranges, com.dacodingbeast.pidtuners.Algorithm.FitnessFunction(2.0, AngleRange.fromRadians(0.0,PI/2), AngleRange.fromRadians(PI/6,PI/4).asArrayList(),SimulatorType.ArmSimulator))
+        val particle = Particle(ranges, com.dacodingbeast.pidtuners.Algorithm.FitnessFunction(2.0, AngleRange.fromRadians(0.0,PI/2), AngleRange.fromRadians(PI/6,PI/4),SimulatorType.ArmSimulator))
 
-        val fitnessFunction = FitnessFunction(2.0, AngleRange.fromRadians(0.0,PI/2), AngleRange.fromRadians(PI/6,PI/4).asArrayList(),SimulatorType.ArmSimulator)
+        val fitnessFunction = FitnessFunction(2.0, AngleRange.fromRadians(0.0,PI/2), AngleRange.fromRadians(PI/6,PI/4),SimulatorType.ArmSimulator)
 
         val result = fitnessFunction.findFitness(particle)
         println(result.itae)

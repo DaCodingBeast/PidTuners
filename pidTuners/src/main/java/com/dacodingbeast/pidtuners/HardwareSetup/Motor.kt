@@ -26,20 +26,20 @@ import kotlin.math.abs
  * @see Encoder
  */
 
-//todo jvm overload so no null
+//todo jvm overload motor class for java users(optional params)
 
 class Motor(
     val name: String,
     private var motorDirection: DcMotorSimple.Direction,
     var specs: MotorSpecs,
     private var externalGearRatio: Double = 1.0,
-    val obstacle: Target?,
-    private val encoder: Encoder?
+    val obstacle: Target? = null,
+    private val encoder: Encoder? = null
 ) {
     private var slideParams: PIDParams? = null
     private var pivotParams: PIDParams? = null
     private var pidFcontroller: PIDFcontroller? = null
-    private val simulationType: SimulatorType = simulatorType
+    private val simulationType: SimulatorType = SimulatorType.ArmSimulator
 
     var ticksPerIn :Double = 1.0
     private var inPerTick:Double = 1.0
@@ -161,8 +161,6 @@ class Motor(
     fun targetReached(degreeAccuracy: Double = 5.0): Boolean{
         when(simulationType){
             SimulatorType.ArmSimulator ->{
-
-                //todo - This will not work if you have an obstacle that is thinner than the given angle
 
                 val angle  = AngleRange.fromRadians(findAngle(), this.target)
                 val direction = AngleRange.findMotorDirection(angle, obstacle as AngleRange?)

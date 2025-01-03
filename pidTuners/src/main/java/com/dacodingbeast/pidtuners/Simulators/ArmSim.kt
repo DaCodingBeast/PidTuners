@@ -25,7 +25,7 @@ class ArmSim(override var target: AngleRange) :
      */
 
     override fun updateSimulator(): SimulatorData {
-        val calculate = pidController.calculate(target)
+        val calculate = pidController.calculate(target, constants.motor.obstacle)
         val controlEffort = calculate.motorPower
 
         val motorTorque = constants.motor.calculateTmotor(controlEffort)
