@@ -40,7 +40,7 @@ class AngleRangeTests {
         assertEquals(-PI, AngleRange.wrap(-PI))
         assertEquals(PI, AngleRange.wrap(PI))
         assertEquals(0.0, AngleRange.wrap(2 * PI))
-        assertEquals(-PI / 2, AngleRange.wrap(-3 * PI / 2))
+        assertEquals(PI / 2, AngleRange.wrap(-3 * PI / 2))
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.dacodingbeast.pidtuners.CommonUtilities
+package com.dacodingbeast.pidtuners.Opmodes
 
 public class RemoveOutliers {
      fun removeOutliers(data: ArrayList<Double>): ArrayList<Double> {

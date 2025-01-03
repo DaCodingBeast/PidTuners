@@ -2,6 +2,7 @@ package ArmSpecific
 
 import com.dacodingbeast.pidtuners.Algorithm.Dt
 import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants
+import com.dacodingbeast.pidtuners.HardwareSetup.Motors
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.SimulatorData
 import com.dacodingbeast.pidtuners.Simulators.SimulatorStructure
@@ -14,26 +15,30 @@ enum class Direction {
     Clockwise, CounterClockWise
 }
 
-class ArmSim(override var target: AngleRange) :
-    SimulatorStructure(target) {
-
-    private val armSpecific = constants.systemSpecific as PivotSystemConstants
+class ArmSim(override var motor: Motors, override val targetIndex: Int) :
+    SimulatorStructure(motor,targetIndex) {
 
     /**
      * This function calculates the sum of two integers.
      * @return Arms Angle, Error, and motor power
      */
 
+
+
     override fun updateSimulator(): SimulatorData {
-        val calculate = pidController.calculate(target, constants.motor.obstacle)
+        var target = motor.targets[targetIndex]
+
+        val calculate = pidController.calculate(target, motor.obstacle)
         val controlEffort = calculate.motorPower
 
-        val motorTorque = constants.motor.calculateTmotor(controlEffort)
-        val gravityTorque = armSpecific.gravityConstants.gravityTorque(abs(target.start)) * if (target.start > 0) -1 else 1
+        val motorTorque = motor.calculateTmotor(controlEffort)
+
+        val g = (motor.systemConstants as PivotSystemConstants).gravityConstants
+        val gravityTorque = g.gravityTorque(abs(target.start)) * if (target.start > 0) -1 else 1
 
         val torqueApplied = motorTorque + gravityTorque
 
-        val angularAcceleration = torqueApplied / armSpecific.Inertia
+        val angularAcceleration = torqueApplied / motor.systemConstants.Inertia
         velocity += angularAcceleration * Dt
 
         target = AngleRange.fromRadians(

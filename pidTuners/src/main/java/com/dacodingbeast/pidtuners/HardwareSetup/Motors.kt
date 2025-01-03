@@ -3,6 +3,7 @@ package com.dacodingbeast.pidtuners.HardwareSetup
 import CommonUtilities.PIDFcontroller
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
+import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
 import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes
 import com.dacodingbeast.pidtuners.Simulators.Target
 import com.qualcomm.robotcore.hardware.DcMotor
@@ -15,6 +16,7 @@ abstract class Motors(
     val name: String,
     val motorDirection: DcMotorSimple.Direction,
     private val motorSpecs: MotorSpecs,
+    val systemConstants: ConstantsSuper,
     private var externalGearRatio: Double = 1.0,
     pidParams: PIDParams = PIDParams(0.0,0.0,0.0,0.0),
     private val externalEncoder: Encoder? = null
@@ -91,7 +93,7 @@ abstract class Motors(
      * @param power The power applied to the Motor, derived from the PIDF Controller
      */
     fun calculateTmotor(power: Double): Double {
-        return calculateTmotor(power, PSO_Optimizer.constants.systemSpecific.frictionRPM)
+        return calculateTmotor(power, systemConstants.frictionRPM)
     }
 
     /**

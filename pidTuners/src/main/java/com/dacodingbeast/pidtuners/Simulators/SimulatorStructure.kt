@@ -6,17 +6,16 @@ import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
 import com.dacodingbeast.pidtuners.Algorithm.Particle
 import com.dacodingbeast.pidtuners.Constants.Constants
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
+import com.dacodingbeast.pidtuners.HardwareSetup.Motors
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
-abstract class SimulatorStructure(open val target: Target)
+abstract class SimulatorStructure(open val motor: Motors, open val targetIndex: Int)
 {
     lateinit var pidController : PIDFcontroller
 
     fun init(params: Particle){
         pidController = PIDFcontroller(PIDParams(params.position))
     }
-
-    val constants = PSO_Optimizer.constants
 
     /**
      * Simulate Robot

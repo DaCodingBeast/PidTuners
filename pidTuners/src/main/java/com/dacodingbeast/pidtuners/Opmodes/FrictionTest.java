@@ -5,7 +5,6 @@ import static java.lang.Math.abs;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.dacodingbeast.pidtuners.CommonUtilities.RemoveOutliers;
 import com.dacodingbeast.pidtuners.Constants.Constants;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
