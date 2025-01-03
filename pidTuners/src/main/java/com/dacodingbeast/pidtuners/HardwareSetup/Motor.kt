@@ -59,6 +59,7 @@ class Motor(
         }else if (externalGearRatio == 0.0){
             throw IllegalArgumentException("Gear ratio cannot be zero use 1 if not geared")
         }
+
         if (encoder != null) { // if using an external encoder, the motor gear ratio is 1 as nothing is geared past that
             externalGearRatio = 1.0
             specs.motorGearRatio = 1.0

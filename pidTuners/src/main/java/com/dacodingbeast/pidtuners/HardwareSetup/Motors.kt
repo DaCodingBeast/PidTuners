@@ -2,6 +2,8 @@ package com.dacodingbeast.pidtuners.HardwareSetup
 
 import CommonUtilities.PIDFcontroller
 import CommonUtilities.PIDParams
+import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
+import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes
 import com.dacodingbeast.pidtuners.Simulators.Target
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
@@ -12,19 +14,34 @@ import com.qualcomm.robotcore.hardware.HardwareMap
 abstract class Motors(
     val name: String,
     val motorDirection: DcMotorSimple.Direction,
-    val motorSpecs: MotorSpecs,
-    val externalGearRatio: Double = 1.0,
-    val pidParams: PIDParams = PIDParams(0.0,0.0,0.0,0.0),
-    val externalEncoder: Encoder? = null
+    private val motorSpecs: MotorSpecs,
+    private var externalGearRatio: Double = 1.0,
+    pidParams: PIDParams = PIDParams(0.0,0.0,0.0,0.0),
+    private val externalEncoder: Encoder? = null
 ) {
 
-    lateinit var hardwareMap: HardwareMap
-    var startPosition = 0.0
+    private lateinit var hardwareMap: HardwareMap
+    private var startPosition = 0.0
     lateinit var motor: DcMotorEx
 
     abstract val obstacle: Target?
     abstract val targets: List<Target>
-    val pidController = PIDFcontroller(pidParams)
+    private val pidController = PIDFcontroller(pidParams)
+
+    init {
+        if (externalGearRatio < 0) {
+            throw IllegalArgumentException("Gear ratio must be positive")
+        }else if (externalGearRatio == 0.0){
+            throw IllegalArgumentException("Gear ratio cannot be zero use 1 if not geared")
+        }
+        if (externalEncoder != null) { // if using an external encoder, the motor gear ratio is 1 as nothing is geared past that
+            externalGearRatio = 1.0
+            motorSpecs.motorGearRatio = 1.0
+        }else { // else, apply the external gear ratio to the motor gear ratio, to find total gear ratio
+            motorSpecs.applyGearRatio(externalGearRatio)
+        }
+
+    }
 
 
     fun init(hardwareMap: HardwareMap, startPosition: Double){
@@ -38,7 +55,60 @@ abstract class Motors(
     }
 
     fun run(targetIndex: Int){
+        //todo if targets multiple list switch constants based on new target
         motor.power=pidController.calculate(targets[targetIndex], obstacle).motorPower
     }
+
+    fun getCurrentPose(): Double {
+        return externalEncoder?.getCurrentPosition()?.toDouble() ?: motor.currentPosition.toDouble()
+    }
+    fun getRPM(): Double {
+        return motorSpecs.rpm
+    }
+    fun getGearRatio(): Double {
+        return motorSpecs.motorGearRatio
+    }
+    fun getStallTorque(): Double {
+        return motorSpecs.stallTorque.value
+    }
+
+    fun getTicksPerRotation(): Double {
+        return motorSpecs.encoderTicksPerRotation
+    }
+
+    fun setPower(power: Double) {
+        motor.power = power
+    }
+
+    fun getPower(): Double {
+        return motor.power
+    }
+
+
+
+    /**
+     * Find the motors torque
+     * @param power The power applied to the Motor, derived from the PIDF Controller
+     */
+    fun calculateTmotor(power: Double): Double {
+        return calculateTmotor(power, PSO_Optimizer.constants.systemSpecific.frictionRPM)
+    }
+
+    /**
+     * Finding the Motor Torque based on the Systems Constants.
+     * This function will need to be ran in the Gravity OpMode, so it must take the constants as parameters
+     * @see Hardware.Motor Motor being used
+     * @param actualRPM Non-theoretical RPM, tested through Friction OpMode
+     * @param power Motor Power
+     */
+    fun calculateTmotor(power: Double, actualRPM: Double): Double {
+        require(power in -1.0..1.0) //obviously works
+        //friction influenced max power
+        val friction = actualRPM / getRPM()
+
+        return getStallTorque() * friction * power
+    }
+
+
 
 }
