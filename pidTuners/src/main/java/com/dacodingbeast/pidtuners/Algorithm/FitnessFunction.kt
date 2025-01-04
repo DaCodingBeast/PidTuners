@@ -2,7 +2,9 @@ package com.dacodingbeast.pidtuners.Algorithm
 
 import ArmSpecific.ArmSim
 import android.transition.Slide
+import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
+import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor
 import com.dacodingbeast.pidtuners.Simulators.SimulatorData
 import com.dacodingbeast.pidtuners.Simulators.SimulatorType
 import com.dacodingbeast.pidtuners.Simulators.Target
@@ -32,10 +34,11 @@ class FitnessFunction(
     val targetIndex: Int
 ) {
 
-    private val simulator = when(motor){
-         -> ArmSim(motor,targetIndex)
-         -> SlideSim(motor,targetIndex)
-    }
+    private val simulator = when (motor) {
+    is ArmMotor -> ArmSim(motor, targetIndex)
+    is SlideMotor -> SlideSim(motor, targetIndex)
+    else -> throw IllegalArgumentException("Unsupported motor type")
+}
 
     /**
      * The Computation of the [param] to find the fitness score.

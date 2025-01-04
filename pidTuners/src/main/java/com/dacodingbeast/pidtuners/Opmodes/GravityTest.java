@@ -7,8 +7,7 @@ import android.util.Pair;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.dacodingbeast.pidtuners.Constants.Constants;
-import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
+import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -18,15 +17,14 @@ import java.util.Arrays;
 
 @TeleOp(name = "GravityTest", group = "Linear OpMode")
 public class GravityTest extends LinearOpMode {
-    Constants constants;
-    public GravityTest(Constants constants) {
-        this.constants = constants;
+    ArmMotor motor;
+    public GravityTest(ArmMotor motor) {
+        this.motor = motor;
     }
     @Override
     public void runOpMode() {
         MultipleTelemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), this.telemetry);;
 
-        Motor motor = constants.getMotor();
         motor.init(hardwareMap,stationaryAngle);
 
         ArrayList<Pair<Double, Double>> dataPairs = new ArrayList<>();
@@ -45,7 +43,7 @@ public class GravityTest extends LinearOpMode {
                         angle,
                         motor.calculateTmotor(
                                 motor.getPower(),
-                                constants.getSystemSpecific().getFrictionRPM()
+                                motor.getSystemConstants().getFrictionRPM()
                         )
                 ));
 

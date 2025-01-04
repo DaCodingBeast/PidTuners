@@ -2,26 +2,26 @@ package com.dacodingbeast.pidtuners.HardwareSetup
 
 import CommonUtilities.PIDFcontroller
 import CommonUtilities.PIDParams
-import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
 import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
-import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes
+import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.spoolDiameter
+import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.Target
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
+import kotlin.math.abs
 
 //todo external encoder optional param
 abstract class Motors(
     val name: String,
     val motorDirection: DcMotorSimple.Direction,
-    private val motorSpecs: MotorSpecs,
+    val motorSpecs: MotorSpecs,
     val systemConstants: ConstantsSuper,
     private var externalGearRatio: Double = 1.0,
     pidParams: PIDParams = PIDParams(0.0,0.0,0.0,0.0),
     private val externalEncoder: Encoder? = null
 ) {
-
     private lateinit var hardwareMap: HardwareMap
     private var startPosition = 0.0
     lateinit var motor: DcMotorEx
@@ -86,8 +86,6 @@ abstract class Motors(
         return motor.power
     }
 
-
-
     /**
      * Find the motors torque
      * @param power The power applied to the Motor, derived from the PIDF Controller
@@ -110,7 +108,75 @@ abstract class Motors(
 
         return getStallTorque() * friction * power
     }
+    fun getMotorType():String{
+        return when(this){
+            is SlideMotor -> "Slide"
+            is ArmMotor -> "Arm"
+            else -> "Unknown"
+        }
+    }
+}
+class SlideMotor(
+    name: String,
+    motorDirection: DcMotorSimple.Direction,
+    motorSpecs: MotorSpecs,
+    systemConstants: ConstantsSuper,
+    externalGearRatio: Double = 1.0,
+    pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0),
+    override val targets: List<Target>,
+    externalEncoder: Encoder? = null,
+    override val obstacle: Target? = null,
+) : Motors(
+    name,
+    motorDirection,
+    motorSpecs,
+    systemConstants,
+    externalGearRatio,
+    pidParams,
+    externalEncoder
+) {
+    var ticksPerIn :Double = 1.0
+    private var inPerTick:Double = 1.0
+    init {
+        ticksPerIn = TicksToInch(spoolDiameter,this).ticksPerInch
+        inPerTick = TicksToInch(spoolDiameter,this).inchesPerTick
+    }
+    fun targetReached(target: Double, tickAccuracy:Double = 50.0):Boolean{
+        val current = this.getCurrentPose()
+        return current in (target - tickAccuracy)..(target + tickAccuracy)
+    }
+}
+class ArmMotor(
+    name: String,
+    motorDirection: DcMotorSimple.Direction,
+    motorSpecs: MotorSpecs,
+    systemConstants: ConstantsSuper,
+    externalGearRatio: Double = 1.0,
+    pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0),
+    override val targets: List<Target>,
+    externalEncoder: Encoder? = null,
+    override val obstacle: Target? = null,
+) : Motors(
+    name,
+    motorDirection,
+    motorSpecs,
+    systemConstants,
+    externalGearRatio,
+    pidParams,
+    externalEncoder
+) {
+    /**
+     * To find angle in degrees: Angle.fromRadians(
+     */
+    fun findAngle(inDegrees : Boolean = false): Double {
+        val ticks = getCurrentPose()
+        val angle = AngleRange.wrap((ticks * (2 * Math.PI / motorSpecs.encoderTicksPerRotation)))
+        return if (inDegrees) angle * 180 / Math.PI else angle
+    }
 
-
-
+    fun targetReached(target:Double,degreeAccuracy :Double = 5.0):Boolean{
+        val angle  = AngleRange.fromRadians(findAngle(), target)
+        val direction = AngleRange.findMotorDirection(angle, obstacle as AngleRange?)
+        return abs(AngleRange.findPIDFAngleError(direction,angle)) < Math.toRadians(degreeAccuracy)
+    }
 }

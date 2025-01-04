@@ -2,12 +2,8 @@ package com.dacodingbeast.pidtuners.Simulators
 
 import CommonUtilities.PIDParams
 import CommonUtilities.PIDFcontroller
-import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
 import com.dacodingbeast.pidtuners.Algorithm.Particle
-import com.dacodingbeast.pidtuners.Constants.Constants
-import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
-import com.qualcomm.robotcore.hardware.DcMotorSimple
 
 abstract class SimulatorStructure(open val motor: Motors, open val targetIndex: Int)
 {

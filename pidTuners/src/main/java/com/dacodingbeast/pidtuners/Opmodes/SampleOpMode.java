@@ -5,8 +5,7 @@ import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.stationaryAngle;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.dacodingbeast.pidtuners.Constants.Constants;
-import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
+import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
 import com.dacodingbeast.pidtuners.Simulators.Target;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -17,19 +16,18 @@ import java.util.List;
 @Config
 @TeleOp(name = "PivotSampleOpMode", group = "Linear OpMode")
 public class SampleOpMode extends LinearOpMode {
-    Constants constants;
+    Motors motor;
     public static int x = 0;
-    public SampleOpMode(Constants constants) {
-        this.constants = constants;
+    public SampleOpMode(Motors motor) {
+        this.motor = motor;
     }
     @Override
     public void runOpMode() {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        Motor motor = constants.getMotor();
         motor.init(hardwareMap,stationaryAngle);
 
-        List<Target> targets = constants.getAngles();
+        List<Target> targets = motor.getAngles();
         ElapsedTime timer = new ElapsedTime();
 
         x=0;

@@ -2,7 +2,6 @@ package com.dacodingbeast.pidtuners.Constants
 
 import ArmSpecific.ArmSim
 import ArmSpecific.Direction
-import com.dacodingbeast.pidtuners.HardwareSetup.Motor
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.pow

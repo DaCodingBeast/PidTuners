@@ -6,7 +6,6 @@ import com.dacodingbeast.pidtuners.Constants.Constants
 import com.dacodingbeast.pidtuners.Constants.GravityModelConstants
 import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
-import com.dacodingbeast.pidtuners.HardwareSetup.Motor
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.SimulatorType
 import com.qualcomm.robotcore.hardware.DcMotorSimple

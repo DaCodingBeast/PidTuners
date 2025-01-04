@@ -4,7 +4,6 @@ import com.dacodingbeast.pidtuners.Algorithm.Dt
 import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Algorithm.Vector
-import com.dacodingbeast.pidtuners.HardwareSetup.Motor
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
 import com.dacodingbeast.pidtuners.Simulators.Target
 import kotlin.math.max
@@ -38,8 +37,6 @@ class PIDFcontroller(var params: PIDParams) {
 
     private var prevError = 0.0
     private var integral = 0.0
-
-    val constants = PSO_Optimizer.constants
 
     /**
      * @param angleRange Used to determine the feedforward term to fight gravity

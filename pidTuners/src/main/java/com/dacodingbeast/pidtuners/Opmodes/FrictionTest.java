@@ -6,7 +6,7 @@ import static java.lang.Math.abs;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.dacodingbeast.pidtuners.Constants.Constants;
-import com.dacodingbeast.pidtuners.HardwareSetup.Motor;
+import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -15,9 +15,9 @@ import java.util.ArrayList;
 
 @TeleOp(name = "FrictionTest", group = "Linear OpMode")
 public class FrictionTest extends LinearOpMode {
-    Constants constants;
-    public FrictionTest(Constants constants) {
-        this.constants = constants;
+    Motors motor;
+    public FrictionTest(Motors motor) {
+        this.motor = motor;
     }
 
     RemoveOutliers removeOutliers = new RemoveOutliers();
@@ -25,7 +25,6 @@ public class FrictionTest extends LinearOpMode {
     public void runOpMode() {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        Motor motor = constants.getMotor();
         motor.init(hardwareMap,stationaryAngle);
 
         ElapsedTime timer = new ElapsedTime();
@@ -49,7 +48,7 @@ public class FrictionTest extends LinearOpMode {
             telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
 
             // Running motor at half speed
-            double angle = motor.findAngle(false);
+            double angle = motor.findAngle(false); //TODO this needs to also be able to use slides
 
             //todo double angle = get voltage and convert to Radians if using an absolute encoder
 
@@ -66,19 +65,19 @@ public class FrictionTest extends LinearOpMode {
 
             if(run) {
                 motor.setPower(0.5);
-                telemetry.addData("Running", constants.getMotor().getRPM()*.5);
+                telemetry.addData("Running", motor.getRPM()*.5);
                 telemetry.addData("Angle", angle);
             };
 
             // Measure RPM
-            double ticksPerRevolution = constants.getMotor().getTicksPerRotation(); // Encoder resolution (ticks per revolution)
+            double ticksPerRevolution = motor.getTicksPerRotation(); // Encoder resolution (ticks per revolution)
             double rpm = ((motor.getCurrentPose() - lastPosition) / ticksPerRevolution) * (60.0 / timer.seconds());
             lastPosition = (int) motor.getCurrentPose();
 
             telemetry.addData("rpm",rpm);
 
-            double theoreticalRpmMeasured = constants.getMotor().getRPM() * .5;
-            if (run && (rpm > theoreticalRpmMeasured*.5 && rpm<theoreticalRpmMeasured *1.5) && angle > (constants.getAngles().get(0).getStop()*.5)) {
+            double theoreticalRpmMeasured = motor.getRPM() * .5;
+            if (run && (rpm > theoreticalRpmMeasured*.5 && rpm<theoreticalRpmMeasured *1.5) && angle > (motor.getTargets().get(0).getStop()*.5)) {
                 RPMS.add(rpm);
             }
             telemetry.addData("t",theoreticalRpmMeasured);
@@ -115,7 +114,7 @@ public class FrictionTest extends LinearOpMode {
                 }
                 double averageAA = sum / angularAccelerationData.size();
 
-                double rotationalInertia = constants.getMotor().calculateTmotor(
+                double rotationalInertia = motor.calculateTmotor(
                         .5,
                         actualRpm
                 ) / averageAA;
