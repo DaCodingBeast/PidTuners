@@ -10,7 +10,7 @@ class SlideMotor(
     name: String,
     motorDirection: DcMotorSimple.Direction,
     motorSpecs: MotorSpecs,
-    spoolDiameter: Double,
+    val spoolDiameter: Double,
     systemConstants: ConstantsSuper,
     externalGearRatio: Double = 1.0,
     pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0),
@@ -29,12 +29,16 @@ class SlideMotor(
     var ticksPerIn :Double = 1.0
     private var inPerTick:Double = 1.0
     init {
+        calculateInPerTick()
+    }
+
+    fun calculateInPerTick(){
         ticksPerIn = TicksToInch(spoolDiameter,this).ticksPerInch
         inPerTick = TicksToInch(spoolDiameter,this).inchesPerTick
     }
 
     fun getExtension(): Double{
-        //todo convert ticks to inches
+        return motor.currentPosition * inPerTick
     }
 
     fun targetReached(target: Double, inchAccuracy:Double = 5.0):Boolean{

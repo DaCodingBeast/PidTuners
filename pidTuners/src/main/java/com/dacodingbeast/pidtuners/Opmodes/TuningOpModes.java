@@ -6,9 +6,9 @@ import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants;
 import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants;
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor;
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware;
-import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
 import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor;
 import com.dacodingbeast.pidtuners.Simulators.AngleRange;
+import com.dacodingbeast.pidtuners.Simulators.SlideRange;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
@@ -29,9 +29,12 @@ public final class TuningOpModes {
     public static ArmMotor armMotor = new ArmMotor("Shoulder",DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,pivotSystemConstants,1.0,pidParams,testingAngle.asArrayList(),null,obstacleAngle);
     public static Double spoolDiameter = 1.0;
 
+    static SlideRange slideRange = SlideRange.fromInches(0.0, 0.0);
+    static SlideRange slideObstacle = SlideRange.fromTicks(0.0, 0.0);
+
     static SlideSystemConstants slideSystemConstants = new SlideSystemConstants(0.0,frictionRPM);
 
-    public static SlideMotor slideMotor = new SlideMotor("Slide",DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,slideSystemConstants,1.0,pidParams,testingAngle.asArrayList(),null,obstacleAngle);
+    public static SlideMotor slideMotor = new SlideMotor("Slide",DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,30.0,slideSystemConstants,1.0,pidParams,slideRange.asArrayList(),null,slideObstacle);
 
     static double accuracy = 3.5;
 
@@ -44,9 +47,9 @@ public final class TuningOpModes {
     private TuningOpModes() {
     }
 
-    private static OpModeMeta metaForClass(Class<? extends OpMode> cls, Motors motors) {
+    private static OpModeMeta metaForClass(Class<? extends OpMode> cls, String tag) {
         return new OpModeMeta.Builder()
-                .setName(cls.getSimpleName() + (motors.getMotorType()))
+                .setName(cls.getSimpleName() + tag)
                 .setGroup("PIDTuners")
                 .setFlavor(OpModeMeta.Flavor.TELEOP)
                 .build();
@@ -54,29 +57,30 @@ public final class TuningOpModes {
 
     @OpModeRegistrar
     public static void register(OpModeManager manager) {
+        manager.register(metaForClass(PSODirectionDebugger.class, ""), new PSODirectionDebugger(slideMotor,armMotor));
         if (enableArm) {
             manager.register(
-                    metaForClass(FrictionTest.class, armMotor), new FrictionTest(armMotor)
+                    metaForClass(FrictionTest.class, "Arm"), new FrictionTest(armMotor)
             );
             manager.register(
-                    metaForClass(GravityTest.class, armMotor), new GravityTest(armMotor)
+                    metaForClass(GravityTest.class, "Arm"), new GravityTest(armMotor)
             );
             manager.register(
-                    metaForClass(SampleOpMode.class, armMotor), new SampleOpMode(armMotor)
+                    metaForClass(SampleOpMode.class, "Arm"), new SampleOpMode(armMotor)
             );
             manager.register(
-                    metaForClass(FindPID.class, armMotor), new FindPID(armMotor,accuracy,time)
+                    metaForClass(FindPID.class, "Arm"), new FindPID(armMotor,accuracy,time)
             );
         }
         if (enableSlides) {
             manager.register(
-                    metaForClass(FrictionTest.class, slideMotor), new FrictionTest(slideMotor)
+                    metaForClass(FrictionTest.class, "Slide"), new FrictionTest(slideMotor)
             );
             manager.register(
-                    metaForClass(SampleOpMode.class, slideMotor), new SampleOpMode(slideMotor)
+                    metaForClass(SampleOpMode.class, "Slide"), new SampleOpMode(slideMotor)
             );
             manager.register(
-                    metaForClass(FindPID.class, slideMotor), new FindPID(slideMotor,accuracy,time)
+                    metaForClass(FindPID.class, "Slide"), new FindPID(slideMotor,accuracy,time)
             );
         }
     }
