@@ -26,8 +26,10 @@ class SlideMotor(
     pidParams,
     externalEncoder
 ) {
+
     var ticksPerIn :Double = 1.0
     private var inPerTick:Double = 1.0
+
     init {
         calculateInPerTick()
     }

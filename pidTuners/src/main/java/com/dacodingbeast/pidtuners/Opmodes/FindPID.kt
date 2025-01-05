@@ -15,13 +15,15 @@ class FindPID(val motor: Motors, private val accuracy:Double, private val Time:D
         waitForStart()
 
 
-        motor.angles.forEach {angleRange->
+
+        for(i in motor.targets.indices){
+
             val algorithm = PSO_Optimizer(arrayListOf(
                 Ranges(0.0, accuracy),
                 Ranges(0.0, accuracy/3.5),
                 Ranges(0.0, accuracy),
                 Ranges(0.0, accuracy)
-            ),Time,motor,targetIndex)
+            ),Time,motor,i)
 
             algorithm.update(25)
             telemetry.addLine(algorithm.getBest().toString())

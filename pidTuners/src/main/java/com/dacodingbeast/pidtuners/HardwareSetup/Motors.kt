@@ -101,6 +101,7 @@ abstract class Motors(
      * @param actualRPM Non-theoretical RPM, tested through Friction OpMode
      * @param power Motor Power
      */
+
     fun calculateTmotor(power: Double, actualRPM: Double): Double {
         require(power in -1.0..1.0) //obviously works
         //friction influenced max power
