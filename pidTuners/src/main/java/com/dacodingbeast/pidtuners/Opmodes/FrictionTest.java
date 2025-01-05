@@ -5,7 +5,6 @@ import static java.lang.Math.abs;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.dacodingbeast.pidtuners.Constants.Constants;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -48,7 +47,7 @@ public class FrictionTest extends LinearOpMode {
             telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
 
             // Running motor at half speed
-            double angle = motor.findAngle(false); //TODO this needs to also be able to use slides
+            double angle = motor.findPosition(); //TODO this needs to also be able to use slides
 
             //todo double angle = get voltage and convert to Radians if using an absolute encoder
 
@@ -96,7 +95,6 @@ public class FrictionTest extends LinearOpMode {
             // Finding Angular Acceleration
             angularVelocity = (angle - lastAngle) / timer.seconds();
             angularAccel = abs((angularVelocity - lastVelocity) / timer.seconds());
-
 
 
             if (run) {

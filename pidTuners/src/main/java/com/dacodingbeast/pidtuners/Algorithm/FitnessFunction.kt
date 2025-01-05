@@ -29,9 +29,8 @@ class FitnessFunctionData(val itae: Double,val history:ArrayList<SimulatorData>)
  */
 class FitnessFunction(
     private val totalTime: Double,
-    target: Target,
-    private val motor: Motors,
-    val targetIndex: Int
+    motor: Motors,
+    targetIndex: Int
 ) {
 
     private val simulator = when (motor) {

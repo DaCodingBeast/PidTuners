@@ -39,12 +39,12 @@ class SlideMotor(
         inPerTick = TicksToInch(spoolDiameter,this).inchesPerTick
     }
 
-    fun getExtension(): Double{
+    override fun findPosition(): Double{
         return motor.currentPosition * inPerTick
     }
 
     fun targetReached(target: Double, inchAccuracy:Double = 5.0):Boolean{
-        val current = getExtension()
+        val current = findPosition()
         return current in (target - inchAccuracy)..(target + inchAccuracy)
     }
 }

@@ -27,7 +27,7 @@ class PSODirectionDebugger(val slideMotor: SlideMotor,val armMotor: ArmMotor):Li
             }else if (gamepad1.cross){
                 armMotor.setPower(-1.0)
             }
-            telemetry.addData("Slide Motor pose (in)",slideMotor.getExtension())
+            telemetry.addData("Slide Motor pose (in)",slideMotor.getCurrentPose())
             telemetry.addData("Arm Motor pose (ticks)",armMotor.getCurrentPose())
             telemetry.update()
         }

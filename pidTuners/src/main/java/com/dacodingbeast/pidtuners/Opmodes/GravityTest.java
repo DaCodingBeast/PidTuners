@@ -32,7 +32,7 @@ public class GravityTest extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
-            double angle = motor.findAngle(false);
+            double angle = motor.findPosition(false);
             //todo double angle = get voltage and convert to Radians if using an absolute encoder
 
             telemetry.addLine("Press Record to store data points, and display data points when done.");

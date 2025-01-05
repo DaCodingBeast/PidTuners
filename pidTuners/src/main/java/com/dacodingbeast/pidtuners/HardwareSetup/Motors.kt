@@ -116,4 +116,6 @@ abstract class Motors(
             else -> "Unknown"
         }
     }
+
+    abstract fun findPosition(): Double
 }

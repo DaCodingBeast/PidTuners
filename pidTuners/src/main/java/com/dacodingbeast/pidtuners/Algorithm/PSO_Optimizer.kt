@@ -21,7 +21,7 @@ class PSO_Optimizer(
     val particles = Array(swarmSize) {
         Particle(
             parameterRanges,
-            FitnessFunction(time, motor.targets[targetIndex], motor, targetIndex)
+            FitnessFunction(time, motor, targetIndex)
         )
     }
 
