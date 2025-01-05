@@ -62,10 +62,11 @@ public class GravityTest extends LinearOpMode {
             double intercept = coefficients[0];
             double linear = coefficients[1];
             double quadratic = coefficients[2];
+            double[] vertex = QuadraticRegression.toVertexForm(quadratic, linear, intercept);
             telemetry.addLine("Place this in your gravity constants in TuningOpModes");
-            telemetry.addData("c", intercept);
-            telemetry.addData("b", linear);
-            telemetry.addData("a", quadratic);
+            telemetry.addData("a", vertex[0]);
+            telemetry.addData("h", vertex[1]);
+            telemetry.addData("k", vertex[2]);
 
 //                telemetry.addLine("Input data points into a table in https://www.desmos.com/calculator");
 //                telemetry.addLine("Copy and paste the below equation, and place a,b,k in the config");
