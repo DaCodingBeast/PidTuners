@@ -3,7 +3,6 @@ package com.dacodingbeast.pidtuners.Opmodes
 import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
 import com.dacodingbeast.pidtuners.Algorithm.Ranges
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
-import com.dacodingbeast.pidtuners.Simulators.SimulatorType
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 

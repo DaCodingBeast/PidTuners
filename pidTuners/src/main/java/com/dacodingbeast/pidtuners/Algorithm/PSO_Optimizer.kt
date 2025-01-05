@@ -1,7 +1,6 @@
 package com.dacodingbeast.pidtuners.Algorithm
 
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
-import com.dacodingbeast.pidtuners.Simulators.SimulatorType
 
 class PSO_Optimizer(
     private val parameterRanges: ArrayList<Ranges>,

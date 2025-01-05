@@ -51,17 +51,6 @@ public class FrictionTest extends LinearOpMode {
 
             //todo double angle = get voltage and convert to Radians if using an absolute encoder
 
-            //todo fix so it is done when angle is correctly in range (sometimes movement direction is reverse)
-            // Run motor
-
-//            if(angle> constants.getAngles().get(0)
-//
-//
-//            ){
-//                motor.setPower(0);
-//                run = false;
-//            }
-
             if(run) {
                 motor.setPower(0.5);
                 telemetry.addData("Running", motor.getRPM()*.5);
@@ -95,6 +84,7 @@ public class FrictionTest extends LinearOpMode {
             // Finding Angular Acceleration
             angularVelocity = (angle - lastAngle) / timer.seconds();
             angularAccel = abs((angularVelocity - lastVelocity) / timer.seconds());
+
 
 
             if (run) {

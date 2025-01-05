@@ -13,8 +13,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.List;
 
+import CommonUtilities.PIDFcontroller;
+
 @Config
-@TeleOp(name = "PivotSampleOpMode", group = "Linear OpMode")
+@TeleOp(name = "SampleOpMode", group = "Linear OpMode")
 public class SampleOpMode extends LinearOpMode {
     Motors motor;
     public static int x = 0;
@@ -27,7 +29,6 @@ public class SampleOpMode extends LinearOpMode {
 
         motor.init(hardwareMap,stationaryAngle);
 
-        List<Target> targets = motor.getAngles();
         ElapsedTime timer = new ElapsedTime();
 
         x=0;
@@ -43,25 +44,20 @@ public class SampleOpMode extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
             double looptime = timer.seconds();
             timer.reset();
-//
-//
-//            if (motor.targetReached(8)){
-//                if(targets.size()> x+1 && timerTime.seconds() >= 1.0) {
-//                    x+=1;
-//                    target = targets.get(x);
-//                    timerTime.reset();
-//                }
-//            }
-//
-//            for (int i = 0; i < targets.size(); i++) { //TODO this not needed anymore?
-//                if (target == targets.get(i)) {
-//                    pidFcontroller.resetConstantsAndTarget(pidFcontroller.getParams(), target);
-//                    break;
-//                }
-//            }
-//            motor.runMotor(target);
-//            telemetry.addData("X",x);
-//            telemetry.update();
+            PIDFcontroller pidFcontroller = motor.getPIDFController();
+            List<Target> targets = motor.getTargets();
+            Target target = motor.getTargets().get(x);
+            if (motor.targetReached(8.0,null)){
+                if(targets.size()> x+1 && timerTime.seconds() >= 1.0) {
+                    x+=1;
+                    target = targets.get(x);
+                    timerTime.reset();
+                }
+            }
+
+            motor.run(x);
+            telemetry.addData("X",x);
+            telemetry.update();
         }
     }
 }

@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import kotlin.math.abs
 
-//todo external encoder optional param
 abstract class Motors(
     val name: String,
     val motorDirection: DcMotorSimple.Direction,
@@ -52,6 +51,7 @@ abstract class Motors(
         this.motor = hardwareMap.get(DcMotorEx::class.java, name)
         motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        motor.direction = motorDirection
         motor.power = 0.0
         externalEncoder?.init(hardwareMap)
     }
@@ -85,6 +85,9 @@ abstract class Motors(
     fun getPower(): Double {
         return motor.power
     }
+    fun getPIDFController(): PIDFcontroller {
+        return pidController
+    }
 
     /**
      * Find the motors torque
@@ -109,12 +112,12 @@ abstract class Motors(
 
         return getStallTorque() * friction * power
     }
-    fun getMotorType():String{
-        return when(this){
-            is SlideMotor -> "Slide"
-            is ArmMotor -> "Arm"
-            else -> "Unknown"
-        }
+
+    open fun targetReached(target: Double, accuracy: Double?):Boolean {
+        return true
+    }
+    open fun getCurrent():Double{
+        return 0.0
     }
 
     abstract fun findPosition(): Double

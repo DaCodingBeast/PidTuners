@@ -6,7 +6,6 @@ import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
 import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor
 import com.dacodingbeast.pidtuners.Simulators.SimulatorData
-import com.dacodingbeast.pidtuners.Simulators.SimulatorType
 import com.dacodingbeast.pidtuners.Simulators.Target
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
