@@ -18,7 +18,7 @@ abstract class SimulatorStructure(open val motor: Motors, open val targetIndex: 
      */
     abstract fun updateSimulator(): SimulatorData
 
-    val error = 0.0
+    var error = 0.0
     var velocity = 0.0
 
     /**

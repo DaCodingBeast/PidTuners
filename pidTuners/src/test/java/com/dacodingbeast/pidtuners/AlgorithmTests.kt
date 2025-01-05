@@ -1,94 +1,141 @@
-//import com.dacodingbeast.pidtuners.Algorithm.FitnessFunction
-//import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
-//import com.dacodingbeast.pidtuners.Algorithm.Particle
-//import com.dacodingbeast.pidtuners.Algorithm.Ranges
-//import com.dacodingbeast.pidtuners.Constants.Constants
-//import com.dacodingbeast.pidtuners.Constants.GravityModelConstants
-//import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants
-//import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
-//import com.dacodingbeast.pidtuners.Simulators.AngleRange
-//import com.dacodingbeast.pidtuners.Simulators.SimulatorType
-//import com.qualcomm.robotcore.hardware.DcMotorSimple
-//import junit.framework.TestCase.assertTrue
-//import org.junit.Assert.assertNotEquals
-//import org.junit.Test
-//
-//class AlgorithmTests {
-//
-//    private val motor = Motor(
-//        "",
-//        DcMotorSimple.Direction.FORWARD,
-//        Hardware.YellowJacket.RPM223,
-//        1.0,
-//        null,
-//        null
-//    )
-//    private val constants = Constants(
-//        motor,
-//        listOf(AngleRange.fromRadians(0.0, 1.0)),
-//        PivotSystemConstants(
-//            1.0,
-//            223.0,
-//            GravityModelConstants(1.0, 1.0, 1.0)
-//        ),
-//        SimulatorType.ArmSimulator
-//    )
-//    private val parameterRanges = arrayListOf(
-//        Ranges(0.0, 1.0),
-//        Ranges(1.0, 2.0)
-//    )
-//
-//    @Test
-//    fun `test particle initialization within ranges`() {
-//        val optimizer = PSO_Optimizer(parameterRanges, SimulatorType.ArmSimulator, 1.0, AngleRange.fromRadians(0.0, 1.0), null, constants)
-//
-//        optimizer.particles.forEach { particle ->
-//            particle.position.particleParams.forEachIndexed { index, value ->
-//                assertTrue(value in parameterRanges[index].start..parameterRanges[index].stop)
-//            }
-//        }
-//    }
-//
-//    @Test
-//    fun `test fitness evaluation updates best result`() {
-//        val fitnessFunction = FitnessFunction(1.0, AngleRange.fromRadians(0.0, 1.0), null, SimulatorType.ArmSimulator)
-//        val particle = Particle(parameterRanges, fitnessFunction)
-//
-//        val initialBestResult = particle.bestResult
-//        particle.updateFitness()
-//        assertTrue(particle.bestResult <= initialBestResult)
-//    }
-//
-//    @Test
-//    fun `test velocity and position update`() {
-//        val fitnessFunction = FitnessFunction(1.0, AngleRange.fromRadians(0.0, 1.0), null, SimulatorType.ArmSimulator)
-//        val particle = Particle(parameterRanges, fitnessFunction)
-//
-//        val initialPosition = particle.position
-//        val globalBest = Particle(parameterRanges, fitnessFunction)
-//        particle.updateVelocity(globalBest)
-//
-//        assertNotEquals(initialPosition, particle.position)
-//    }
-//
-//    @Test
-//    fun `test global best update in optimizer`() {
-//        val optimizer = PSO_Optimizer(parameterRanges, SimulatorType.ArmSimulator, 1.0, AngleRange.fromRadians(0.0, 1.0), null, constants)
-//        optimizer.update(1)
-//
-//        optimizer.particles.forEach { particle ->
-//            assertTrue(optimizer.getBest().bestResult <= particle.bestResult)
-//        }
-//    }
-//
-//    @Test
-//    fun `test end-to-end optimization`() {
-//        val optimizer = PSO_Optimizer(parameterRanges, SimulatorType.ArmSimulator, 10.0, AngleRange.fromRadians(0.0, 1.0), null, constants)
-//
-//        optimizer.update(10)
-//        val bestParticle = optimizer.getBest()
-//
-//        assertTrue(bestParticle.bestResult < Double.MAX_VALUE)
-//        println("Best Particle Fitness: ${bestParticle.bestResult}")
-//    }
-//}
+import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
+import com.dacodingbeast.pidtuners.Algorithm.Ranges
+import com.dacodingbeast.pidtuners.Constants.GravityModelConstants
+import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants
+import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor
+import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
+import com.dacodingbeast.pidtuners.Simulators.AngleRange
+import com.qualcomm.robotcore.hardware.DcMotorSimple
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import org.junit.Test
+
+class PSOOptimizerTest {
+
+    val motor = ArmMotor("",
+        DcMotorSimple.Direction.FORWARD,
+        Hardware.YellowJacket.RPM223, PivotSystemConstants(1.0,220.0,
+        GravityModelConstants(1.0,2.0,3.0)
+        ), targets = listOf(AngleRange.fromRadians(0.0,1.0)))
+    @Test
+    fun `test PSO_Optimizer initialization`() {
+        // Mock or create necessary objects
+        val motor = motor // Replace with an actual or mocked Motors object
+        val parameterRanges = arrayListOf(
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0)
+        )
+        val optimizer = PSO_Optimizer(parameterRanges, 1.0, motor, 0)
+
+        // Check that particles are initialized correctly
+        assertNotNull(optimizer.particles)
+        assertEquals(100000, optimizer.particles.size) // Ensure the swarm size matches
+    }
+
+    @Test
+    fun `test global best particle initialization`() {
+        val motor = motor
+        val parameterRanges = arrayListOf(
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0)
+        )
+        val optimizer = PSO_Optimizer(parameterRanges, 1.0, motor, 0)
+
+        // Ensure gBestParticle is not null and initialized to the first particle
+        val globalBest = optimizer.getBest()
+        assertNotNull(globalBest)
+        assertEquals(optimizer.particles[0], globalBest)
+    }
+
+    @Test
+    fun `test update improves global best`() {
+        val motor = motor
+        val parameterRanges = arrayListOf(
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0)
+        )
+        val optimizer = PSO_Optimizer(parameterRanges, 1.0, motor, 0)
+
+        // Mock or simulate initial global best fitness
+        val initialBestResult = optimizer.getBest().bestResult
+
+        // Run updates
+        optimizer.update(10)
+
+        // Ensure global best fitness improves (or remains the same if optimal)
+        val updatedBestResult = optimizer.getBest().bestResult
+        assertTrue(updatedBestResult <= initialBestResult)
+    }
+
+    @Test
+    fun `test particle velocities are updated correctly`() {
+        val motor = motor
+        val parameterRanges = arrayListOf(
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0)
+        )
+        val optimizer = PSO_Optimizer(parameterRanges, 1.0, motor, 0)
+
+        // Capture initial particle states
+        val initialVelocities = optimizer.particles.map { it.velocity }
+
+        // Run a single update
+        optimizer.update(1)
+
+        // Ensure velocities are updated
+        optimizer.particles.forEachIndexed { index, particle ->
+            val initialVelocity = initialVelocities[index]
+            assertTrue(particle.velocity != initialVelocity)
+        }
+    }
+
+    @Test
+    fun `test global best is consistent across updates`() {
+        val motor = motor
+        val parameterRanges = arrayListOf(
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0)
+        )
+        val optimizer = PSO_Optimizer(parameterRanges, 1.0, motor, 0)
+
+        // Run updates
+        optimizer.update(10)
+
+        // Ensure the global best is consistent and valid
+        val globalBest = optimizer.getBest()
+        assertNotNull(globalBest)
+        assertTrue(optimizer.particles.contains(globalBest))
+    }
+
+    @Test
+    fun `test global best after multiple updates`() {
+        val motor = motor
+        val parameterRanges = arrayListOf(
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0),
+            Ranges(0.0, 1.0)
+        )
+        val optimizer = PSO_Optimizer(parameterRanges, 1.0, motor, 0)
+
+        // Run updates in multiple steps
+        optimizer.update(5)
+        val intermediateBest = optimizer.getBest()
+        optimizer.update(5)
+        val finalBest = optimizer.getBest()
+
+        // Ensure global best improves or remains the same
+        assertTrue(finalBest.bestResult <= intermediateBest.bestResult)
+    }
+}
