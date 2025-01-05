@@ -29,6 +29,8 @@ class ArmSim(override var motor: Motors, override val targetIndex: Int) :
         var target = motor.targets[targetIndex]
 
         val calculate = pidController.calculate(target, motor.obstacle)
+        error = calculate.error
+
         val controlEffort = calculate.motorPower
 
         val motorTorque = motor.calculateTmotor(controlEffort)

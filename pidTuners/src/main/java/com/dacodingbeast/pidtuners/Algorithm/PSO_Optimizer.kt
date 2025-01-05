@@ -16,7 +16,7 @@ class PSO_Optimizer(
         lateinit var motor: Motors
     }
 
-    private val swarmSize = 1000000
+    private val swarmSize = 100000
     val particles = Array(swarmSize) {
         Particle(
             parameterRanges,
