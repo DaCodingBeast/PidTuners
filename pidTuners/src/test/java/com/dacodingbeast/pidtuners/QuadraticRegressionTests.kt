@@ -122,4 +122,28 @@ fun testQuadraticRegressionAndVertexForm() {
     assertEquals(expectedK, vertexForm[2], 0.01)
     println("Vertex form coefficients: a=${vertexForm[0]}, h=${vertexForm[1]}, k=${vertexForm[2]}")
 }
+
+    @Test
+    fun testQuadraticRegressionManual() {
+        // Test dataset
+        val xValues = doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0)
+        val yValues = doubleArrayOf(1.0, 4.0, 9.0, 16.0, 25.0) // y = x^2 (perfect quadratic)
+
+        val coefficients = QuadraticRegression.quadraticRegressionManual(xValues,yValues)
+        val intercept = coefficients[0]
+        val linear = coefficients[1]
+        val quadratic = coefficients[2]
+
+        val expectedA = 1.0 // Coefficient of x^2
+        val expectedB = 0.0 // Coefficient of x
+        val expectedC = 0.0 // Constant term
+
+        // Assertions to check correctness
+        assertEquals(quadratic,expectedA, 1e-6)
+        assertEquals(linear,expectedB, 1e-6)
+        assertEquals(intercept,expectedC, 1e-6)
+
+        println("Test passed: Quadratic regression coefficients are correct!")
+        println("Computed coefficients: Intercept=$intercept, Linear=$linear, Quadratic=$quadratic")
+    }
 }
