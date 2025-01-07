@@ -4,9 +4,13 @@ import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Constants.GravityModelConstants
 import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants
 import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
+import com.dacodingbeast.pidtuners.HardwareSetup.AnalogEncoder
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor
+import com.dacodingbeast.pidtuners.HardwareSetup.DigitalEncoder
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
 import com.dacodingbeast.pidtuners.HardwareSetup.MotorSpecs
+import com.dacodingbeast.pidtuners.HardwareSetup.Operand
+import com.dacodingbeast.pidtuners.HardwareSetup.Operation
 import com.dacodingbeast.pidtuners.HardwareSetup.torque.StallTorque
 import com.dacodingbeast.pidtuners.HardwareSetup.torque.TorqueUnit
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
@@ -167,8 +171,14 @@ val yellowJacket = ArmMotor("motor", DcMotorSimple.Direction.FORWARD, Hardware.Y
         val motor = ArmMotor("motor", DcMotorSimple.Direction.FORWARD, MotorSpecs(200.0,
             StallTorque(0.1,TorqueUnit.KILOGRAM_CENTIMETER),4.0,28.0), PivotSystemConstants(0.0,0.0,
             GravityModelConstants(0.0,0.0,0.0)
-        ), 1.0, PIDParams(0.0,0.0,0.0,0.0),AngleRange.fromDegrees(0.0,90.0).asList(), Encoder("encoder", DcMotorSimple.Direction.FORWARD))
+        ), 1.0, PIDParams(0.0,0.0,0.0,0.0),AngleRange.fromDegrees(0.0,90.0).asList(), DigitalEncoder("encoder", DcMotorSimple.Direction.FORWARD))
         assertEquals(motor.getGearRatio() , 1.0)
         assertEquals(motor.getRPM(), 200.0)
+        val motor2 = ArmMotor("motor", DcMotorSimple.Direction.FORWARD, MotorSpecs(200.0,
+            StallTorque(0.1,TorqueUnit.KILOGRAM_CENTIMETER),4.0,28.0), PivotSystemConstants(0.0,0.0,
+            GravityModelConstants(0.0,0.0,0.0)
+        ), 1.0, PIDParams(0.0,0.0,0.0,0.0),AngleRange.fromDegrees(0.0,90.0).asList(), AnalogEncoder("encoder", listOf(Operation(Operand.MULTIPLY,1.0))))
+        assertEquals(motor2.getGearRatio() , 1.0)
+        assertEquals(motor2.getRPM(), 200.0)
     }
 }
