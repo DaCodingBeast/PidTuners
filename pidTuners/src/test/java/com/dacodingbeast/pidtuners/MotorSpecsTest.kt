@@ -5,7 +5,6 @@ import com.dacodingbeast.pidtuners.Constants.GravityModelConstants
 import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants
 import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor
-import com.dacodingbeast.pidtuners.HardwareSetup.Encoder
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
 import com.dacodingbeast.pidtuners.HardwareSetup.MotorSpecs
 import com.dacodingbeast.pidtuners.HardwareSetup.torque.StallTorque

@@ -5,17 +5,15 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 
-class Encoder(val name: String, private val encoderDirection: DcMotorSimple.Direction? = DcMotorSimple.Direction.FORWARD) {
-    lateinit var motor: DcMotorEx
-
-    fun init(awHmap : HardwareMap){
-        motor = awHmap.get(DcMotorEx::class.java, name)
+class DigitalEncoder(override val name: String,private val encoderDirection:DcMotorSimple.Direction) : Encoders(name) {
+    lateinit var motor:DcMotorEx
+    override fun init(ahwMap: HardwareMap) {
+        motor = ahwMap.get(DcMotorEx::class.java, name)
         motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         motor.mode = DcMotor.RunMode.RUN_USING_ENCODER
         motor.direction = encoderDirection
     }
-
-    fun getCurrentPosition(): Int {
+    override fun getCurrentPosition(): Int {
         return motor.currentPosition
     }
 }

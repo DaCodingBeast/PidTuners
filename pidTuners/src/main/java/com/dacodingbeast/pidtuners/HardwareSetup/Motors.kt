@@ -19,7 +19,7 @@ abstract class Motors(
     val systemConstants: ConstantsSuper,
     private var externalGearRatio: Double = 1.0,
     pidParams: PIDParams = PIDParams(0.0,0.0,0.0,0.0),
-    private val externalEncoder: Encoder? = null
+    private val externalEncoder: Encoders? = null
 ) {
     private lateinit var hardwareMap: HardwareMap
     private var startPosition = 0.0

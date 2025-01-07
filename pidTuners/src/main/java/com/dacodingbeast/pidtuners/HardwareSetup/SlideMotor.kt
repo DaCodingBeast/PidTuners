@@ -15,7 +15,7 @@ class SlideMotor(
     externalGearRatio: Double = 1.0,
     pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0),
     override val targets: List<SlideRange>,
-    externalEncoder: Encoder? = null,
+    private val externalEncoder: Encoders? = null,
     override val obstacle: SlideRange? = null,
 ) : Motors(
     name,
@@ -39,9 +39,9 @@ class SlideMotor(
         inPerTick = TicksToInch(spoolDiameter,this).inchesPerTick
     }
 
-    override fun findPosition(): Double{
-        return motor.currentPosition * inPerTick
-    }
+    override fun findPosition(): Double {
+    return getCurrentPose() * inPerTick
+}
 
     override fun targetReached(target: Double, tickAccuracy:Double?):Boolean{
         val accuracy = tickAccuracy ?: 5.0
