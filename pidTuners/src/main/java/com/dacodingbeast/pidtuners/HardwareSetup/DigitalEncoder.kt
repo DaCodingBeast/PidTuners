@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 
 class DigitalEncoder(override val name: String,private val encoderDirection:DcMotorSimple.Direction) : Encoders(name) {
-    lateinit var motor:DcMotorEx
+    private lateinit var motor:DcMotorEx
     override fun init(ahwMap: HardwareMap) {
         motor = ahwMap.get(DcMotorEx::class.java, name)
         motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER

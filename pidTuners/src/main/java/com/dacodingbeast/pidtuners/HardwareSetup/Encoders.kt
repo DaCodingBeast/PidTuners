@@ -6,7 +6,6 @@ abstract class Encoders(
     open val name:String,
 ) {
     open fun init(ahwMap:HardwareMap){
-
     }
     open fun getCurrentPosition():Int{
         return 0
