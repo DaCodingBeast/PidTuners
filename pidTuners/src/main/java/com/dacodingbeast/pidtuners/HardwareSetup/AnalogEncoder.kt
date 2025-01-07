@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap
  * @param name The name of the encoder.
  * @param calculatorOperations The list of operations to perform on the input voltage.
  */
-class AnalogEncoder(override val name: String,val calculatorOperations:List<Operation>) : Encoders(name) {
+class AnalogEncoder(override val name: String, private val startPosition:Double, private val calculatorOperations:List<Operation>) : Encoders(name) {
     private lateinit var analogEncoder: AnalogInput
     private lateinit var calculator: AnalogEncoderCalculator
     override fun init(ahwMap: HardwareMap) {
@@ -18,7 +18,7 @@ class AnalogEncoder(override val name: String,val calculatorOperations:List<Oper
     }
 
     override fun getCurrentPosition(): Int {
-        return calculator.runOperations(analogEncoder.voltage).toInt()
+        return calculator.runOperations(analogEncoder.voltage).toInt() - startPosition.toInt()
     }
 }
 /**
