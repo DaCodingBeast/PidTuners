@@ -3,14 +3,11 @@ package com.dacodingbeast.pidtuners.HardwareSetup
 import CommonUtilities.PIDFcontroller
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
-import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.spoolDiameter
-import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.Target
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
-import kotlin.math.abs
 
 abstract class Motors(
     val name: String,
@@ -40,6 +37,9 @@ abstract class Motors(
             motorSpecs.motorGearRatio = 1.0
         }else { // else, apply the external gear ratio to the motor gear ratio, to find total gear ratio
             motorSpecs.applyGearRatio(externalGearRatio)
+        }
+        if(targets.isEmpty()){
+            throw IllegalArgumentException("Targets List empty, you forgot to add your targets")
         }
 
     }
@@ -85,6 +85,7 @@ abstract class Motors(
     fun getPower(): Double {
         return motor.power
     }
+
     fun getPIDFController(): PIDFcontroller {
         return pidController
     }
@@ -113,12 +114,19 @@ abstract class Motors(
         return getStallTorque() * friction * power
     }
 
-    open fun targetReached(target: Double, accuracy: Double?):Boolean {
+    open fun targetReached(target: Double, accuracy: Double):Boolean {
         return true
     }
+
     open fun getCurrent():Double{
         return 0.0
     }
 
     abstract fun findPosition(): Double
+
+    fun findPositionUnwrapped(): Double {
+        val ticks = getCurrentPose()
+        val angle = (ticks * (2 * Math.PI / motorSpecs.encoderTicksPerRotation))
+        return angle
+    }
 }

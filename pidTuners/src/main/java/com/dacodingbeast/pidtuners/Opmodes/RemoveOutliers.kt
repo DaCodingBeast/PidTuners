@@ -1,7 +1,6 @@
 package com.dacodingbeast.pidtuners.Opmodes
 
-public class RemoveOutliers {
-     fun removeOutliers(data: ArrayList<Double>): ArrayList<Double> {
+fun removeOutliers(data: ArrayList<Double>): ArrayList<Double> {
 
         if (data.isEmpty()) {
             //todo log
@@ -22,6 +21,4 @@ public class RemoveOutliers {
 
         // Filter data within the bounds
         return ArrayList(sortedData.filter { it in lowerBound..upperBound })
-    }
-
 }

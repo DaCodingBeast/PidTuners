@@ -43,8 +43,7 @@ class SlideMotor(
         return motor.currentPosition * inPerTick
     }
 
-    override fun targetReached(target: Double, tickAccuracy:Double?):Boolean{
-        val accuracy = tickAccuracy ?: 5.0
+    override fun targetReached(target: Double, accuracy: Double): Boolean {
         val current = findPosition()
         return current in (target - accuracy)..(target + accuracy)
     }

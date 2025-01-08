@@ -1,10 +1,12 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
+import static com.dacodingbeast.pidtuners.Opmodes.RemoveOutliersKt.removeOutliers;
 import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.stationaryAngle;
 import static java.lang.Math.abs;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -18,8 +20,6 @@ public class FrictionTest extends LinearOpMode {
     public FrictionTest(Motors motor) {
         this.motor = motor;
     }
-
-    RemoveOutliers removeOutliers = new RemoveOutliers();
     @Override
     public void runOpMode() {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
@@ -46,15 +46,20 @@ public class FrictionTest extends LinearOpMode {
 
             telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
 
+            double position;
             // Running motor at half speed
-            double angle = motor.findPosition(); //TODO this needs to also be able to use slides
+            if(motor.getClass() == ArmMotor.class){
+                position = motor.findPosition();
+            } else{
+                position = motor.findPositionUnwrapped();
+            }
 
-            //todo double angle = get voltage and convert to Radians if using an absolute encoder
 
+            //todo DFDKJFKDJFLKDJLFKSJDL
             if(run) {
                 motor.setPower(0.5);
                 telemetry.addData("Running", motor.getRPM()*.5);
-                telemetry.addData("Angle", angle);
+                telemetry.addData("Angle", position);
             };
 
             // Measure RPM
@@ -65,7 +70,7 @@ public class FrictionTest extends LinearOpMode {
             telemetry.addData("rpm",rpm);
 
             double theoreticalRpmMeasured = motor.getRPM() * .5;
-            if (run && (rpm > theoreticalRpmMeasured*.5 && rpm<theoreticalRpmMeasured *1.5) && angle > (motor.getTargets().get(0).getStop()*.5)) {
+            if (run && (rpm > theoreticalRpmMeasured*.5 && rpm<theoreticalRpmMeasured *1.5) && position >) { //todo FDK FDLKDKJFLKDJLF
                 RPMS.add(rpm);
             }
             telemetry.addData("t",theoreticalRpmMeasured);
@@ -74,7 +79,7 @@ public class FrictionTest extends LinearOpMode {
 
             // Make sure size is not returning something other than 0
             if (!RPMS.isEmpty()) {
-                ArrayList<Double> x = removeOutliers.removeOutliers(RPMS);
+                ArrayList<Double> x = removeOutliers(RPMS);
                 double sum = 0;
                 for (double num : x) sum += num * 1/.5;
                 actualRpm = sum / x.size();
@@ -82,9 +87,8 @@ public class FrictionTest extends LinearOpMode {
             }
 
             // Finding Angular Acceleration
-            angularVelocity = (angle - lastAngle) / timer.seconds();
+            angularVelocity = (position - lastAngle) / timer.seconds();
             angularAccel = abs((angularVelocity - lastVelocity) / timer.seconds());
-
 
 
             if (run) {
@@ -93,8 +97,8 @@ public class FrictionTest extends LinearOpMode {
             } else {
                 // Calculate if friction test is complete and find rotational Inertia
 
-                angularAccelerationData = removeOutliers.removeOutliers(angularAccelerationData);
-                motorPowers = removeOutliers.removeOutliers(motorPowers);
+                angularAccelerationData = removeOutliers(angularAccelerationData);
+                motorPowers = removeOutliers(motorPowers);
 
                 double sum = 0;
                 for (double num : angularAccelerationData) {
@@ -111,7 +115,7 @@ public class FrictionTest extends LinearOpMode {
                 stop();
             }
 
-            lastAngle = angle;
+            lastAngle = position;
             lastVelocity = angularVelocity;
             timer.reset();
             telemetry.update();

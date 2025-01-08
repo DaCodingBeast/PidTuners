@@ -122,7 +122,7 @@ class FitnessFunction {
         val punishedITAE = fitnessFunction.findFitness(particle).itae
         assertTrue(punishedITAE == baselineITAE) // Punishment increases or equals ITAE
     }
-    @Test
+    @Test(expected = IllegalArgumentException::class)
     fun `test fitness computation with high total time`() {
         val motor = ArmMotor(
             "",
