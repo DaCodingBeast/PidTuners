@@ -73,5 +73,28 @@ class QuadraticRegression {
 
             return solution
         }
-    }
+        /**
+         * Converts a quadratic equation in standard form (ax^2 + bx + c)
+         * into vertex form (a(x - h)^2 + k).
+         *
+         * @param a The coefficient of x^2 in the standard form equation.
+         * @param b The coefficient of x in the standard form equation.
+         * @param c The constant term in the standard form equation.
+         * @return A DoubleArray containing [a, h, k], where:
+         *         - a: The same coefficient as the input
+         *         - h: The x-coordinate of the vertex
+         *         - k: The y-coordinate of the vertex
+         */
+        @JvmStatic
+        fun toVertexForm(a: Double, b: Double, c: Double): DoubleArray {
+            // Calculate h (x-coordinate of the vertex)
+            val h = -b / (2 * a)
+
+            // Calculate k (y-coordinate of the vertex)
+            val k = c - (b * b) / (4 * a)
+
+            // Return the vertex form coefficients as [a, h, k]
+            return doubleArrayOf(a, h, k)
+        }
+        }
 }

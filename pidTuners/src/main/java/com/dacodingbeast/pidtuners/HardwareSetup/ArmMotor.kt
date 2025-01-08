@@ -14,7 +14,7 @@ class ArmMotor(
     externalGearRatio: Double = 1.0,
     pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0),
     override val targets: List<AngleRange>,
-    externalEncoder: Encoder? = null,
+    externalEncoder: Encoders? = null,
     override val obstacle: AngleRange? = null,
 ) : Motors(
     name,
