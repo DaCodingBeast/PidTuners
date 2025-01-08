@@ -40,6 +40,7 @@ public class SampleOpMode extends LinearOpMode {
             timer.reset();
         }
         waitForStart();
+        //todo cases for both motors (accuracy needs to be different)
 
         while (opModeIsActive() && !isStopRequested()) {
             double looptime = timer.seconds();
@@ -47,7 +48,7 @@ public class SampleOpMode extends LinearOpMode {
             PIDFcontroller pidFcontroller = motor.getPIDFController();
             List<Target> targets = motor.getTargets();
             Target target = motor.getTargets().get(x);
-            if (motor.targetReached(8.0,null)){
+            if (motor.targetReached(target.getStop(),5.0)){
                 if(targets.size()> x+1 && timerTime.seconds() >= 1.0) {
                     x+=1;
                     target = targets.get(x);
