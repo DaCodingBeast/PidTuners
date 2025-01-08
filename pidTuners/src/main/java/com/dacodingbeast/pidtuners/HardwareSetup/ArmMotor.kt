@@ -39,9 +39,10 @@ class ArmMotor(
         return if (inDegrees) angle * 180 / Math.PI else angle
     }
 
-    override fun targetReached(target:Double, accuracy :Double):Boolean{
+    override fun targetReached(target:Double, accuracy :Double?):Boolean{
+        val accurate = accuracy ?: Math.toRadians(15.0)
         val angle  = AngleRange.fromRadians(findPosition(), target)
         val direction = AngleRange.findMotorDirection(angle, obstacle)
-        return abs(AngleRange.findPIDFAngleError(direction,angle)) < Math.toRadians(accuracy)
+        return abs(AngleRange.findPIDFAngleError(direction,angle)) < Math.toRadians(accurate)
     }
 }

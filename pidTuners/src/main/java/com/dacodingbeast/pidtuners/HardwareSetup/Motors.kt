@@ -114,7 +114,7 @@ abstract class Motors(
         return getStallTorque() * friction * power
     }
 
-    open fun targetReached(target: Double, accuracy: Double):Boolean {
+    open fun targetReached(target: Double, accuracy: Double?):Boolean {
         return true
     }
 

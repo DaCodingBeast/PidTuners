@@ -48,7 +48,7 @@ public class SampleOpMode extends LinearOpMode {
             PIDFcontroller pidFcontroller = motor.getPIDFController();
             List<Target> targets = motor.getTargets();
             Target target = motor.getTargets().get(x);
-            if (motor.targetReached(target.getStop(),5.0)){
+            if (motor.targetReached(target.getStop(),null)){
                 if(targets.size()> x+1 && timerTime.seconds() >= 1.0) {
                     x+=1;
                     target = targets.get(x);

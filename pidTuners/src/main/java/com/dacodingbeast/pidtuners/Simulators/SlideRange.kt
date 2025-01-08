@@ -18,6 +18,9 @@ class SlideRange private constructor(override val start: Double, override val st
         fun inRange(goal: SlideRange, obstacle: SlideRange): Boolean {
             return goal.start in obstacle.start..obstacle.stop || goal.stop in obstacle.start..obstacle.stop
         }
+        fun fromAngle(angle1:Double,angle2:Double):SlideRange{
+            return fromInches(angle1,angle2)
+        }
 
     }
     fun asArrayList(): ArrayList<SlideRange> {
