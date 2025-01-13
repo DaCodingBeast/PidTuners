@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit
 
 abstract class Motors(
     val name: String,
@@ -56,9 +57,10 @@ abstract class Motors(
         externalEncoder?.init(hardwareMap)
     }
 
-    fun run(targetIndex: Int){
+    fun run(targetIndex: Int): Double{
         //todo if targets multiple list switch constants based on new target
         motor.power=pidController.calculate(targets[targetIndex], obstacle).motorPower
+        return targets[targetIndex].start
     }
 
     fun getCurrentPose(): Double {
@@ -118,8 +120,8 @@ abstract class Motors(
         return true
     }
 
-    open fun getCurrent():Double{
-        return 0.0
+    open fun getCurrent(currentUnit: CurrentUnit):Double{
+        return motor.getCurrent(currentUnit)
     }
 
     abstract fun findPosition(): Double
@@ -129,4 +131,5 @@ abstract class Motors(
         val angle = (ticks * (2 * Math.PI / motorSpecs.encoderTicksPerRotation))
         return angle
     }
+
 }

@@ -59,8 +59,9 @@ public class FrictionTest extends LinearOpMode {
             if(run) {
                 motor.setPower(0.5);
                 telemetry.addData("Running", motor.getRPM()*.5);
-                telemetry.addData("Angle", position);
+//                telemetry.addData("Position", position);
             };
+//            motor.run(3);
 
             // Measure RPM
             double ticksPerRevolution = motor.getTicksPerRotation(); // Encoder resolution (ticks per revolution)

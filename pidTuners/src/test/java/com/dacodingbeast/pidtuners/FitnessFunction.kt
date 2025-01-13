@@ -174,7 +174,7 @@ class FitnessFunction {
         assertTrue(fitnessData.itae >= 0) // ITAE should remain valid
         assertTrue(fitnessData.history.isNotEmpty()) // History should still be populated
     }
-    //todo require targets not be empty list
+
     @Test(expected = IllegalArgumentException::class)
     fun `test fitness with invalid configuration`() {
         val motor = ArmMotor(

@@ -4,14 +4,10 @@ import com.dacodingbeast.pidtuners.Algorithm.Dt
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
 import kotlin.math.abs
 
-enum class Direction{
-    EXTENDING, RETRACTING
-}
-
 class SlideSim(override var motor: Motors, override val targetIndex: Int):SimulatorStructure(motor,targetIndex) {
 
     override fun updateSimulator(): SimulatorData {
-        var target = motor.targets[targetIndex]
+        var target = motor.targets[targetIndex] as SlideRange
 
         val calculate = pidController.calculate(target, motor.obstacle)
         val controlEffort = calculate.motorPower
@@ -21,13 +17,8 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int):Simula
         val acceleration = motorTorque / motor.systemConstants.Inertia
         velocity += acceleration * Dt
 
-        val ticks = SlideRange.fromInches(target.start, target.stop)
-
-        val angle1 = (ticks.start * (2 * Math.PI / motor.motorSpecs.encoderTicksPerRotation)) + velocity * Dt
-        val angle2 = (ticks.stop * (2 * Math.PI / motor.motorSpecs.encoderTicksPerRotation))
-
-        target = SlideRange.fromAngle(angle1,angle2)
-        //to inch
+        val newAngle = target.toAngle().start + Dt * velocity
+        target = SlideRange.fromAngle(newAngle, target.toAngle().stop).toInches()
 
         return SimulatorData(target.start, controlEffort, error, velocity)
     }

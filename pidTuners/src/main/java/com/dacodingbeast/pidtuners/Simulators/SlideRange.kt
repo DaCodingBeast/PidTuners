@@ -1,28 +1,45 @@
 package com.dacodingbeast.pidtuners.Simulators
 
 import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes
+import com.dacodingbeast.pidtuners.Simulators.Conversions.fromAngleToTicks
+import com.dacodingbeast.pidtuners.Simulators.Conversions.fromInchesToTicks
+import com.dacodingbeast.pidtuners.Simulators.Conversions.fromTicksToAngle
+import com.dacodingbeast.pidtuners.Simulators.Conversions.fromTicksToInches
 import java.util.ArrayList
 
-class SlideRange private constructor(override val start: Double, override val stop: Double): Target(start,stop){
-    companion object Slides{
+class SlideRange private constructor(override val start: Double, override val stop: Double) : Target(start, stop) {
+    companion object Slides {
         @JvmStatic
         fun fromTicks(start: Double, end: Double): SlideRange {
             return SlideRange(start, end)
         }
+
         @JvmStatic
         fun fromInches(start: Double, end: Double): SlideRange {
-            val motor = TuningOpModes.slideMotor
-            motor.calculateInPerTick()
-            return SlideRange(start*motor!!.ticksPerIn, end*motor.ticksPerIn) //immediately converts to ticks
+            return SlideRange(fromInchesToTicks(start), fromInchesToTicks(end))
         }
-        fun inRange(goal: SlideRange, obstacle: SlideRange): Boolean {
-            return goal.start in obstacle.start..obstacle.stop || goal.stop in obstacle.start..obstacle.stop
-        }
-        fun fromAngle(angle1:Double,angle2:Double):SlideRange{
-            return fromInches(angle1,angle2)
+
+        @JvmStatic
+        fun fromAngle(angle1: Double, angle2: Double): SlideRange {
+            return SlideRange(fromAngleToTicks(angle1), fromAngleToTicks(angle2))
         }
 
     }
+    fun inRange(goal: SlideRange, obstacle: SlideRange): Boolean {
+        return goal.start in obstacle.start..obstacle.stop || goal.stop in obstacle.start..obstacle.stop
+    }
+    fun toInches(): SlideRange {
+        return SlideRange(fromTicksToInches(this.start), fromTicksToInches(this.stop))
+    }
+
+    fun toTicks(): SlideRange {
+        return this // Already in ticks, no conversion needed.
+    }
+
+    fun toAngle(): SlideRange {
+        return SlideRange(fromTicksToAngle(this.start), fromTicksToAngle(this.stop))
+    }
+
     fun asArrayList(): ArrayList<SlideRange> {
         return arrayListOf(this)
     }
