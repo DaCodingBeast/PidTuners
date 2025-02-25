@@ -29,12 +29,12 @@ public final class TuningOpModes {
     public static ArmMotor armMotor = new ArmMotor("Shoulder",DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,pivotSystemConstants,1.0,pidParams,testingAngle.asArrayList(),null,obstacleAngle);
     public static Double spoolDiameter = 1.0;
 
-    static SlideRange slideRange = SlideRange.fromInches(0.0, 0.0);
-    static SlideRange slideObstacle = SlideRange.fromTicks(0.0, 0.0);
+    static SlideRange slideRange = SlideRange.fromInches(0.0, 38.0);
+    static SlideRange slideObstacle = null;
 
     static SlideSystemConstants slideSystemConstants = new SlideSystemConstants(0.0,frictionRPM);
 
-    public static SlideMotor slideMotor = new SlideMotor("Slide",DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,30.0,slideSystemConstants,1.0,pidParams,slideRange.asArrayList(),null,slideObstacle);
+    public static SlideMotor slideMotor = new SlideMotor("Slide",DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,spoolDiameter,slideSystemConstants,1.0,pidParams,slideRange.asArrayList(),null,slideObstacle);
 
     static double accuracy = 3.5;
 
@@ -42,8 +42,8 @@ public final class TuningOpModes {
 
     static double gravityMotorPower = 0.5;
 
-    static boolean enableSlides = true;
-    static boolean enableArm = true;
+    static boolean enableSlides = false;
+    static boolean enableArm = false;
     private TuningOpModes() {
     }
 
