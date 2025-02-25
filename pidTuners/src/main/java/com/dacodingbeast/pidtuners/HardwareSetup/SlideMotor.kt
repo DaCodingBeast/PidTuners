@@ -26,6 +26,48 @@ class SlideMotor(
     pidParams,
     externalEncoder
 ) {
+    constructor(
+        name: String,
+        motorDirection: DcMotorSimple.Direction,
+        motorSpecs: MotorSpecs,
+        systemConstants: ConstantsSuper,
+        spoolDiameter: Double,
+        externalGearRatio: Double = 1.0,
+        pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0),
+        target: List<SlideRange>,
+    ) : this(
+        name,
+        motorDirection,
+        motorSpecs,
+        spoolDiameter,
+        systemConstants,
+        externalGearRatio,
+        pidParams,
+        target,
+        null,
+        null
+    )
+    constructor(
+        name: String,
+        motorDirection: DcMotorSimple.Direction,
+        motorSpecs: MotorSpecs,
+        systemConstants: ConstantsSuper,
+        spoolDiameter: Double,
+        targets: List<SlideRange>,
+        ) : this(
+        name,
+        motorDirection,
+        motorSpecs,
+        spoolDiameter,
+        systemConstants,
+        1.0,
+        PIDParams(0.0, 0.0, 0.0, 0.0),
+        targets,
+        null,
+        null,
+    )
+
+
 
     var ticksPerIn :Double = 1.0
     private var inPerTick:Double = 1.0

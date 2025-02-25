@@ -19,6 +19,30 @@ abstract class Motors(
     pidParams: PIDParams = PIDParams(0.0,0.0,0.0,0.0),
     private val externalEncoder: Encoders? = null
 ) {
+    constructor(
+        name: String,
+        motorDirection: DcMotorSimple.Direction,
+        motorSpecs: MotorSpecs,
+        systemConstants: ConstantsSuper,
+        externalGearRatio: Double,
+        pidParams: PIDParams
+    ):this(name, motorDirection, motorSpecs, systemConstants, externalGearRatio, pidParams,null)
+    constructor(
+        name: String,
+        motorSpecs: MotorSpecs,
+        systemConstants: ConstantsSuper,
+        externalGearRatio: Double,
+        pidParams: PIDParams,
+        externalEncoder: Encoders
+    ):this(name, DcMotorSimple.Direction.FORWARD, motorSpecs, systemConstants, externalGearRatio, pidParams, externalEncoder)
+
+    constructor(
+        name: String,
+        motorSpecs: MotorSpecs,
+        systemConstants: ConstantsSuper,
+        externalGearRatio: Double,
+        pidParams: PIDParams
+    ):this(name, DcMotorSimple.Direction.FORWARD, motorSpecs, systemConstants, externalGearRatio, pidParams)
     private lateinit var hardwareMap: HardwareMap
     private var startPosition = 0.0
     lateinit var motor: DcMotorEx

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 
 class DigitalEncoder(override val name: String,private val encoderDirection:DcMotorSimple.Direction) : Encoders(name) {
+    constructor(name: String) : this(name, DcMotorSimple.Direction.FORWARD)
     private lateinit var motor:DcMotorEx
     override fun init(ahwMap: HardwareMap) {
         motor = ahwMap.get(DcMotorEx::class.java, name)

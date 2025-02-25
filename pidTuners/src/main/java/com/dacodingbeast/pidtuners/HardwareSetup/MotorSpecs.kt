@@ -16,6 +16,11 @@ data class MotorSpecs(
     var motorGearRatio: Double = 1.0,
     var encoderTicksPerRotation: Double,
 ) {
+    constructor(
+        rpm: Double,
+        stallTorque: StallTorque,
+        encoderTicksPerRotation: Double,
+    ) : this(rpm, stallTorque, 1.0, encoderTicksPerRotation)
     init {
         stallTorque.to(TorqueUnit.KILOGRAM_CENTIMETER)
         if (motorGearRatio == 0.0) {

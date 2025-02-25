@@ -25,6 +25,25 @@ class ArmMotor(
     pidParams,
     externalEncoder
 ) {
+    constructor(
+        name: String,
+        motorDirection: DcMotorSimple.Direction,
+        motorSpecs: MotorSpecs,
+        systemConstants: ConstantsSuper,
+        externalGearRatio: Double = 1.0,
+        pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0),
+        target: List<AngleRange>,
+    ) : this(
+        name,
+        motorDirection,
+        motorSpecs,
+        systemConstants,
+        externalGearRatio,
+        pidParams,
+        target,
+        null,
+        null
+    )
     /**
      * To find angle in degrees: Angle.fromRadians(
      */
