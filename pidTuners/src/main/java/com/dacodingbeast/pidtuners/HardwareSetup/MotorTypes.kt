@@ -140,11 +140,11 @@ sealed class Hardware {
      */
     object REVSpurMotor { //nm
         @JvmField
-        val `40_1` =
+        val `GR40` =
             MotorSpecs(150.0, StallTorque(4.2, TorqueUnit.NEWTON_METER), 40.0, 28.0 * (1.0 / 40.0))
 
         @JvmField
-        val `20_1` =
+        val `GR20` =
             MotorSpecs(300.0, StallTorque(2.1, TorqueUnit.NEWTON_METER), 20.0, 28.0 * (1.0 / 20.0))
     }
 
@@ -153,12 +153,13 @@ sealed class Hardware {
      */
 
     enum class HDHexGearRatios(val value: Double) {
-        `3_1`(3.0),
-        `4_1`(4.0),
-        `5_1`(5.0)
+        `GR3_1`(3.0),
+        `GR4_1`(4.0),
+        `GR5_1`(5.0)
     }
 
     class HDHex(vararg grs: HDHexGearRatios) {
+
         val motorSpecs: MotorSpecs
 
         init {
@@ -185,5 +186,4 @@ sealed class Hardware {
             motorSpecs.applyGearRatio(gearRatio)
         }
     }
-
 }
