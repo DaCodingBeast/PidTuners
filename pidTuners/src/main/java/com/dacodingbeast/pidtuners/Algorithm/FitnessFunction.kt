@@ -1,14 +1,10 @@
 package com.dacodingbeast.pidtuners.Algorithm
 
 import ArmSpecific.ArmSim
-import android.transition.Slide
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
 import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor
 import com.dacodingbeast.pidtuners.Simulators.SimulatorData
-import com.dacodingbeast.pidtuners.Simulators.Target
-import com.dacodingbeast.pidtuners.Simulators.AngleRange
-import com.dacodingbeast.pidtuners.Simulators.SlideRange
 import com.dacodingbeast.pidtuners.Simulators.SlideSim
 import kotlin.math.abs
 import kotlin.math.pow
@@ -18,7 +14,7 @@ import kotlin.math.pow
  */
 const val Dt = 0.01
 
-class FitnessFunctionData(val itae: Double,val history:ArrayList<SimulatorData>)
+class FitnessFunctionData(val itae: Double, val history: ArrayList<SimulatorData>)
 
 /**
  * The Fitness Function made specifically for Arm Mechanisms
@@ -33,10 +29,10 @@ class FitnessFunction(
 ) {
 
     private val simulator = when (motor) {
-    is ArmMotor -> ArmSim(motor, targetIndex)
-    is SlideMotor -> SlideSim(motor, targetIndex)
-    else -> throw IllegalArgumentException("Unsupported motor type")
-}
+        is ArmMotor -> ArmSim(motor, targetIndex)
+        is SlideMotor -> SlideSim(motor, targetIndex)
+        else -> throw IllegalArgumentException("Unsupported motor type")
+    }
 
     /**
      * The Computation of the [param] to find the fitness score.
@@ -60,7 +56,7 @@ class FitnessFunction(
             time += Dt
         }
 
-        itae+= simulator.punishSimulator()
+        itae += simulator.punishSimulator()
 
         // Return ITAE as the fitness score (lower is better)
         return FitnessFunctionData(itae, history)

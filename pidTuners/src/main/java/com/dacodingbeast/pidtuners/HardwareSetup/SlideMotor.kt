@@ -2,7 +2,7 @@ package com.dacodingbeast.pidtuners.HardwareSetup
 
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
-import com.dacodingbeast.pidtuners.Simulators.AngleRange
+import com.dacodingbeast.pidtuners.MathFunctions.TicksToInch
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
@@ -47,6 +47,7 @@ class SlideMotor(
         null,
         null
     )
+
     constructor(
         name: String,
         motorDirection: DcMotorSimple.Direction,
@@ -54,7 +55,7 @@ class SlideMotor(
         systemConstants: ConstantsSuper,
         spoolDiameter: Double,
         targets: List<SlideRange>,
-        ) : this(
+    ) : this(
         name,
         motorDirection,
         motorSpecs,
@@ -68,24 +69,23 @@ class SlideMotor(
     )
 
 
-
-    var ticksPerIn :Double = 1.0
-    private var inPerTick:Double = 1.0
+    var ticksPerIn: Double = 1.0
+    private var inPerTick: Double = 1.0
 
     init {
         calculateInPerTick()
     }
 
-    fun calculateInPerTick(){
-        ticksPerIn = TicksToInch(spoolDiameter,this).ticksPerInch
-        inPerTick = TicksToInch(spoolDiameter,this).inchesPerTick
+    fun calculateInPerTick() {
+        ticksPerIn = TicksToInch(spoolDiameter, this).ticksPerInch
+        inPerTick = TicksToInch(spoolDiameter, this).inchesPerTick
     }
 
     override fun findPosition(): Double {
-    return getCurrentPose() * inPerTick
-}
+        return getCurrentPose() * inPerTick
+    }
 
-    override fun targetReached(target: Double,  accuracy: Double?): Boolean {
+    override fun targetReached(target: Double, accuracy: Double?): Boolean {
         val accurate = accuracy ?: 50.0
         val current = findPosition()
         return current in (target - accurate)..(target + accurate)

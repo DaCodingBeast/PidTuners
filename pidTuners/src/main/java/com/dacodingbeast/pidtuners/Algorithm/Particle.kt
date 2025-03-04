@@ -14,10 +14,12 @@ class Particle(private val ranges: List<Ranges>, val fitnessFunction: FitnessFun
      * Initialized values are in between [ranges]
      * @see Vector
      */
-    var position = Vector(ranges.map{ Random.nextDouble(it.start, it.stop) }.toDoubleArray())
-    var velocity : Vector = Vector(DoubleArray(ranges.size))
+    var position = Vector(ranges.map { Random.nextDouble(it.start, it.stop) }.toDoubleArray())
+    var velocity: Vector = Vector(DoubleArray(ranges.size))
+
     //initialize at start
     var pBestParam = position
+
     /**
      * The Best Fitness Value.
      * It is the highest number possible, because the function is minimizing ITAE
@@ -26,7 +28,7 @@ class Particle(private val ranges: List<Ranges>, val fitnessFunction: FitnessFun
     var bestResult = Double.MAX_VALUE
 
 
-    private lateinit var fitness : FitnessFunctionData
+    private lateinit var fitness: FitnessFunctionData
 
     fun updateFitness() {
         fitness = fitnessFunction.findFitness(this) // ITAE
@@ -43,8 +45,8 @@ class Particle(private val ranges: List<Ranges>, val fitnessFunction: FitnessFun
         val particleBestCoefficient = 0.1
         val swarmBestCoefficient = 0.2
 
-        velocity = ((velocity * prevVeloCoeffecient)+
-                ((pBestParam - position) * particleBestCoefficient * Random.nextDouble())+
+        velocity = ((velocity * prevVeloCoeffecient) +
+                ((pBestParam - position) * particleBestCoefficient * Random.nextDouble()) +
                 ((globalBest.pBestParam - pBestParam) * swarmBestCoefficient * Random.nextDouble()))
 
         velocity.ensureNonNegativePosition(globalBest.position, position)
@@ -52,12 +54,14 @@ class Particle(private val ranges: List<Ranges>, val fitnessFunction: FitnessFun
     }
 
     //to show algorithm in csv style (for a python script)
-    fun printStory(timeOfOptimization: Int){
+    fun printStory(timeOfOptimization: Int) {
         (0 until fitness.history.size).forEach { c ->
             //todo format csv for python visual. It should include all of Simulator Data's components
         }
     }
 
-    override fun toString(): String {return  position.toString()}
+    override fun toString(): String {
+        return position.toString()
+    }
 
 }

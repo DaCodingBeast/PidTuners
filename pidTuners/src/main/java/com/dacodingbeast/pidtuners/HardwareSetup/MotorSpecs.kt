@@ -21,6 +21,7 @@ data class MotorSpecs(
         stallTorque: StallTorque,
         encoderTicksPerRotation: Double,
     ) : this(rpm, stallTorque, 1.0, encoderTicksPerRotation)
+
     init {
         stallTorque.to(TorqueUnit.KILOGRAM_CENTIMETER)
         if (motorGearRatio == 0.0) {
@@ -42,7 +43,7 @@ data class MotorSpecs(
 
     fun applyGearRatio(gearRatio: Double) {
         motorGearRatio *= gearRatio
-        rpm *= 1/gearRatio
+        rpm *= 1 / gearRatio
         stallTorque.value *= gearRatio
         encoderTicksPerRotation *= gearRatio
     }

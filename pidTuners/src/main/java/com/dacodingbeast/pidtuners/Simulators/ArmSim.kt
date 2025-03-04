@@ -16,13 +16,12 @@ enum class Direction {
 }
 
 class ArmSim(override var motor: Motors, override val targetIndex: Int) :
-    SimulatorStructure(motor,targetIndex) {
+    SimulatorStructure(motor, targetIndex) {
 
     /**
      * This function calculates the sum of two integers.
      * @return Arms Angle, Error, and motor power
      */
-
 
 
     override fun updateSimulator(): SimulatorData {
@@ -54,7 +53,7 @@ class ArmSim(override var motor: Motors, override val targetIndex: Int) :
     override val acceptableError = Math.toRadians(3.0)
     override val acceptableVelocity = 1.0
     override val badAccuracy = abs(error) * 1000
-    override val badVelocity = abs(velocity) *20
+    override val badVelocity = abs(velocity) * 20
 
     override fun punishSimulator(): Double {
         return (if (error >= acceptableError) badAccuracy else 0.0) +

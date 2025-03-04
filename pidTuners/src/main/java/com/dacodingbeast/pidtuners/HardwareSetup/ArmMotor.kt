@@ -44,6 +44,7 @@ class ArmMotor(
         null,
         null
     )
+
     /**
      * To find angle in degrees: Angle.fromRadians(
      */
@@ -52,16 +53,16 @@ class ArmMotor(
         return AngleRange.wrap((ticks * (2 * Math.PI / motorSpecs.encoderTicksPerRotation)))
     }
 
-    fun findPosition(inDegrees : Boolean = false): Double {
+    fun findPosition(inDegrees: Boolean = false): Double {
         val ticks = getCurrentPose()
         val angle = AngleRange.wrap((ticks * (2 * Math.PI / motorSpecs.encoderTicksPerRotation)))
         return if (inDegrees) angle * 180 / Math.PI else angle
     }
 
-    override fun targetReached(target:Double, accuracy :Double?):Boolean{
+    override fun targetReached(target: Double, accuracy: Double?): Boolean {
         val accurate = accuracy ?: Math.toRadians(15.0)
-        val angle  = AngleRange.fromRadians(findPosition(), target)
+        val angle = AngleRange.fromRadians(findPosition(), target)
         val direction = AngleRange.findMotorDirection(angle, obstacle)
-        return abs(AngleRange.findPIDFAngleError(direction,angle)) < Math.toRadians(accurate)
+        return abs(AngleRange.findPIDFAngleError(direction, angle)) < Math.toRadians(accurate)
     }
 }

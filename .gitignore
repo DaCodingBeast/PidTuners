@@ -13,4 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
-.idea/runConfigurations.xml
+.idea/discord.xml
+.idea/git_toolbox_blame.xml
+.idea/git_toolbox_prj.xml

@@ -1,15 +1,14 @@
 package com.dacodingbeast.pidtuners.Simulators
 
-import CommonUtilities.PIDParams
 import CommonUtilities.PIDFcontroller
+import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Algorithm.Particle
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
 
-abstract class SimulatorStructure(open val motor: Motors, open val targetIndex: Int)
-{
-    lateinit var pidController : PIDFcontroller
+abstract class SimulatorStructure(open val motor: Motors, open val targetIndex: Int) {
+    lateinit var pidController: PIDFcontroller
 
-    fun init(params: Particle){
+    fun init(params: Particle) {
         pidController = PIDFcontroller(PIDParams(params.position))
     }
 
@@ -34,7 +33,7 @@ abstract class SimulatorStructure(open val motor: Motors, open val targetIndex: 
     /**
      * Define the fitness punishment if @see[acceptableError]'s threshold isn't reached
      */
-    abstract val badAccuracy : Double
+    abstract val badAccuracy: Double
 
     /**
      * Define the velocity threshold you would like to stay within
@@ -44,7 +43,7 @@ abstract class SimulatorStructure(open val motor: Motors, open val targetIndex: 
     /**
      * Define the fitness punishment if @see[acceptableVelocity]'s criteria isn't met
      */
-    abstract val badVelocity : Double
+    abstract val badVelocity: Double
 
 
 }

@@ -9,7 +9,29 @@ import com.qualcomm.robotcore.hardware.HardwareMap
  * @param name The name of the encoder.
  * @param calculatorOperations The list of operations to perform on the input voltage.
  */
-class AnalogEncoder(override val name: String, private val startPosition:Double, private val calculatorOperations:List<Operation>) : Encoders(name) {
+class AnalogEncoder(
+    override val name: String,
+    private val startPosition: Double,
+    private val calculatorOperations: List<Operation>
+) : Encoders(name) {
+    constructor(name: String, startPosition: Double, vararg calculatorOperations: Operation) : this(
+        name,
+        startPosition,
+        calculatorOperations.toList()
+    )
+
+    constructor(name: String, vararg calculatorOperations: Operation) : this(
+        name,
+        0.0,
+        calculatorOperations.toList()
+    )
+
+    constructor(name: String, calculatorOperations: List<Operation>) : this(
+        name,
+        0.0,
+        calculatorOperations
+    )
+
     private lateinit var analogEncoder: AnalogInput
     private lateinit var calculator: AnalogEncoderCalculator
     override fun init(ahwMap: HardwareMap) {
@@ -21,22 +43,24 @@ class AnalogEncoder(override val name: String, private val startPosition:Double,
         return calculator.runOperations(analogEncoder.voltage).toInt() - startPosition.toInt()
     }
 }
+
 /**
  * Represents a calculator that performs a list of operations on an input value.
  *
  * @param operations The list of operations in order to perform.
  */
-class AnalogEncoderCalculator(val operations: List<Operation>){
+class AnalogEncoderCalculator(val operations: List<Operation>) {
     init {
-        require(operations.isNotEmpty()){"Operations cannot be empty"}
+        require(operations.isNotEmpty()) { "Operations cannot be empty" }
     }
+
     /**
      * Runs the operations on the input value.
      *
      * @param input The input value to perform the operations on.
      * @return The result after performing all the operations.
      */
-    fun runOperations(input:Double):Double{
+    fun runOperations(input: Double): Double {
         var returnable = input
         operations.forEach {
             returnable = it.runOperation(returnable)
@@ -44,15 +68,16 @@ class AnalogEncoderCalculator(val operations: List<Operation>){
         return returnable
     }
 }
-class Operation(val operation: Operand, val value: Double){
+
+class Operation(val operation: Operand, val value: Double) {
     /**
      * Runs the operation on the input value.
      *
      * @param input The input value to perform the operation on.
      * @return The result after performing the operation.
      */
-    fun runOperation(input:Double):Double{
-        val returnable = when(operation){
+    fun runOperation(input: Double): Double {
+        val returnable = when (operation) {
             Operand.MULTIPLY -> input * value
             Operand.DIVIDE -> input / value
             Operand.ADD -> input + value
@@ -61,7 +86,8 @@ class Operation(val operation: Operand, val value: Double){
         return returnable
     }
 }
-enum class Operand{
+
+enum class Operand {
     MULTIPLY,
     DIVIDE,
     ADD,

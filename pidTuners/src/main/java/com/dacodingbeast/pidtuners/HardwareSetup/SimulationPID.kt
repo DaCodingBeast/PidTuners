@@ -1,9 +1,8 @@
 package CommonUtilities
 
 import com.dacodingbeast.pidtuners.Algorithm.Dt
-import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
-import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Algorithm.Vector
+import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
 import com.dacodingbeast.pidtuners.Simulators.Target
 import kotlin.math.max
@@ -17,12 +16,12 @@ import kotlin.math.sin
  * @param kd Derivative Term
  * @param kf FeedForward Term, used for fighting gravity forces based on angle
  */
-class PIDParams (val kp: Double, val ki: Double, val kd: Double, val kf: Double = 0.0){
-    constructor(params: Vector): this(
+class PIDParams(val kp: Double, val ki: Double, val kd: Double, val kf: Double = 0.0) {
+    constructor(params: Vector) : this(
         params.particleParams[0],
         params.particleParams[1],
         params.particleParams[2],
-        params.particleParams.getOrNull(3)?: 0.0
+        params.particleParams.getOrNull(3) ?: 0.0
     )
 }
 
@@ -50,14 +49,18 @@ class PIDFcontroller(var params: PIDParams) {
         obstacle: Target?
     ): Result {
 
-        var ff=0.0
-        val error = when(position){
+        var ff = 0.0
+        val error = when (position) {
             is AngleRange -> {
                 val direction = AngleRange.findMotorDirection(position, obstacle as AngleRange?)
-                ff = if(position.start>0 ) max(0.0, sin(position.start)) * params.kf else min(0.0, sin(position.start)) * params.kf
+                ff = if (position.start > 0) max(0.0, sin(position.start)) * params.kf else min(
+                    0.0,
+                    sin(position.start)
+                ) * params.kf
                 AngleRange.findPIDFAngleError(direction, position)
             }
-            is SlideRange ->{
+
+            is SlideRange -> {
                 position.stop - position.start
             }
 

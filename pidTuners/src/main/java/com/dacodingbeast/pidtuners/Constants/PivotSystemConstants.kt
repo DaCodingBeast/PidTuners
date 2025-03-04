@@ -1,7 +1,5 @@
 package com.dacodingbeast.pidtuners.Constants
 
-import ArmSpecific.ArmSim
-import ArmSpecific.Direction
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.pow
@@ -17,21 +15,21 @@ import kotlin.math.pow
  */
 data class PivotSystemConstants(
     override val Inertia: Double,
-    override val frictionRPM:Double,
+    override val frictionRPM: Double,
     val gravityConstants: GravityModelConstants,
 ) : ConstantsSuper(Inertia, frictionRPM)
 
 /**
  * The Constants of a quadratic function that models gravity's effective torque on the Arm
  */
-data class GravityModelConstants(val a: Double, val b: Double, val k: Double){
+data class GravityModelConstants(val a: Double, val b: Double, val k: Double) {
     /**
      * Preforming the mathematical model using the Constants to Find Gravity Torque
      * @see GravityModelConstants
      * @param angle Absolute value of Systems current angle
      */
     fun gravityTorque(angle: Double): Double {
-        require(angle in -PI ..PI)// obviously Works
+        require(angle in -PI..PI)// obviously Works
 
         val angleAbs = abs(angle)
 

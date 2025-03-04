@@ -49,7 +49,7 @@ class Vector(var particleParams: DoubleArray) {
         for (i in particleParams) {
             returnable += "$i, "
         }
-        if (returnable.split(",").size%2==0) {
+        if (returnable.split(",").size % 2 == 0) {
             returnable += "0.0"
         }
         return returnable

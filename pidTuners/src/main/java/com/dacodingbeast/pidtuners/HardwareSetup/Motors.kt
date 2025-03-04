@@ -16,7 +16,7 @@ abstract class Motors(
     val motorSpecs: MotorSpecs,
     val systemConstants: ConstantsSuper,
     private var externalGearRatio: Double = 1.0,
-    pidParams: PIDParams = PIDParams(0.0,0.0,0.0,0.0),
+    pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0),
     private val externalEncoder: Encoders? = null
 ) {
     constructor(
@@ -26,7 +26,8 @@ abstract class Motors(
         systemConstants: ConstantsSuper,
         externalGearRatio: Double,
         pidParams: PIDParams
-    ):this(name, motorDirection, motorSpecs, systemConstants, externalGearRatio, pidParams,null)
+    ) : this(name, motorDirection, motorSpecs, systemConstants, externalGearRatio, pidParams, null)
+
     constructor(
         name: String,
         motorSpecs: MotorSpecs,
@@ -34,7 +35,15 @@ abstract class Motors(
         externalGearRatio: Double,
         pidParams: PIDParams,
         externalEncoder: Encoders
-    ):this(name, DcMotorSimple.Direction.FORWARD, motorSpecs, systemConstants, externalGearRatio, pidParams, externalEncoder)
+    ) : this(
+        name,
+        DcMotorSimple.Direction.FORWARD,
+        motorSpecs,
+        systemConstants,
+        externalGearRatio,
+        pidParams,
+        externalEncoder
+    )
 
     constructor(
         name: String,
@@ -42,7 +51,15 @@ abstract class Motors(
         systemConstants: ConstantsSuper,
         externalGearRatio: Double,
         pidParams: PIDParams
-    ):this(name, DcMotorSimple.Direction.FORWARD, motorSpecs, systemConstants, externalGearRatio, pidParams)
+    ) : this(
+        name,
+        DcMotorSimple.Direction.FORWARD,
+        motorSpecs,
+        systemConstants,
+        externalGearRatio,
+        pidParams
+    )
+
     private lateinit var hardwareMap: HardwareMap
     private var startPosition = 0.0
     lateinit var motor: DcMotorEx
@@ -54,23 +71,23 @@ abstract class Motors(
     init {
         if (externalGearRatio < 0) {
             throw IllegalArgumentException("Gear ratio must be positive")
-        }else if (externalGearRatio == 0.0){
+        } else if (externalGearRatio == 0.0) {
             throw IllegalArgumentException("Gear ratio cannot be zero use 1 if not geared")
         }
         if (externalEncoder != null) { // if using an external encoder, the motor gear ratio is 1 as nothing is geared past that
             externalGearRatio = 1.0
             motorSpecs.motorGearRatio = 1.0
-        }else { // else, apply the external gear ratio to the motor gear ratio, to find total gear ratio
+        } else { // else, apply the external gear ratio to the motor gear ratio, to find total gear ratio
             motorSpecs.applyGearRatio(externalGearRatio)
         }
-        if(targets.isEmpty()){
-            throw IllegalArgumentException("Targets List empty, you forgot to add your targets")
-        }
+//        if (targets.isEmpty()) {
+//            throw IllegalArgumentException("Targets List empty, you forgot to add your targets")
+//        }
 
     }
 
 
-    fun init(hardwareMap: HardwareMap, startPosition: Double){
+    fun init(hardwareMap: HardwareMap, startPosition: Double) {
         this.hardwareMap = hardwareMap
         this.startPosition = startPosition
         this.motor = hardwareMap.get(DcMotorEx::class.java, name)
@@ -81,21 +98,24 @@ abstract class Motors(
         externalEncoder?.init(hardwareMap)
     }
 
-    fun run(targetIndex: Int): Double{
+    fun run(targetIndex: Int): Double {
         //todo if targets multiple list switch constants based on new target
-        motor.power=pidController.calculate(targets[targetIndex], obstacle).motorPower
+        motor.power = pidController.calculate(targets[targetIndex], obstacle).motorPower
         return targets[targetIndex].start
     }
 
     fun getCurrentPose(): Double {
         return externalEncoder?.getCurrentPosition()?.toDouble() ?: motor.currentPosition.toDouble()
     }
+
     fun getRPM(): Double {
         return motorSpecs.rpm
     }
+
     fun getGearRatio(): Double {
         return motorSpecs.motorGearRatio
     }
+
     fun getStallTorque(): Double {
         return motorSpecs.stallTorque.value
     }
@@ -140,11 +160,11 @@ abstract class Motors(
         return getStallTorque() * friction * power
     }
 
-    open fun targetReached(target: Double, accuracy: Double?):Boolean {
+    open fun targetReached(target: Double, accuracy: Double?): Boolean {
         return true
     }
 
-    open fun getCurrent(currentUnit: CurrentUnit):Double{
+    open fun getCurrent(currentUnit: CurrentUnit): Double {
         return motor.getCurrent(currentUnit)
     }
 

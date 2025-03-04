@@ -1,6 +1,6 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
-import static com.dacodingbeast.pidtuners.Opmodes.RemoveOutliersKt.removeOutliers;
+import static com.dacodingbeast.pidtuners.MathFunctions.RemoveOutliersKt.removeOutliers;
 import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.stationaryAngle;
 import static java.lang.Math.abs;
 
@@ -17,14 +17,16 @@ import java.util.ArrayList;
 @TeleOp(name = "FrictionTest", group = "Linear OpMode")
 public class FrictionTest extends LinearOpMode {
     Motors motor;
+
     public FrictionTest(Motors motor) {
         this.motor = motor;
     }
+
     @Override
     public void runOpMode() {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        motor.init(hardwareMap,stationaryAngle);
+        motor.init(hardwareMap, stationaryAngle);
 
         ElapsedTime timer = new ElapsedTime();
         ArrayList<Double> RPMS = new ArrayList<>();
@@ -36,7 +38,7 @@ public class FrictionTest extends LinearOpMode {
         ArrayList<Double> angularAccelerationData = new ArrayList<>();
         ArrayList<Double> motorPowers = new ArrayList<>();
         double actualRpm = 0.0;
-        boolean run  = true;
+        boolean run = true;
 
         waitForStart();
         if (!opModeInInit()) {
@@ -49,33 +51,33 @@ public class FrictionTest extends LinearOpMode {
 
             double position;
             // Running motor at half speed
-            if(motor.getClass() == ArmMotor.class){
+            if (motor.getClass() == ArmMotor.class) {
                 position = motor.findPosition();
-            } else{
+            } else {
                 position = motor.findPositionUnwrapped();
             }
 
 
             //todo DFDKJFKDJFLKDJLFKSJDL
-            if(run) {
+            if (run) {
                 motor.setPower(0.5);
-                telemetry.addData("Running", motor.getRPM()*.5);
+                telemetry.addData("Running", motor.getRPM() * .5);
 //                telemetry.addData("Position", position);
-            };
-//            motor.run(3);
+            }
+            //            motor.run(3);
 
             // Measure RPM
             double ticksPerRevolution = motor.getTicksPerRotation(); // Encoder resolution (ticks per revolution)
             double rpm = ((motor.getCurrentPose() - lastPosition) / ticksPerRevolution) * (60.0 / timer.seconds());
             lastPosition = (int) motor.getCurrentPose();
 
-            telemetry.addData("rpm",rpm);
+            telemetry.addData("rpm", rpm);
 
             double theoreticalRpmMeasured = motor.getRPM() * .5;
-            if (run && (rpm > theoreticalRpmMeasured*.5 && rpm<theoreticalRpmMeasured *1.5) && position > lastAngle) { //todo FDK FDLKDKJFLKDJLF
+            if (run && (rpm > theoreticalRpmMeasured * .5 && rpm < theoreticalRpmMeasured * 1.5) && position > lastAngle) { //todo FDK FDLKDKJFLKDJLF
                 RPMS.add(rpm);
             }
-            telemetry.addData("t",theoreticalRpmMeasured);
+            telemetry.addData("t", theoreticalRpmMeasured);
 
 //            else telemetry.addLine("Rpm Constants is incorrect, or your robot is struggling with the amount of weight it has");
 
@@ -83,7 +85,7 @@ public class FrictionTest extends LinearOpMode {
             if (!RPMS.isEmpty()) {
                 ArrayList<Double> x = removeOutliers(RPMS);
                 double sum = 0;
-                for (double num : x) sum += num * 1/.5;
+                for (double num : x) sum += num * 1 / .5;
                 actualRpm = sum / x.size();
                 telemetry.addData("Motor RPM", actualRpm);
             }
@@ -113,7 +115,7 @@ public class FrictionTest extends LinearOpMode {
                         actualRpm
                 ) / averageAA;
 
-                telemetry.addData("Inertia",rotationalInertia);
+                telemetry.addData("Inertia", rotationalInertia);
                 stop();
             }
 

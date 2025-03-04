@@ -7,8 +7,8 @@ import android.util.Pair;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.dacodingbeast.pidtuners.Algorithm.QuadraticRegression;
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor;
+import com.dacodingbeast.pidtuners.MathFunctions.QuadraticRegression;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -19,14 +19,16 @@ import java.util.Arrays;
 @TeleOp(name = "GravityTest", group = "Linear OpMode")
 public class GravityTest extends LinearOpMode {
     ArmMotor motor;
+
     public GravityTest(ArmMotor motor) {
         this.motor = motor;
     }
+
     @Override
     public void runOpMode() {
-        MultipleTelemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), this.telemetry);;
+        MultipleTelemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), this.telemetry);
 
-        motor.init(hardwareMap,stationaryAngle);
+        motor.init(hardwareMap, stationaryAngle);
 
         ArrayList<Pair<Double, Double>> dataPairs = new ArrayList<>();
 
@@ -40,18 +42,18 @@ public class GravityTest extends LinearOpMode {
 
             motor.setPower(gravityMotorPower);
 
-                dataPairs.add(new Pair<>(
-                        angle,
-                        motor.calculateTmotor(
-                                motor.getPower(),
-                                motor.getSystemConstants().getFrictionRPM()
-                        )
-                ));
+            dataPairs.add(new Pair<>(
+                    angle,
+                    motor.calculateTmotor(
+                            motor.getPower(),
+                            motor.getSystemConstants().getFrictionRPM()
+                    )
+            ));
 
-                for (Pair<Double, Double> dataPoint : dataPairs) {
-                    double [] d = new double[]{dataPoint.first,dataPoint.second};
-                    telemetry.addLine(Arrays.toString(d));
-                }
+            for (Pair<Double, Double> dataPoint : dataPairs) {
+                double[] d = new double[]{dataPoint.first, dataPoint.second};
+                telemetry.addLine(Arrays.toString(d));
+            }
             double[] x = new double[dataPairs.size()];
             double[] y = new double[dataPairs.size()];
             for (int i = 0; i < dataPairs.size(); i++) {

@@ -1,16 +1,16 @@
 package com.dacodingbeast.pidtuners.Simulators
 
 import ArmSpecific.Direction
-import java.util.ArrayList
 import kotlin.math.PI
 
 /**
  * Angle Unit used throughout simulation
  */
 
-class AngleRange private constructor(override val start: Double, override val stop: Double): Target(start,stop) {
+class AngleRange private constructor(override val start: Double, override val stop: Double) :
+    Target(start, stop) {
 
-    companion object Angles{
+    companion object Angles {
 
         const val DEG_TO_RAD = Math.PI / 180
         const val RAD_TO_DEG = 180 / Math.PI
@@ -67,9 +67,10 @@ class AngleRange private constructor(override val start: Double, override val st
             }
             return if (obstacle != null) {
 //            println("  current angles$g1, $g2")
-                if (inRange(goal,obstacle)) longRoute else shortRoute
+                if (inRange(goal, obstacle)) longRoute else shortRoute
             } else shortRoute
         }
+
         /**
          * Finding If the shortest route to an Angle could be prevented by an [obstacle]
          * @param goal Target Angle
@@ -79,11 +80,11 @@ class AngleRange private constructor(override val start: Double, override val st
         fun inRange(goal: AngleRange, obstacle: AngleRange): Boolean {
 
             val shortestAngleChange = wrap(goal.stop - goal.start)
-            for(o in listOf(obstacle.start, obstacle.stop)){
-                return if (shortestAngleChange>0){
-                    o >= goal.start && o<= goal.stop
-                } else{
-                    o <= goal.start && o>= goal.stop
+            for (o in listOf(obstacle.start, obstacle.stop)) {
+                return if (shortestAngleChange > 0) {
+                    o >= goal.start && o <= goal.stop
+                } else {
+                    o <= goal.start && o >= goal.stop
                 }
             }
             return false
@@ -99,17 +100,18 @@ class AngleRange private constructor(override val start: Double, override val st
             val angleChange = wrap(angleRange.stop - angleRange.start)
             return when (direction) {
                 Direction.CounterClockWise -> {
-                    if (angleChange>0){
+                    if (angleChange > 0) {
                         angleChange
-                    } else{
+                    } else {
                         angleChange + 2 * PI
                     }
                 }
+
                 Direction.Clockwise -> {
-                    if (angleChange<0){
+                    if (angleChange < 0) {
                         angleChange
-                    } else{
-                        angleChange - 2* PI
+                    } else {
+                        angleChange - 2 * PI
                     }
                 }
             }
@@ -126,9 +128,11 @@ class AngleRange private constructor(override val start: Double, override val st
     fun toDegrees(): Pair<Double, Double> {
         return Pair(start * RAD_TO_DEG, stop * RAD_TO_DEG)
     }
+
     fun asArrayList(): ArrayList<AngleRange> {
         return arrayListOf(this)
     }
+
     fun asList(): List<AngleRange> {
         return listOf(this)
     }

@@ -1,13 +1,12 @@
 package com.dacodingbeast.pidtuners.Simulators
 
-import com.dacodingbeast.pidtuners.Opmodes.TuningOpModes
-import com.dacodingbeast.pidtuners.Simulators.Conversions.fromAngleToTicks
-import com.dacodingbeast.pidtuners.Simulators.Conversions.fromInchesToTicks
-import com.dacodingbeast.pidtuners.Simulators.Conversions.fromTicksToAngle
-import com.dacodingbeast.pidtuners.Simulators.Conversions.fromTicksToInches
-import java.util.ArrayList
+import com.dacodingbeast.pidtuners.MathFunctions.Conversions.fromAngleToTicks
+import com.dacodingbeast.pidtuners.MathFunctions.Conversions.fromInchesToTicks
+import com.dacodingbeast.pidtuners.MathFunctions.Conversions.fromTicksToAngle
+import com.dacodingbeast.pidtuners.MathFunctions.Conversions.fromTicksToInches
 
-class SlideRange private constructor(override val start: Double, override val stop: Double) : Target(start, stop) {
+class SlideRange private constructor(override val start: Double, override val stop: Double) :
+    Target(start, stop) {
     companion object Slides {
         @JvmStatic
         fun fromTicks(start: Double, end: Double): SlideRange {
@@ -25,9 +24,11 @@ class SlideRange private constructor(override val start: Double, override val st
         }
 
     }
+
     fun inRange(goal: SlideRange, obstacle: SlideRange): Boolean {
         return goal.start in obstacle.start..obstacle.stop || goal.stop in obstacle.start..obstacle.stop
     }
+
     fun toInches(): SlideRange {
         return SlideRange(fromTicksToInches(this.start), fromTicksToInches(this.stop))
     }

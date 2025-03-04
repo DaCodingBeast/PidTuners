@@ -1,4 +1,4 @@
-package com.dacodingbeast.pidtuners.Algorithm
+package com.dacodingbeast.pidtuners.MathFunctions
 
 import kotlin.math.pow
 
@@ -73,6 +73,7 @@ class QuadraticRegression {
 
             return solution
         }
+
         /**
          * Converts a quadratic equation in standard form (ax^2 + bx + c)
          * into vertex form (a(x - h)^2 + k).
@@ -96,5 +97,5 @@ class QuadraticRegression {
             // Return the vertex form coefficients as [a, h, k]
             return doubleArrayOf(a, h, k)
         }
-        }
+    }
 }

@@ -44,7 +44,7 @@ class SlideSimTest {
         slideSim.velocity = 0.5
 
         val punishment = slideSim.punishSimulator()
-
+        println(punishment)
         assertEquals(0.0, punishment, 0.1)
     }
 

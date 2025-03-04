@@ -18,24 +18,26 @@ import CommonUtilities.PIDFcontroller;
 @Config
 @TeleOp(name = "SampleOpMode", group = "Linear OpMode")
 public class SampleOpMode extends LinearOpMode {
-    Motors motor;
     public static int x = 0;
+    Motors motor;
+
     public SampleOpMode(Motors motor) {
         this.motor = motor;
     }
+
     @Override
     public void runOpMode() {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        motor.init(hardwareMap,stationaryAngle);
+        motor.init(hardwareMap, stationaryAngle);
 
         ElapsedTime timer = new ElapsedTime();
 
-        x=0;
+        x = 0;
 
 
         ElapsedTime timerTime = new ElapsedTime();
-        while (opModeInInit()){
+        while (opModeInInit()) {
             timerTime.reset();
             timer.reset();
         }
@@ -48,16 +50,16 @@ public class SampleOpMode extends LinearOpMode {
             PIDFcontroller pidFcontroller = motor.getPIDFController();
             List<Target> targets = motor.getTargets();
             Target target = motor.getTargets().get(x);
-            if (motor.targetReached(target.getStop(),null)){
-                if(targets.size()> x+1 && timerTime.seconds() >= 1.0) {
-                    x+=1;
+            if (motor.targetReached(target.getStop(), null)) {
+                if (targets.size() > x + 1 && timerTime.seconds() >= 1.0) {
+                    x += 1;
                     target = targets.get(x);
                     timerTime.reset();
                 }
             }
 
             motor.run(x);
-            telemetry.addData("X",x);
+            telemetry.addData("X", x);
             telemetry.update();
         }
     }

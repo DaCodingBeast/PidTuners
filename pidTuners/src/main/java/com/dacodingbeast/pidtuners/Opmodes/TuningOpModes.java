@@ -19,22 +19,20 @@ import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 import CommonUtilities.PIDParams;
 
 public final class TuningOpModes {
+    public static Double spoolDiameter = 1.0;
     static AngleRange obstacleAngle = AngleRange.Angles.fromDegrees(0, 90);
     static AngleRange testingAngle = AngleRange.Angles.fromDegrees(90, 180);
-
     static double stationaryAngle = Math.toRadians(0.0);
     static double frictionRPM = 0.0;
-    static PIDParams pidParams = new PIDParams(0.0,0.0,0.0,0.0);
-    static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(0.0,frictionRPM, new  GravityModelConstants(0.0,0.0,0.0));
-    public static ArmMotor armMotor = new ArmMotor("Shoulder",DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,pivotSystemConstants,1.0,pidParams,testingAngle.asArrayList(),null,obstacleAngle);
-    public static Double spoolDiameter = 1.0;
-
+    static PIDParams pidParams = new PIDParams(0.0, 0.0, 0.0, 0.0);
+    static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(0.0, frictionRPM, new GravityModelConstants(0.0, 0.0, 0.0));
+    public static ArmMotor armMotor = new ArmMotor("Shoulder", DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223, pivotSystemConstants, 1.0, pidParams, testingAngle.asArrayList(), null, obstacleAngle);
     static SlideRange slideRange = SlideRange.fromInches(0.0, 38.0);
     static SlideRange slideObstacle = null;
 
-    static SlideSystemConstants slideSystemConstants = new SlideSystemConstants(0.0,frictionRPM);
+    static SlideSystemConstants slideSystemConstants = new SlideSystemConstants(0.0, frictionRPM);
 
-    public static SlideMotor slideMotor = new SlideMotor("Slide",DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,spoolDiameter,slideSystemConstants,1.0,pidParams,slideRange.asArrayList(),null,slideObstacle);
+    public static SlideMotor slideMotor = new SlideMotor("Slide", DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223, spoolDiameter, slideSystemConstants, 1.0, pidParams, slideRange.asArrayList(), null, slideObstacle);
 
     static double accuracy = 3.5;
 
@@ -44,6 +42,7 @@ public final class TuningOpModes {
 
     static boolean enableSlides = false;
     static boolean enableArm = false;
+
     private TuningOpModes() {
     }
 
@@ -57,7 +56,7 @@ public final class TuningOpModes {
 
     @OpModeRegistrar
     public static void register(OpModeManager manager) {
-        manager.register(metaForClass(PSODirectionDebugger.class, ""), new PSODirectionDebugger(slideMotor,armMotor));
+        manager.register(metaForClass(PSODirectionDebugger.class, ""), new PSODirectionDebugger(slideMotor, armMotor));
         if (enableArm) {
             manager.register(
                     metaForClass(FrictionTest.class, "Arm"), new FrictionTest(armMotor)
@@ -69,7 +68,7 @@ public final class TuningOpModes {
                     metaForClass(SampleOpMode.class, "Arm"), new SampleOpMode(armMotor)
             );
             manager.register(
-                    metaForClass(FindPID.class, "Arm"), new FindPID(armMotor,accuracy,time)
+                    metaForClass(FindPID.class, "Arm"), new FindPID(armMotor, accuracy, time)
             );
         }
         if (enableSlides) {
@@ -80,7 +79,7 @@ public final class TuningOpModes {
                     metaForClass(SampleOpMode.class, "Slide"), new SampleOpMode(slideMotor)
             );
             manager.register(
-                    metaForClass(FindPID.class, "Slide"), new FindPID(slideMotor,accuracy,time)
+                    metaForClass(FindPID.class, "Slide"), new FindPID(slideMotor, accuracy, time)
             );
         }
     }

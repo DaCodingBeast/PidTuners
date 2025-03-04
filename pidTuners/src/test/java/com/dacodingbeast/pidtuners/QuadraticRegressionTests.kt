@@ -1,7 +1,7 @@
 package com.dacodingbeast.pidtuners
 
-import com.dacodingbeast.pidtuners.Algorithm.QuadraticRegression
-import com.dacodingbeast.pidtuners.Algorithm.QuadraticRegression.Companion.quadraticRegressionManual
+import com.dacodingbeast.pidtuners.MathFunctions.QuadraticRegression
+import com.dacodingbeast.pidtuners.MathFunctions.QuadraticRegression.Companion.quadraticRegressionManual
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
