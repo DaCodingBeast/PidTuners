@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="v"
+                 name="PidTuners"
+                 start-page="pidtuners.md">
+
+    <toc-element topic="pidtuners.md"/>
+    <toc-element topic="Installation-Instructions.md"/>
+    <toc-element topic="Tuners.md"/>
+    <toc-element topic="How-to-use-it.md"/>
+</instance-profile>
