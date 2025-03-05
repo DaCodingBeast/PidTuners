@@ -1,5 +1,6 @@
-package com.dacodingbeast.pidtuners.MathFunctions
+package com.dacodingbeast.pidtuners.utilities.MathFunctions
 
+import kotlin.math.abs
 import kotlin.math.pow
 
 class QuadraticRegression {
@@ -39,7 +40,7 @@ class QuadraticRegression {
                 // Find the pivot row and swap
                 var maxRow = i
                 for (k in i + 1 until n) {
-                    if (kotlin.math.abs(augmentedMatrix[k][i]) > kotlin.math.abs(augmentedMatrix[maxRow][i])) {
+                    if (abs(augmentedMatrix[k][i]) > abs(augmentedMatrix[maxRow][i])) {
                         maxRow = k
                     }
                 }
@@ -48,7 +49,7 @@ class QuadraticRegression {
                 augmentedMatrix[maxRow] = temp
 
                 // Make the pivot non-zero
-                if (kotlin.math.abs(augmentedMatrix[i][i]) < 1e-9) {
+                if (abs(augmentedMatrix[i][i]) < 1e-9) {
                     throw IllegalArgumentException("Matrix is singular or nearly singular.")
                 }
 

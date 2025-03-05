@@ -2,7 +2,7 @@ package com.dacodingbeast.pidtuners.HardwareSetup
 
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
-import com.dacodingbeast.pidtuners.MathFunctions.TicksToInch
+import com.dacodingbeast.pidtuners.utilities.MathFunctions.TicksToInch
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 

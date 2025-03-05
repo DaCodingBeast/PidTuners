@@ -1,6 +1,6 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
-import static com.dacodingbeast.pidtuners.MathFunctions.RemoveOutliersKt.removeOutliers;
+import static com.dacodingbeast.pidtuners.utilities.MathFunctions.RemoveOutliersKt.removeOutliers;
 import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.stationaryAngle;
 import static java.lang.Math.abs;
 
@@ -8,6 +8,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
+import com.dacodingbeast.pidtuners.utilities.DataLogger;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -24,6 +25,7 @@ public class FrictionTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        DataLogger.getInstance().startLogger("FrictionTest" + motor.getName());
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
         motor.init(hardwareMap, stationaryAngle);
@@ -88,6 +90,7 @@ public class FrictionTest extends LinearOpMode {
                 for (double num : x) sum += num * 1 / .5;
                 actualRpm = sum / x.size();
                 telemetry.addData("Motor RPM", actualRpm);
+                DataLogger.getInstance().logDebug("actualRpm: " + actualRpm);
             }
 
             // Finding Angular Acceleration
@@ -116,6 +119,7 @@ public class FrictionTest extends LinearOpMode {
                 ) / averageAA;
 
                 telemetry.addData("Inertia", rotationalInertia);
+                DataLogger.getInstance().logDebug("rotationalInertia: "+rotationalInertia);
                 stop();
             }
 

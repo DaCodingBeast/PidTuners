@@ -1,5 +1,6 @@
 package com.dacodingbeast.pidtuners.HardwareSetup
 
+import com.dacodingbeast.pidtuners.utilities.DataLogger
 import com.qualcomm.robotcore.hardware.AnalogInput
 import com.qualcomm.robotcore.hardware.HardwareMap
 
@@ -51,7 +52,11 @@ class AnalogEncoder(
  */
 class AnalogEncoderCalculator(val operations: List<Operation>) {
     init {
-        require(operations.isNotEmpty()) { "Operations cannot be empty" }
+        try {
+            require(operations.isNotEmpty()) { "Operations cannot be empty" }
+        }catch (_: Exception){
+            DataLogger.instance.logError("Analog Encoder Calculator: Operations cannot be empty")
+        }
     }
 
     /**

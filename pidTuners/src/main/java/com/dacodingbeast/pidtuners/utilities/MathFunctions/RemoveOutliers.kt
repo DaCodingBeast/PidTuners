@@ -1,9 +1,11 @@
-package com.dacodingbeast.pidtuners.MathFunctions
+package com.dacodingbeast.pidtuners.utilities.MathFunctions
+
+import com.dacodingbeast.pidtuners.utilities.DataLogger
 
 fun removeOutliers(data: ArrayList<Double>): ArrayList<Double> {
 
     if (data.isEmpty()) {
-        //todo log
+        DataLogger.instance.logError("Remove outliers: Data is empty")
         return ArrayList()
     }
 

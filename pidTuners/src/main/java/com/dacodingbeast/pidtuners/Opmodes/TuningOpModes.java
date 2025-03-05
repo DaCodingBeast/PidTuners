@@ -9,6 +9,7 @@ import com.dacodingbeast.pidtuners.HardwareSetup.Hardware;
 import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor;
 import com.dacodingbeast.pidtuners.Simulators.AngleRange;
 import com.dacodingbeast.pidtuners.Simulators.SlideRange;
+import com.dacodingbeast.pidtuners.utilities.DataLogger;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
@@ -82,6 +83,8 @@ public final class TuningOpModes {
                     metaForClass(FindPID.class, "Slide"), new FindPID(slideMotor, accuracy, time)
             );
         }
+        DataLogger.create();
+        DataLogger.getInstance().initLogger(enableArm,enableSlides);
     }
 
 }

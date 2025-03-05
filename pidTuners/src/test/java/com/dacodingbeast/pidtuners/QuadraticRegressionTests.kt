@@ -1,7 +1,7 @@
 package com.dacodingbeast.pidtuners
 
-import com.dacodingbeast.pidtuners.MathFunctions.QuadraticRegression
-import com.dacodingbeast.pidtuners.MathFunctions.QuadraticRegression.Companion.quadraticRegressionManual
+import com.dacodingbeast.pidtuners.utilities.MathFunctions.QuadraticRegression
+import com.dacodingbeast.pidtuners.utilities.MathFunctions.QuadraticRegression.Companion.quadraticRegressionManual
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
@@ -52,7 +52,7 @@ class QuadraticRegressionTests {
         val x = points.map { it.first }.toDoubleArray()
         val y = points.map { it.second }.toDoubleArray()
 
-        val coefficients = QuadraticRegression.quadraticRegressionManual(x,y)
+        val coefficients = quadraticRegressionManual(x,y)
         val intercept = coefficients[0]
         val linear = coefficients[1]
         val quadratic = coefficients[2]
@@ -99,7 +99,7 @@ fun testQuadraticRegressionAndVertexForm() {
     val y = points.map { it.second }.toDoubleArray()
 
     // Perform quadratic regression
-    val coefficients = QuadraticRegression.quadraticRegressionManual(x, y)
+    val coefficients = quadraticRegressionManual(x, y)
     val intercept = coefficients[0]
     val linear = coefficients[1]
     val quadratic = coefficients[2]
@@ -129,7 +129,7 @@ fun testQuadraticRegressionAndVertexForm() {
         val xValues = doubleArrayOf(1.0, 2.0, 3.0, 4.0, 5.0)
         val yValues = doubleArrayOf(1.0, 4.0, 9.0, 16.0, 25.0) // y = x^2 (perfect quadratic)
 
-        val coefficients = QuadraticRegression.quadraticRegressionManual(xValues,yValues)
+        val coefficients = quadraticRegressionManual(xValues,yValues)
         val intercept = coefficients[0]
         val linear = coefficients[1]
         val quadratic = coefficients[2]

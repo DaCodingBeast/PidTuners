@@ -4,6 +4,7 @@ import CommonUtilities.PIDFcontroller
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
 import com.dacodingbeast.pidtuners.Simulators.Target
+import com.dacodingbeast.pidtuners.utilities.DataLogger
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
@@ -153,7 +154,12 @@ abstract class Motors(
      */
 
     fun calculateTmotor(power: Double, actualRPM: Double): Double {
-        require(power in -1.0..1.0) //obviously works
+        try {
+            require(power in -1.0..1.0) //obviously works
+        }catch (_: IllegalArgumentException){
+            DataLogger.instance.logError("Power must be between -1 and 1")
+
+        }
         //friction influenced max power
         val friction = actualRPM / getRPM()
 

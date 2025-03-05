@@ -1,6 +1,7 @@
 package com.dacodingbeast.pidtuners.Simulators
 
 import ArmSpecific.Direction
+import com.dacodingbeast.pidtuners.utilities.DataLogger
 import kotlin.math.PI
 
 /**
@@ -37,7 +38,11 @@ class AngleRange private constructor(override val start: Double, override val st
          * @param theta Angle Error being wrapped, so that the shortest route is discovered
          */
         fun wrap(theta: Double): Double {
-//            require(theta in -2 * PI..2 * PI) { Log.d(ArmSpecific.error, "You created an Angle greater than 360 degrees")}
+            try {
+                require(theta in -2 * PI..2 * PI)
+            }catch (_: IllegalArgumentException){
+                DataLogger.instance.logError("Angle must be between -2PI and 2PI, but was $theta")
+            }
             var angle = theta
             while (angle > PI) angle -= PI * 2
             while (angle < -PI) angle += PI * 2

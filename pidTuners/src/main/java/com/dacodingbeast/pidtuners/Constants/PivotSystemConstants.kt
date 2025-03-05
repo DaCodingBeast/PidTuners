@@ -1,5 +1,6 @@
 package com.dacodingbeast.pidtuners.Constants
 
+import com.dacodingbeast.pidtuners.utilities.DataLogger
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.pow
@@ -29,8 +30,11 @@ data class GravityModelConstants(val a: Double, val b: Double, val k: Double) {
      * @param angle Absolute value of Systems current angle
      */
     fun gravityTorque(angle: Double): Double {
-        require(angle in -PI..PI)// obviously Works
-
+        try {
+            require(angle in -PI..PI)// obviously Works
+        }catch (_: IllegalArgumentException){
+            DataLogger.instance.logError("Angle must be between -PI and PI")
+        }
         val angleAbs = abs(angle)
 
         //Its a parabola created by Desmos based on given input

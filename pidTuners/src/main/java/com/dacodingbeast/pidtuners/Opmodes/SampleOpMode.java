@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
 import com.dacodingbeast.pidtuners.Simulators.Target;
+import com.dacodingbeast.pidtuners.utilities.DataLogger;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -24,9 +25,9 @@ public class SampleOpMode extends LinearOpMode {
     public SampleOpMode(Motors motor) {
         this.motor = motor;
     }
-
     @Override
     public void runOpMode() {
+        DataLogger.getInstance().startLogger("SampleOpMode" + motor.getName());
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
         motor.init(hardwareMap, stationaryAngle);
@@ -60,6 +61,7 @@ public class SampleOpMode extends LinearOpMode {
 
             motor.run(x);
             telemetry.addData("X", x);
+            DataLogger.getInstance().logDebug("X: " + x);
             telemetry.update();
         }
     }

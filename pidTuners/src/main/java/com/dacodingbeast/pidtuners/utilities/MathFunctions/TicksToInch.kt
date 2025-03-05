@@ -1,4 +1,4 @@
-package com.dacodingbeast.pidtuners.MathFunctions
+package com.dacodingbeast.pidtuners.utilities.MathFunctions
 
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
 

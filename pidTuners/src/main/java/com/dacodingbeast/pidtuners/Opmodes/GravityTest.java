@@ -8,7 +8,8 @@ import android.util.Pair;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor;
-import com.dacodingbeast.pidtuners.MathFunctions.QuadraticRegression;
+import com.dacodingbeast.pidtuners.utilities.DataLogger;
+import com.dacodingbeast.pidtuners.utilities.MathFunctions.QuadraticRegression;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -26,6 +27,7 @@ public class GravityTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        DataLogger.getInstance().startLogger("GravityTest" + motor.getName());
         MultipleTelemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), this.telemetry);
 
         motor.init(hardwareMap, stationaryAngle);
@@ -69,6 +71,8 @@ public class GravityTest extends LinearOpMode {
             telemetry.addData("a", vertex[0]);
             telemetry.addData("h", vertex[1]);
             telemetry.addData("k", vertex[2]);
+
+            DataLogger.getInstance().logDebug("a: " + vertex[0] + " h: " + vertex[1] + " k: " + vertex[2]);
 
 //                telemetry.addLine("Input data points into a table in https://www.desmos.com/calculator");
 //                telemetry.addLine("Copy and paste the below equation, and place a,b,k in the config");

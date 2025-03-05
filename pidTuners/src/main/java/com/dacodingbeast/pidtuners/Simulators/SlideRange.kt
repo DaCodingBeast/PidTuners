@@ -1,9 +1,9 @@
 package com.dacodingbeast.pidtuners.Simulators
 
-import com.dacodingbeast.pidtuners.MathFunctions.Conversions.fromAngleToTicks
-import com.dacodingbeast.pidtuners.MathFunctions.Conversions.fromInchesToTicks
-import com.dacodingbeast.pidtuners.MathFunctions.Conversions.fromTicksToAngle
-import com.dacodingbeast.pidtuners.MathFunctions.Conversions.fromTicksToInches
+import com.dacodingbeast.pidtuners.utilities.MathFunctions.Conversions.fromAngleToTicks
+import com.dacodingbeast.pidtuners.utilities.MathFunctions.Conversions.fromInchesToTicks
+import com.dacodingbeast.pidtuners.utilities.MathFunctions.Conversions.fromTicksToAngle
+import com.dacodingbeast.pidtuners.utilities.MathFunctions.Conversions.fromTicksToInches
 
 class SlideRange private constructor(override val start: Double, override val stop: Double) :
     Target(start, stop) {
