@@ -30,10 +30,12 @@ class DataLogger private constructor(val tagger: String){
     }
     companion object{
         @JvmStatic
-        lateinit var instance : DataLogger
+        val defaultTagger = "PidTunersDataLogger"
+        @JvmStatic
+        var instance : DataLogger = DataLogger(defaultTagger)
         @JvmStatic
         fun create(){
-            this.instance = DataLogger("PidTunersDataLogger")
+            this.instance = DataLogger(defaultTagger)
         }
         @JvmStatic
         fun create(tag: String){
