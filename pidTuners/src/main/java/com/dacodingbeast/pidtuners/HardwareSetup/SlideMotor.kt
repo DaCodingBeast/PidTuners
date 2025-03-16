@@ -6,16 +6,16 @@ import com.dacodingbeast.pidtuners.utilities.MathFunctions.TicksToInch
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
-class SlideMotor(
+class SlideMotor @JvmOverloads constructor(
     name: String,
     motorDirection: DcMotorSimple.Direction,
     motorSpecs: MotorSpecs,
-    val spoolDiameter: Double,
+    private val spoolDiameter: Double,
     systemConstants: ConstantsSuper,
     externalGearRatio: Double = 1.0,
     pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0),
     override val targets: List<SlideRange>,
-    private val externalEncoder: Encoders? = null,
+    externalEncoder: Encoders? = null,
     override val obstacle: SlideRange? = null,
 ) : Motors(
     name,

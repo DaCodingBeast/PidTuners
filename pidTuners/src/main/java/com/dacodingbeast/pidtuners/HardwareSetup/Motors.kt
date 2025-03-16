@@ -182,4 +182,40 @@ abstract class Motors(
         return angle
     }
 
+    fun fromInchesToTicks(value: Double): Double {
+        if (this is SlideMotor) {
+            this.calculateInPerTick()
+            return value * (motor as SlideMotor).ticksPerIn
+        } else {
+            throw IllegalStateException("Motor is not of type SlideMotor.")
+        }
+    }
+
+    fun fromTicksToInches(value: Double): Double {
+        if (this is SlideMotor) {
+            this.calculateInPerTick()
+            return value / this.ticksPerIn
+        } else {
+            throw IllegalStateException("Motor is not of type SlideMotor.")
+        }
+    }
+
+    fun fromAngleToTicks(angle: Double): Double {
+        if (this is SlideMotor) {
+            val ticksPerRotation = this.motorSpecs.encoderTicksPerRotation
+            return (angle / (2 * Math.PI)) * ticksPerRotation
+        } else {
+            throw IllegalStateException("Motor is not of type SlideMotor.")
+        }
+    }
+
+    fun fromTicksToAngle(ticks: Double): Double {
+        if (this is SlideMotor) {
+            val ticksPerRotation = this.motorSpecs.encoderTicksPerRotation
+            return (ticks / ticksPerRotation) * 2 * Math.PI
+        } else {
+            throw IllegalStateException("Motor is not of type SlideMotor.")
+        }
+    }
+
 }

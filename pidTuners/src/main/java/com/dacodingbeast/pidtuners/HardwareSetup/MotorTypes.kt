@@ -11,7 +11,7 @@ sealed class Hardware {
     /**
      * Yellow Jacket Motors ranging from 84 - 1150 RPM
      */
-    object YellowJacket { //TODO: these all in kg cm
+    object YellowJacket {
         @JvmField
         val RPM30 = MotorSpecs(
             30.0, StallTorque(250.0, TorqueUnit.KILOGRAM_CENTIMETER),

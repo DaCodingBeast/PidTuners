@@ -24,27 +24,28 @@ class MotorSpecsTest {
         StallTorque(0.1,TorqueUnit.KILOGRAM_CENTIMETER),4.0,28.0), PivotSystemConstants(0.0,0.0,
         GravityModelConstants(0.0,0.0,0.0)
     ), 1.0, PIDParams(0.0,0.0,0.0,0.0),AngleRange.fromDegrees(0.0,90.0).asList(),null)
-        val spurMotor = ArmMotor("motor", DcMotorSimple.Direction.FORWARD, Hardware.REVSpurMotor.`20_1`, PivotSystemConstants(0.0,0.0,
+        val spurMotor = ArmMotor("motor", DcMotorSimple.Direction.FORWARD, Hardware.REVSpurMotor.GR20, PivotSystemConstants(0.0,0.0,
             GravityModelConstants(0.0,0.0,0.0)
         ), 1.0, PIDParams(0.0,0.0,0.0,0.0),AngleRange.fromDegrees(0.0,90.0).asList(),null)
 val yellowJacket = ArmMotor("motor", DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223,PivotSystemConstants(0.0,0.0,
     GravityModelConstants(0.0,0.0,0.0)
 ), 1.0, PIDParams(0.0,0.0,0.0,0.0),AngleRange.fromDegrees(0.0,90.0).asList(),null)
-    val hdHex = ArmMotor("motor", DcMotorSimple.Direction.FORWARD, Hardware.HDHex(Hardware.HDHexGearRatios.`3_1`,
-        Hardware.HDHexGearRatios.`4_1`).motorSpecs,PivotSystemConstants(0.0,0.0,
+    val hdHex = ArmMotor("motor", DcMotorSimple.Direction.FORWARD, Hardware.HDHex(Hardware.HDHexGearRatios.GR3_1,
+        Hardware.HDHexGearRatios.GR4_1
+    ).motorSpecs,PivotSystemConstants(0.0,0.0,
         GravityModelConstants(0.0,0.0,0.0)
     ), 1.0, PIDParams(0.0,0.0,0.0,0.0),AngleRange.fromDegrees(0.0,90.0).asList(),null)
     @Test
     fun create_Motor_Spec_bjects(){
-        Hardware.REVSpurMotor.`20_1`
-        Hardware.REVSpurMotor.`40_1`
+        Hardware.REVSpurMotor.GR20
+        Hardware.REVSpurMotor.GR40
         Hardware.REVCoreHex.CoreHexMotor
         Hardware.TorqueNado.MAX
         Hardware.NeveRest.Classic_40
         Hardware.NeveRest.Classic_60
         Hardware.NeveRest.Orbital_3_7
         Hardware.NeveRest.Orbital_20
-        Hardware.HDHex(Hardware.HDHexGearRatios.`3_1`,Hardware.HDHexGearRatios.`4_1`,Hardware.HDHexGearRatios.`5_1`).motorSpecs
+        Hardware.HDHex(Hardware.HDHexGearRatios.GR3_1,Hardware.HDHexGearRatios.GR4_1,Hardware.HDHexGearRatios.GR5_1).motorSpecs
     }
     @Test
     fun testMotorSpecs(){

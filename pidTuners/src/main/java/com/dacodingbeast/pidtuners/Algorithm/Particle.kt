@@ -8,7 +8,7 @@ import kotlin.random.Random
  * @param ranges The ranges that limit the PIDF Coefficients
  * @param multiplePids Boolean that creates 12 PIDF Coefficients for 3 Controllers vs 4 for 1
  */
-class Particle(private val ranges: List<Ranges>, val fitnessFunction: FitnessFunction) {
+class Particle(private val ranges: List<Ranges>, private val fitnessFunction: FitnessFunction) {
     /**
      * The initialized random position of the Particle.
      * Initialized values are in between [ranges]

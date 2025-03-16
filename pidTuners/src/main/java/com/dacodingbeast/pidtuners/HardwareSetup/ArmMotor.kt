@@ -6,7 +6,7 @@ import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import kotlin.math.abs
 
-class ArmMotor(
+class ArmMotor @JvmOverloads constructor(
     name: String,
     motorDirection: DcMotorSimple.Direction,
     motorSpecs: MotorSpecs,

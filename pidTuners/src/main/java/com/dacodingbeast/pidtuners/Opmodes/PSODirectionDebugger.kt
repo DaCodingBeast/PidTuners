@@ -5,7 +5,7 @@ import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor
 import com.dacodingbeast.pidtuners.utilities.DataLogger
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 
-class PSODirectionDebugger(val slideMotor: SlideMotor?, val armMotor: ArmMotor?) : LinearOpMode() {
+class PSODirectionDebugger @JvmOverloads constructor (private val slideMotor: SlideMotor? = null, private val armMotor: ArmMotor? = null) : LinearOpMode() {
     override fun runOpMode() {
         DataLogger.instance.startLogger("PSO Direction Debugger")
         slideMotor?.init(hardwareMap, 0.0)

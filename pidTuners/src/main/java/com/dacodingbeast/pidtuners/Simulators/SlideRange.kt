@@ -1,9 +1,13 @@
 package com.dacodingbeast.pidtuners.Simulators
 
+import android.transition.Slide
+import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor
 import com.dacodingbeast.pidtuners.utilities.MathFunctions.Conversions.fromAngleToTicks
 import com.dacodingbeast.pidtuners.utilities.MathFunctions.Conversions.fromInchesToTicks
 import com.dacodingbeast.pidtuners.utilities.MathFunctions.Conversions.fromTicksToAngle
 import com.dacodingbeast.pidtuners.utilities.MathFunctions.Conversions.fromTicksToInches
+
+//todo - Move Everything that isn't in inches to the Slide Simulator
 
 class SlideRange private constructor(override val start: Double, override val stop: Double) :
     Target(start, stop) {
@@ -29,16 +33,16 @@ class SlideRange private constructor(override val start: Double, override val st
         return goal.start in obstacle.start..obstacle.stop || goal.stop in obstacle.start..obstacle.stop
     }
 
-    fun toInches(): SlideRange {
-        return SlideRange(fromTicksToInches(this.start), fromTicksToInches(this.stop))
+    fun toInches(motor: SlideMotor): SlideRange {
+        return SlideRange(motor.fromTicksToInches(this.start), motor.fromTicksToInches(this.stop))
     }
 
     fun toTicks(): SlideRange {
         return this // Already in ticks, no conversion needed.
     }
 
-    fun toAngle(): SlideRange {
-        return SlideRange(fromTicksToAngle(this.start), fromTicksToAngle(this.stop))
+    fun toAngle(motor : SlideMotor): SlideRange {
+        return SlideRange(motor.fromTicksToAngle(this.start), motor.fromTicksToAngle(this.stop))
     }
 
     fun asArrayList(): ArrayList<SlideRange> {

@@ -52,6 +52,3 @@ class PSO_Optimizer(
         return gBestParticle
     }
 }
-
-
-//todo only have prints be the global best at the end
