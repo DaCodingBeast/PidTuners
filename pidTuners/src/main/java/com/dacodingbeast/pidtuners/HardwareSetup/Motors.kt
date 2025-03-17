@@ -218,4 +218,12 @@ abstract class Motors(
         }
     }
 
+    fun fromInchesToAngle(Inches: Double): Double {
+        return fromTicksToAngle(fromInchesToTicks(Inches))
+    }
+
+    fun fromAngleToInches(Angle: Double): Double {
+        return fromTicksToInches(fromAngleToTicks(Angle))
+    }
+
 }

@@ -18,16 +18,13 @@ public final class TestingSize {
     public static Double spoolDiameter = 1.0;
     static double frictionRPM = 0.0;
     static PIDParams pidParams = new PIDParams(0.0, 0.0, 0.0, 0.0);
-    static SlideRange slideRange = SlideRange.fromInches(0.0, 38.0);
+    static SlideRange slideRange = new SlideRange(0.0, 38.0);
     static SlideSystemConstants slideSystemConstants = new SlideSystemConstants(0.0, frictionRPM);
     public static SlideMotor slideMotor = new SlideMotor("Slide", DcMotorSimple.Direction.FORWARD,
             Hardware.YellowJacket.RPM223,
             spoolDiameter, slideSystemConstants, 1.0, pidParams, slideRange.asArrayList());
 
 
-    //todo FTC Dashboard
-    static double accuracy = 3.5;
-    static double time = 30.0;
 
 
     private static OpModeMeta metaForClass(Class<? extends OpMode> cls, String tag) {
@@ -48,7 +45,7 @@ public final class TestingSize {
                 metaForClass(SampleOpMode.class, "Slide"), new SampleOpMode(slideMotor)
         );
         manager.register(
-                metaForClass(FindPID.class, "Slide"), new FindPID(slideMotor, accuracy, time)
+                metaForClass(FindPID.class, "Slide"), new FindPID(slideMotor)
         );
     }
 }

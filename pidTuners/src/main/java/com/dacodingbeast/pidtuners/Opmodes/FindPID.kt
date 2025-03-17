@@ -8,15 +8,18 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
 @TeleOp
-class FindPID(val motor: Motors, private val accuracy: Double, private val Time: Double) :
+class FindPID(val motor: Motors) :
     LinearOpMode() {
+
+        companion object{
+            @JvmField var accuracy: Double = 2.5
+            @JvmField var time: Double = 2.5
+        }
 
     override fun runOpMode() {
         DataLogger.instance.startLogger("FindPID" + motor.name)
 
         waitForStart()
-
-
 
         for (i in motor.targets.indices) {
 
@@ -26,7 +29,7 @@ class FindPID(val motor: Motors, private val accuracy: Double, private val Time:
                     Ranges(0.0, accuracy / 3.5),
                     Ranges(0.0, accuracy),
                     Ranges(0.0, accuracy)
-                ), Time, motor, i
+                ), time, motor, i
             )
 
             algorithm.update(25)

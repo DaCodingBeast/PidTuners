@@ -18,8 +18,14 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int) :
         val acceleration = motorTorque / motor.systemConstants.Inertia
         velocity += acceleration * Dt
 
-        val newAngle = target.toAngle().start + Dt * velocity
-        target = SlideRange.fromAngle(newAngle, target.toAngle().stop).toInches()
+        val angleStart = motor.fromInchesToAngle(target.start)
+        val newAngle = angleStart + Dt * velocity
+
+        val currentPose = motor.fromAngleToInches(newAngle)
+        val stop = target.stop
+
+
+        target = SlideRange(currentPose, stop)
 
         return SimulatorData(target.start, controlEffort, error, velocity)
     }
