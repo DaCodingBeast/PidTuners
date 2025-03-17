@@ -50,8 +50,8 @@ android {
 }
 
 dependencies {
-    implementation("org.firstinspires.ftc:Hardware:10.0.0")
-    implementation("org.firstinspires.ftc:RobotCore:10.1.0")
+    implementation("org.firstinspires.ftc:Hardware:10.2.0")
+    implementation("org.firstinspires.ftc:RobotCore:10.2.0")
     implementation ("com.acmerobotics.dashboard:dashboard:0.4.16")
     implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit)

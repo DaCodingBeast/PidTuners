@@ -28,7 +28,7 @@ public final class TuningOpModes {
     static PIDParams pidParams = new PIDParams(0.0, 0.0, 0.0, 0.0);
     static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(0.0, frictionRPM, new GravityModelConstants(0.0, 0.0, 0.0));
     public static ArmMotor armMotor = new ArmMotor("Shoulder", DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223, pivotSystemConstants, 1.0, pidParams, testingAngle.asArrayList(), null, obstacleAngle);
-    static SlideRange slideRange = SlideRange.fromInches(0.0, 38.0);
+    static SlideRange slideRange = new SlideRange(0.0,38.0);
     static SlideRange slideObstacle = null;
 
     static SlideSystemConstants slideSystemConstants = new SlideSystemConstants(0.0, frictionRPM);
@@ -69,7 +69,7 @@ public final class TuningOpModes {
                     metaForClass(SampleOpMode.class, "Arm"), new SampleOpMode(armMotor)
             );
             manager.register(
-                    metaForClass(FindPID.class, "Arm"), new FindPID(armMotor, accuracy, time)
+                    metaForClass(FindPID.class, "Arm"), new FindPID(armMotor)
             );
         }
         if (enableSlides) {
@@ -80,7 +80,7 @@ public final class TuningOpModes {
                     metaForClass(SampleOpMode.class, "Slide"), new SampleOpMode(slideMotor)
             );
             manager.register(
-                    metaForClass(FindPID.class, "Slide"), new FindPID(slideMotor, accuracy, time)
+                    metaForClass(FindPID.class, "Slide"), new FindPID(slideMotor)
             );
         }
         DataLogger.create();

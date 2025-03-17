@@ -14,8 +14,8 @@ class ArmMotor @JvmOverloads constructor(
     externalGearRatio: Double = 1.0,
     pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0),
     override val targets: List<AngleRange>,
-    externalEncoder: Encoders? = null,
-    override val obstacle: AngleRange? = null,
+    externalEncoder: Encoders?,
+    override val obstacle: AngleRange?,
 ) : Motors(
     name,
     motorDirection,
