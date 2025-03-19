@@ -166,7 +166,8 @@ abstract class Motors(
         return getStallTorque() * friction * power
     }
 
-    open fun targetReached(target: Double, accuracy: Double?): Boolean {
+    @JvmOverloads
+    open fun targetReached(target: Double, accuracy: Double? = null): Boolean {
         return true
     }
 

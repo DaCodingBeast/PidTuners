@@ -13,7 +13,7 @@ class FindPID(val motor: Motors) :
 
         companion object{
             @JvmField var accuracy: Double = 2.5
-            @JvmField var time: Double = 2.5
+            @JvmField var Time: Double = 2.5
         }
 
     override fun runOpMode() {
@@ -29,7 +29,7 @@ class FindPID(val motor: Motors) :
                     Ranges(0.0, accuracy / 3.5),
                     Ranges(0.0, accuracy),
                     Ranges(0.0, accuracy)
-                ), time, motor, i
+                ), Time, motor, i
             )
 
             algorithm.update(25)

@@ -40,7 +40,7 @@ public class FrictionTest extends LinearOpMode {
         ArrayList<Double> angularAccelerationData = new ArrayList<>();
         ArrayList<Double> motorPowers = new ArrayList<>();
         double actualRpm = 0.0;
-        boolean run = true;
+        boolean run;
 
         waitForStart();
         if (!opModeInInit()) {
@@ -48,7 +48,7 @@ public class FrictionTest extends LinearOpMode {
         }
         while (opModeIsActive()) {
 
-            run = !motor.targetReached(stationaryAngle, null);
+            run = !motor.targetReached(stationaryAngle);
 
             telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
 
@@ -61,9 +61,6 @@ public class FrictionTest extends LinearOpMode {
             }
 
 
-            if(timer.seconds() > .3) run = false;
-
-            //todo DFDKJFKDJFLKDJLFKSJDL
             if (run) {
                 motor.setPower(0.5);
                 telemetry.addData("Running", motor.getRPM() * .5);
@@ -79,7 +76,7 @@ public class FrictionTest extends LinearOpMode {
             telemetry.addData("rpm", rpm);
 
             double theoreticalRpmMeasured = motor.getRPM() * .5;
-            if (run && (rpm > theoreticalRpmMeasured * .5 && rpm < theoreticalRpmMeasured * 1.5) && position > lastAngle) { //todo FDK FDLKDKJFLKDJLF
+            if (run && (rpm > theoreticalRpmMeasured * .5 && rpm < theoreticalRpmMeasured * 1.5) && position > lastAngle) {
                 RPMS.add(rpm);
             }
             telemetry.addData("t", theoreticalRpmMeasured);
