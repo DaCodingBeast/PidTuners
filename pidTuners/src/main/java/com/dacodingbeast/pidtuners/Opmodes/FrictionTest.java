@@ -47,6 +47,7 @@ public class FrictionTest extends LinearOpMode {
             timer.reset();
         }
         while (opModeIsActive()) {
+
             run = !motor.targetReached(stationaryAngle, null);
 
             telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
@@ -59,6 +60,8 @@ public class FrictionTest extends LinearOpMode {
                 position = motor.findPositionUnwrapped();
             }
 
+
+            if(timer.seconds() > .3) run = false;
 
             //todo DFDKJFKDJFLKDJLFKSJDL
             if (run) {

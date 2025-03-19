@@ -30,9 +30,9 @@ class SlideSimTest {
             Hardware.YellowJacket.RPM223,
             5.0,
             SlideSystemConstants(1.0, 220.0),
-            targets = listOf(SlideRange.fromInches(0.0, 10.0))
+            targets = listOf(SlideRange(0.0, 10.0))
         )
-        targetRange = SlideRange.fromInches(0.0, 10.0)
+        targetRange = SlideRange(0.0, 10.0)
 
         // Create SlideSim instance
         slideSim = SlideSim(motor, 0)
