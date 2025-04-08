@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("maven-publish")
 }
 
 android {
@@ -59,4 +60,25 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation("androidx.compose.runtime:runtime:1.5.1")
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                groupId = "com.dacodingbeast"
+                artifactId = "dacodingbeast"
+
+//                afterEvaluate {
+//                    from(components["release"])
+//                }
+            }
+        }
+        repositories {
+            maven {
+                name = "dacodingbeast"
+                url = uri("${project.buildDir}/release")
+            }
+        }
+    }
 }

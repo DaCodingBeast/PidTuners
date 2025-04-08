@@ -86,5 +86,4 @@ public final class TuningOpModes {
         DataLogger.create();
         DataLogger.getInstance().initLogger(enableArm,enableSlides);
     }
-
 }
