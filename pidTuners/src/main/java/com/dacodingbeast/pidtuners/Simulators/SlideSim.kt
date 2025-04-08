@@ -2,26 +2,28 @@ package com.dacodingbeast.pidtuners.Simulators
 
 import com.dacodingbeast.pidtuners.Algorithm.Dt
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
+import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor
 import kotlin.math.abs
 
 class SlideSim(override var motor: Motors, override val targetIndex: Int) :
     SimulatorStructure(motor, targetIndex) {
+        val motors = motor as SlideMotor
 
     override fun updateSimulator(): SimulatorData {
-        var target = motor.targets[targetIndex] as SlideRange
+        var target = motors.targets[targetIndex] as SlideRange
 
-        val calculate = pidController.calculate(target, motor.obstacle)
+        val calculate = pidController.calculate(target, motors.obstacle)
         val controlEffort = calculate.motorPower
 
-        val motorTorque = motor.calculateTmotor(controlEffort)
+        val motorTorque = motors.calculateTmotor(controlEffort)
 
-        val acceleration = motorTorque / motor.systemConstants.Inertia
+        val acceleration = motorTorque / motors.systemConstants.Inertia
         velocity += acceleration * Dt
 
-        val angleStart = motor.fromInchesToAngle(target.start)
+        val angleStart = fromInchesToAngle(target.start)
         val newAngle = angleStart + Dt * velocity
 
-        val currentPose = motor.fromAngleToInches(newAngle)
+        val currentPose = fromAngleToInches(newAngle)
         val stop = target.stop
 
 
@@ -38,5 +40,13 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int) :
     override fun punishSimulator(): Double {
         return (if (error >= acceptableError) badAccuracy else 0.0) +
                 (if (velocity >= acceptableVelocity) badVelocity else 0.0)
+    }
+
+    private fun fromInchesToAngle(Inches: Double): Double {
+        return motors.fromTicksToAngle(motors.fromInchesToTicks(Inches))
+    }
+
+    private fun fromAngleToInches(Angle: Double): Double {
+        return motors.fromTicksToInches(motors.fromAngleToTicks(Angle))
     }
 }

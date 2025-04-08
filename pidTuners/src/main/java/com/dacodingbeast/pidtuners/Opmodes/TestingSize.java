@@ -26,8 +26,6 @@ public final class TestingSize {
 //            spoolDiameter, slideSystemConstants, 1.0, pidParams, slideRange.asArrayList());
 
 
-
-
     static double frictionRPM = 0.0;
     static double inertia = 0.0;
     static PIDParams pidParams = new PIDParams(0.0, 0.0, 0.0, 0.0);

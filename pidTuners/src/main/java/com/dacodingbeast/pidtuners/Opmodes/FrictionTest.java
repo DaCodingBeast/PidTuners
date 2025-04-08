@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
+import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor;
 import com.dacodingbeast.pidtuners.utilities.DataLogger;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -48,7 +49,12 @@ public class FrictionTest extends LinearOpMode {
         while (opModeIsActive()) {
             //todo what goes in target reached
 
-            run = !motor.targetReached(Math.PI/2);
+            if(motor.getClass() == ArmMotor.class){
+                run = !motor.targetReached(TestingSize.start + 15);
+            }else {
+                run = !motor.targetReached(TestingSize.start + Math.PI / 2);
+            }
+
 
             telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
 
@@ -57,7 +63,7 @@ public class FrictionTest extends LinearOpMode {
             if (motor.getClass() == ArmMotor.class) {
                 position = motor.findPosition();
             } else {
-                position = motor.findPositionUnwrapped();
+                position = ((SlideMotor) motor).findPositionUnwrapped();
             }
 
             if (run) {

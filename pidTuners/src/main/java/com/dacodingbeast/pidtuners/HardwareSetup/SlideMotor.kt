@@ -69,25 +69,33 @@ class SlideMotor @JvmOverloads constructor(
     )
 
 
-    var ticksPerIn: Double = 1.0
-    private var inPerTick: Double = 1.0
+    var conversions = TicksToInch(spoolDiameter, this)
 
-    init {
-        calculateInPerTick()
-    }
-
-    fun calculateInPerTick() {
-        ticksPerIn = TicksToInch(spoolDiameter, this).ticksPerInch
-        inPerTick = TicksToInch(spoolDiameter, this).inchesPerTick
-    }
 
     override fun findPosition(): Double {
-        return getCurrentPose() * inPerTick
+        return getCurrentPose() * conversions.inchesPerTick
     }
 
+    /**
+     * Checks accuracy in inches
+     */
     override fun targetReached(target: Double, accuracy: Double?): Boolean {
-        val accurate = accuracy ?: 50.0
+        val accurate = accuracy ?: 1.0
         val current = findPosition()
         return current in (target - accurate)..(target + accurate)
+    }
+
+    fun fromInchesToTicks(value: Double): Double {
+        return value * this.conversions.ticksPerInch
+    }
+
+    fun fromTicksToInches(value: Double): Double {
+        return value / this.conversions.ticksPerInch
+    }
+
+    fun findPositionUnwrapped(): Double {
+        val ticks = getCurrentPose()
+        val angle = (ticks * (2 * Math.PI / motorSpecs.encoderTicksPerRotation))
+        return angle
     }
 }

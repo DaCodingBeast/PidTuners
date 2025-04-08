@@ -47,4 +47,7 @@ class ArmMotor @JvmOverloads constructor(
         val direction = AngleRange.findMotorDirection(angle, obstacle)
         return abs(AngleRange.findPIDFAngleError(direction, angle)) < Math.toRadians(accurate)
     }
+
+
+
 }

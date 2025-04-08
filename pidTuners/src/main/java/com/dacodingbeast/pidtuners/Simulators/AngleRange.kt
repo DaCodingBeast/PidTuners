@@ -7,7 +7,6 @@ import kotlin.math.PI
 /**
  * Angle Unit used throughout simulation
  */
-
 class AngleRange(override val start: Double, override val stop: Double) :
     Target(start, stop) {
 
@@ -19,6 +18,7 @@ class AngleRange(override val start: Double, override val stop: Double) :
         /**
          * Create an AngleRange using radians.
          */
+        @JvmStatic
         fun fromRadians(startAngle: Double, endAngle: Double): AngleRange {
             val s = wrap(startAngle)
             val e = wrap(endAngle)
@@ -28,6 +28,7 @@ class AngleRange(override val start: Double, override val stop: Double) :
         /**
          * Create an AngleRange using degrees.
          */
+        @JvmStatic
         fun fromDegrees(startAngle: Double, endAngle: Double): AngleRange {
             return AngleRange(wrap(startAngle * DEG_TO_RAD), wrap(endAngle * DEG_TO_RAD))
         }
@@ -37,6 +38,7 @@ class AngleRange(override val start: Double, override val stop: Double) :
          * Wrapping the Angle in -PI to PI range
          * @param theta Angle Error being wrapped, so that the shortest route is discovered
          */
+        @JvmStatic
         fun wrap(theta: Double): Double {
             try {
                 require(theta in -2 * PI..2 * PI)
