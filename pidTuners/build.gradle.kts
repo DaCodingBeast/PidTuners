@@ -1,19 +1,25 @@
+//buildscript {
+//    repositories {
+//        mavenCentral()
+//        google()
+//    }
+//    dependencies {
+//        classpath 'com.android.tools.build:gradle:7.2.2'
+//    }
+//}
 plugins {
-    alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("maven-publish")
+    id("com.android.library")
 }
-
+//
 android {
     namespace = "com.dacodingbeast.pidtuners"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.dacodingbeast.pidtuners"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -69,9 +75,9 @@ afterEvaluate {
                 groupId = "com.dacodingbeast"
                 artifactId = "dacodingbeast"
 
-//                afterEvaluate {
-//                    from(components["release"])
-//                }
+                afterEvaluate {
+                    from(components["release"])
+                }
             }
         }
         repositories {
