@@ -28,11 +28,17 @@ public final class TestingSize {
 
     static double frictionRPM = 0.0;
     static double inertia = 0.0;
-    static PIDParams pidParams = new PIDParams(0.0, 0.0, 0.0, 0.0);
     static AngleRange angleRange = new AngleRange(0.0, 38.0);
     static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(inertia, frictionRPM, new GravityModelConstants(0.0,0.0,0.0));
-    public static ArmMotor armMotor = new ArmMotor("Slide", DcMotorSimple.Direction.FORWARD,
-            Hardware.YellowJacket.RPM223, pivotSystemConstants, angleRange.asArrayList() , 1.0, pidParams);
+
+    public static ArmMotor armMotor = new ArmMotor.Builder("Slide", DcMotorSimple.Direction.FORWARD,
+            Hardware.YellowJacket.RPM223, pivotSystemConstants, angleRange.asArrayList())
+            .pidParams(new PIDParams(0.0, 0.0, 0.0, 0.0))
+            .build();
+
+
+
+
 
 
     public static double start = 0.0;

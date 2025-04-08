@@ -6,17 +6,19 @@ import com.dacodingbeast.pidtuners.utilities.MathFunctions.TicksToInch
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
-class SlideMotor @JvmOverloads constructor(
+class SlideMotor private constructor(
     name: String,
     motorDirection: DcMotorSimple.Direction,
     motorSpecs: MotorSpecs,
-    private val spoolDiameter: Double,
     systemConstants: ConstantsSuper,
+    spoolDiameter: Double,
+    override val targets: List<SlideRange>,
+
     externalGearRatio: Double = 1.0,
     pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0),
-    override val targets: List<SlideRange>,
     externalEncoder: Encoders? = null,
     override val obstacle: SlideRange? = null,
+
 ) : Motors(
     name,
     motorDirection,
@@ -26,47 +28,39 @@ class SlideMotor @JvmOverloads constructor(
     pidParams,
     externalEncoder
 ) {
-    constructor(
-        name: String,
-        motorDirection: DcMotorSimple.Direction,
-        motorSpecs: MotorSpecs,
-        systemConstants: ConstantsSuper,
-        spoolDiameter: Double,
-        externalGearRatio: Double = 1.0,
-        pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0),
-        target: List<SlideRange>,
-    ) : this(
-        name,
-        motorDirection,
-        motorSpecs,
-        spoolDiameter,
-        systemConstants,
-        externalGearRatio,
-        pidParams,
-        target,
-        null,
-        null
-    )
 
-    constructor(
-        name: String,
-        motorDirection: DcMotorSimple.Direction,
-        motorSpecs: MotorSpecs,
-        systemConstants: ConstantsSuper,
-        spoolDiameter: Double,
-        targets: List<SlideRange>,
-    ) : this(
-        name,
-        motorDirection,
-        motorSpecs,
-        spoolDiameter,
-        systemConstants,
-        1.0,
-        PIDParams(0.0, 0.0, 0.0, 0.0),
-        targets,
-        null,
-        null,
-    )
+    class Builder(private val name: String,
+                  private val motorDirection: DcMotorSimple.Direction,
+                  private val motorSpecs: MotorSpecs,
+                  private val systemConstants: ConstantsSuper,
+                  private val spoolDiameter: Double,
+                  private val targets: List<SlideRange>){
+
+        //default values
+        private var externalGearRatio: Double = 1.0
+        private var pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0)
+        private var externalEncoder: Encoders? = null
+        private var obstacle: SlideRange? = null
+        fun externalGearRatio(ratio: Double) = apply { this.externalGearRatio = ratio }
+        fun pidParams(params: PIDParams) = apply { this.pidParams = params }
+        fun externalEncoder(encoder: Encoders?) = apply { this.externalEncoder = encoder }
+        fun obstacle(obstacle: SlideRange?) = apply { this.obstacle = obstacle }
+        fun build(): SlideMotor {
+            return SlideMotor(
+                name,
+                motorDirection,
+                motorSpecs,
+                systemConstants,
+                spoolDiameter,
+                targets,
+                externalGearRatio,
+                pidParams,
+                externalEncoder,
+                obstacle
+            )
+        }
+    }
+
 
 
     var conversions = TicksToInch(spoolDiameter, this)

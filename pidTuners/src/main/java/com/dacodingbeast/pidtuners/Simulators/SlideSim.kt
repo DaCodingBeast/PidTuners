@@ -17,6 +17,7 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int) :
 
         val motorTorque = motors.calculateTmotor(controlEffort)
 
+        //todo look at this in depth
         val acceleration = motorTorque / motors.systemConstants.Inertia
         velocity += acceleration * Dt
 

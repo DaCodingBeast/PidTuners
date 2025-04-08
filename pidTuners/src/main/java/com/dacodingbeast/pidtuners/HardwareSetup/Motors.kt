@@ -16,50 +16,11 @@ abstract class Motors(
     val motorDirection: DcMotorSimple.Direction,
     val motorSpecs: MotorSpecs,
     val systemConstants: ConstantsSuper,
-    private var externalGearRatio: Double = 1.0,
+    externalGearRatio: Double = 1.0,
     pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0),
     private val externalEncoder: Encoders? = null
 ) {
-    constructor(
-        name: String,
-        motorDirection: DcMotorSimple.Direction,
-        motorSpecs: MotorSpecs,
-        systemConstants: ConstantsSuper,
-        externalGearRatio: Double,
-        pidParams: PIDParams
-    ) : this(name, motorDirection, motorSpecs, systemConstants, externalGearRatio, pidParams, null)
 
-    constructor(
-        name: String,
-        motorSpecs: MotorSpecs,
-        systemConstants: ConstantsSuper,
-        externalGearRatio: Double,
-        pidParams: PIDParams,
-        externalEncoder: Encoders
-    ) : this(
-        name,
-        DcMotorSimple.Direction.FORWARD,
-        motorSpecs,
-        systemConstants,
-        externalGearRatio,
-        pidParams,
-        externalEncoder
-    )
-
-    constructor(
-        name: String,
-        motorSpecs: MotorSpecs,
-        systemConstants: ConstantsSuper,
-        externalGearRatio: Double,
-        pidParams: PIDParams
-    ) : this(
-        name,
-        DcMotorSimple.Direction.FORWARD,
-        motorSpecs,
-        systemConstants,
-        externalGearRatio,
-        pidParams
-    )
 
     private lateinit var hardwareMap: HardwareMap
     private var startPosition = 0.0
@@ -76,7 +37,6 @@ abstract class Motors(
             throw IllegalArgumentException("Gear ratio cannot be zero use 1 if not geared")
         }
         if (externalEncoder != null) { // if using an external encoder, the motor gear ratio is 1 as nothing is geared past that
-            externalGearRatio = 1.0
             motorSpecs.motorGearRatio = 1.0
         } else { // else, apply the external gear ratio to the motor gear ratio, to find total gear ratio
             motorSpecs.applyGearRatio(externalGearRatio)

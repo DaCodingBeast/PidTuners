@@ -6,8 +6,7 @@ import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import kotlin.math.abs
 
-//todo fix order of Motors paramters
-class ArmMotor @JvmOverloads constructor(
+class ArmMotor private constructor(
     name: String,
     motorDirection: DcMotorSimple.Direction,
     motorSpecs: MotorSpecs,
@@ -27,9 +26,44 @@ class ArmMotor @JvmOverloads constructor(
     pidParams,
     externalEncoder
 ) {
+    class Builder(
+        private val name: String,
+        private val motorDirection: DcMotorSimple.Direction,
+        private val motorSpecs: MotorSpecs,
+        private val systemConstants: ConstantsSuper,
+        private val targets: List<AngleRange>
+    ) {
+        private var externalGearRatio: Double = 1.0
+        private var pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0)
+        private var externalEncoder: Encoders? = null
+        private var obstacle: AngleRange? = null
+
+        fun externalGearRatio(ratio: Double) = apply { this.externalGearRatio = ratio }
+        fun pidParams(params: PIDParams) = apply { this.pidParams = params }
+        fun externalEncoder(encoder: Encoders?) = apply { this.externalEncoder = encoder }
+        fun obstacle(obstacle: AngleRange?) = apply { this.obstacle = obstacle }
+
+        fun build(): ArmMotor {
+            return ArmMotor(
+                name,
+                motorDirection,
+                motorSpecs,
+                systemConstants,
+                targets,
+                externalGearRatio,
+                pidParams,
+                externalEncoder,
+                obstacle
+            )
+        }
+    }
+
+
+
     /**
-     * To find angle in degrees: Angle.fromRadians(
+     * To find angle in degrees: Angle.fromRadians
      */
+
     override fun findPosition(): Double {
         val ticks = getCurrentPose()
         return AngleRange.wrap((ticks * (2 * Math.PI / motorSpecs.encoderTicksPerRotation)))

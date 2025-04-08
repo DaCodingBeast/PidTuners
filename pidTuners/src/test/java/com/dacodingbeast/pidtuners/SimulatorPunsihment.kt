@@ -1,13 +1,9 @@
 package com.dacodingbeast.pidtuners
 
-import com.dacodingbeast.pidtuners.Constants.GravityModelConstants
-import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants
 import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
-import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
 import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor
-import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
 import com.dacodingbeast.pidtuners.Simulators.SlideSim
 import com.qualcomm.robotcore.hardware.DcMotorSimple
@@ -23,18 +19,17 @@ class SlideSimTest {
 
     @Before
     fun setUp() {
-        // Mock motor and SlideRange
-        motor = SlideMotor(
-            "",
-            DcMotorSimple.Direction.FORWARD,
-            Hardware.YellowJacket.RPM223,
-            5.0,
-            SlideSystemConstants(1.0, 220.0),
-            targets = listOf(SlideRange(0.0, 10.0))
-        )
         targetRange = SlideRange(0.0, 10.0)
 
-        // Create SlideSim instance
+        motor = SlideMotor.Builder(
+            name = "",
+            motorDirection = DcMotorSimple.Direction.FORWARD,
+            motorSpecs = Hardware.YellowJacket.RPM223,
+            systemConstants = SlideSystemConstants(1.0, 220.0),
+            spoolDiameter = 5.0,
+            targets = listOf(targetRange)
+        ).build()
+
         slideSim = SlideSim(motor, 0)
     }
 
