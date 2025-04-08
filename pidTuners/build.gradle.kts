@@ -12,7 +12,7 @@ plugins {
     id("maven-publish")
     id("com.android.library")
 }
-//
+
 android {
     namespace = "com.dacodingbeast.pidtuners"
     compileSdk = 35
