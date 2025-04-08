@@ -28,6 +28,7 @@ class AngleRange(override val start: Double, override val stop: Double) :
         /**
          * Create an AngleRange using degrees.
          */
+        @JvmStatic
         fun fromDegrees(startAngle: Double, endAngle: Double): AngleRange {
             return AngleRange(wrap(startAngle * DEG_TO_RAD), wrap(endAngle * DEG_TO_RAD))
         }
