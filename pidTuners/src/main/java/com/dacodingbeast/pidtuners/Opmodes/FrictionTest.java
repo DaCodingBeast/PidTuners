@@ -27,7 +27,7 @@ public class FrictionTest extends LinearOpMode {
         DataLogger.getInstance().startLogger("FrictionTest" + motor.getName());
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        motor.init(hardwareMap, TestingSize.starting_Extension);
+        motor.init(hardwareMap, TestingSize.start);
 
         ElapsedTime timer = new ElapsedTime();
         ArrayList<Double> RPMS = new ArrayList<>();
@@ -48,7 +48,7 @@ public class FrictionTest extends LinearOpMode {
         while (opModeIsActive()) {
             //todo what goes in target reached
 
-            run = !motor.targetReached(100.0);
+            run = !motor.targetReached(Math.PI/2);
 
             telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
 

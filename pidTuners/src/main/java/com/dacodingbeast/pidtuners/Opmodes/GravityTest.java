@@ -29,7 +29,7 @@ public class GravityTest extends LinearOpMode {
         DataLogger.getInstance().startLogger("GravityTest" + motor.getName());
         MultipleTelemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), this.telemetry);
 
-        motor.init(hardwareMap, TestingSize.starting_Extension);
+        motor.init(hardwareMap, TestingSize.start);
 
         ArrayList<Pair<Double, Double>> dataPairs = new ArrayList<>();
 

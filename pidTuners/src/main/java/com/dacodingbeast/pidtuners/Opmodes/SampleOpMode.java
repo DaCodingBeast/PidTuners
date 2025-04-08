@@ -28,7 +28,7 @@ public class SampleOpMode extends LinearOpMode {
         DataLogger.getInstance().startLogger("SampleOpMode" + motor.getName());
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        motor.init(hardwareMap, TestingSize.starting_Extension);
+        motor.init(hardwareMap, TestingSize.start);
 
         ElapsedTime timer = new ElapsedTime();
 

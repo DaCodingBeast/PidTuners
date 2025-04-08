@@ -8,7 +8,7 @@ import kotlin.math.PI
  * Angle Unit used throughout simulation
  */
 
-class AngleRange private constructor(override val start: Double, override val stop: Double) :
+class AngleRange(override val start: Double, override val stop: Double) :
     Target(start, stop) {
 
     companion object Angles {
