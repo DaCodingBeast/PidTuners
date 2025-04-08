@@ -1,7 +1,6 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
 import static com.dacodingbeast.pidtuners.utilities.MathFunctions.RemoveOutliersKt.removeOutliers;
-import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.stationaryAngle;
 import static java.lang.Math.abs;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -28,7 +27,7 @@ public class FrictionTest extends LinearOpMode {
         DataLogger.getInstance().startLogger("FrictionTest" + motor.getName());
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        motor.init(hardwareMap, stationaryAngle);
+        motor.init(hardwareMap, TestingSize.starting_Extension);
 
         ElapsedTime timer = new ElapsedTime();
         ArrayList<Double> RPMS = new ArrayList<>();
@@ -47,8 +46,9 @@ public class FrictionTest extends LinearOpMode {
             timer.reset();
         }
         while (opModeIsActive()) {
+            //todo what goes in target reached
 
-            run = !motor.targetReached(stationaryAngle);
+            run = !motor.targetReached(100.0);
 
             telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
 
@@ -59,7 +59,6 @@ public class FrictionTest extends LinearOpMode {
             } else {
                 position = motor.findPositionUnwrapped();
             }
-
 
             if (run) {
                 motor.setPower(0.5);

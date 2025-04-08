@@ -1,7 +1,5 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
-import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.stationaryAngle;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -30,7 +28,7 @@ public class SampleOpMode extends LinearOpMode {
         DataLogger.getInstance().startLogger("SampleOpMode" + motor.getName());
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        motor.init(hardwareMap, stationaryAngle);
+        motor.init(hardwareMap, TestingSize.starting_Extension);
 
         ElapsedTime timer = new ElapsedTime();
 

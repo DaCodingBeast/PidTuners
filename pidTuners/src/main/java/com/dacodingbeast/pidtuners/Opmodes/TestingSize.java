@@ -24,7 +24,8 @@ public final class TestingSize {
             Hardware.YellowJacket.RPM223,
             spoolDiameter, slideSystemConstants, 1.0, pidParams, slideRange.asArrayList());
 
-
+    public static double starting_Extension = 0.0;
+    public static double gravityMotorPower = 0.0;
 
 
     private static OpModeMeta metaForClass(Class<? extends OpMode> cls, String tag) {

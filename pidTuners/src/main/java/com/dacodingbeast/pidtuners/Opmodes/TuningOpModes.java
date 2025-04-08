@@ -27,7 +27,7 @@ public final class TuningOpModes {
     static double frictionRPM = 0.0;
     static PIDParams pidParams = new PIDParams(0.0, 0.0, 0.0, 0.0);
     static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(0.0, frictionRPM, new GravityModelConstants(0.0, 0.0, 0.0));
-    public static ArmMotor armMotor = new ArmMotor("Shoulder", DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223, pivotSystemConstants, 1.0, pidParams, testingAngle.asArrayList(), null, obstacleAngle);
+    public static ArmMotor armMotor = new ArmMotor("Shoulder", DcMotorSimple.Direction.FORWARD, Hardware.YellowJacket.RPM223, pivotSystemConstants,testingAngle.asArrayList(), 1.0, pidParams,  null, obstacleAngle);
     static SlideRange slideRange = new SlideRange(0.0, 38.0);
     static SlideRange slideObstacle = null;
 

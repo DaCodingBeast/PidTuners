@@ -21,7 +21,7 @@ class FitnessFunction {
     fun `test basic fitness computation for ArmMotor`() {
         // Mock or create instances of Motor, Particle, etc.
         val motor = ArmMotor("",DcMotorSimple.Direction.FORWARD,Hardware.YellowJacket.RPM223, PivotSystemConstants(1.0,220.0,
-            GravityModelConstants(1.0,2.0,3.0)), targets = listOf(AngleRange.fromRadians(0.0,1.0)))
+            GravityModelConstants(1.0,2.0,3.0)), targets = listOf(AngleRange.fromRadians(0.0,1.0)), obstacle = null, externalEncoder = null)
         val fitnessFunction = FitnessFunction(1.0, motor, 0)
         val particle = Particle(listOf(Ranges(0.0,1.0),Ranges(0.0,1.0),Ranges(0.0,1.0),Ranges(0.0,1.0)),fitnessFunction) // Mock or provide a valid instance
 

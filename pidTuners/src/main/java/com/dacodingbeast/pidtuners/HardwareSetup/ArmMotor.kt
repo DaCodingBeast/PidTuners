@@ -6,16 +6,18 @@ import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import kotlin.math.abs
 
+//todo fix order of Motors paramters
 class ArmMotor @JvmOverloads constructor(
     name: String,
     motorDirection: DcMotorSimple.Direction,
     motorSpecs: MotorSpecs,
     systemConstants: ConstantsSuper,
+    override val targets: List<AngleRange>,
+
     externalGearRatio: Double = 1.0,
     pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0),
-    override val targets: List<AngleRange>,
-    externalEncoder: Encoders?,
-    override val obstacle: AngleRange?,
+    externalEncoder: Encoders? = null,
+    override val obstacle: AngleRange? = null,
 ) : Motors(
     name,
     motorDirection,

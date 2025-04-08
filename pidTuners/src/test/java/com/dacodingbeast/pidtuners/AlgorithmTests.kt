@@ -12,12 +12,13 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class PSOOptimizerTest {
-
     val motor = ArmMotor("",
         DcMotorSimple.Direction.FORWARD,
-        Hardware.YellowJacket.RPM223, PivotSystemConstants(1.0,220.0,
-        GravityModelConstants(1.0,2.0,3.0)
-        ), targets = listOf(AngleRange.fromRadians(0.0,1.0)))
+        Hardware.YellowJacket.RPM223,
+        PivotSystemConstants(1.0,220.0,  GravityModelConstants(1.0,2.0,3.0)),
+        targets =  listOf(AngleRange.fromRadians(0.0,1.0)),
+        obstacle = null, externalEncoder = null
+    )
     @Test
     fun `test PSO_Optimizer initialization`() {
         // Mock or create necessary objects

@@ -1,7 +1,6 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
-import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.gravityMotorPower;
-import static com.dacodingbeast.pidtuners.Opmodes.TuningOpModes.stationaryAngle;
+import static com.dacodingbeast.pidtuners.Opmodes.TestingSize.gravityMotorPower;
 
 import android.util.Pair;
 
@@ -30,7 +29,7 @@ public class GravityTest extends LinearOpMode {
         DataLogger.getInstance().startLogger("GravityTest" + motor.getName());
         MultipleTelemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), this.telemetry);
 
-        motor.init(hardwareMap, stationaryAngle);
+        motor.init(hardwareMap, TestingSize.starting_Extension);
 
         ArrayList<Pair<Double, Double>> dataPairs = new ArrayList<>();
 
