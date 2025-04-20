@@ -44,6 +44,8 @@ public final class TestingSize {
     public static double start = 0.0;
     public static double gravityMotorPower = 0.0;
 
+    static boolean en = false;
+
 
     private static OpModeMeta metaForClass(Class<? extends OpMode> cls, String tag) {
         return new OpModeMeta.Builder()
@@ -55,6 +57,7 @@ public final class TestingSize {
 
     @OpModeRegistrar
     public static void register(OpModeManager manager) {
+        if (!en) return;
         manager.register(metaForClass(PSODirectionDebugger.class, ""), new PSODirectionDebugger(null, armMotor));
         manager.register(
                 metaForClass(FrictionTest.class, "Slide"), new FrictionTest(armMotor)
