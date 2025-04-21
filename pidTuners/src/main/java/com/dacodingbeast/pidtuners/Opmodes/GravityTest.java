@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-@TeleOp(name = "GravityTest", group = "Linear OpMode")
+//@TeleOp(name = "GravityTest", group = "Linear OpMode")
 public class GravityTest extends LinearOpMode {
     ArmMotor motor;
 

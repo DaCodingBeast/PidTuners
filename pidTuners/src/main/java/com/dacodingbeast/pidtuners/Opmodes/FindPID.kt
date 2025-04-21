@@ -7,7 +7,7 @@ import com.dacodingbeast.pidtuners.utilities.DataLogger
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
-@TeleOp
+//@TeleOp
 class FindPID(val motor: Motors) :
     LinearOpMode() {
 

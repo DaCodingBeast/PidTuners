@@ -10,12 +10,11 @@ import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
 import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor;
 import com.dacodingbeast.pidtuners.utilities.DataLogger;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.ArrayList;
 
-@TeleOp(name = "FrictionTest", group = "Linear OpMode")
+//@TeleOp(name = "FrictionTest", group = "Linear OpMode")
 public class FrictionTest extends LinearOpMode {
     Motors motor;
 

@@ -1,21 +1,19 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
 import com.dacodingbeast.pidtuners.Simulators.Target;
 import com.dacodingbeast.pidtuners.utilities.DataLogger;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.List;
 
 import CommonUtilities.PIDFcontroller;
 
-@Config
-@TeleOp(name = "SampleOpMode", group = "Linear OpMode")
+//@Config
+//@TeleOp(name = "SampleOpMode", group = "Linear OpMode")
 public class SampleOpMode extends LinearOpMode {
     public static int x = 0;
     Motors motor;
