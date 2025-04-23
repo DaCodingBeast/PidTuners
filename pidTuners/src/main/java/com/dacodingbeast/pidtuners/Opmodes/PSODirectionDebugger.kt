@@ -13,10 +13,10 @@ class PSODirectionDebugger @JvmOverloads constructor (private val slideMotor: Sl
         waitForStart()
         while (opModeIsActive()) {
 
-            telemetry.addLine("Press square for slide +") // needs to be changed to give xyab
-            telemetry.addLine("Press circle for slide -")
-            telemetry.addLine("Press triangle for arm +")
-            telemetry.addLine("Press cross for arm -")
+            telemetry.addLine("Press square/X for slide +")
+            telemetry.addLine("Press circle/B for slide -")
+            telemetry.addLine("Press triangle/Y for arm +")
+            telemetry.addLine("Press cross/A for arm -")
             if (gamepad1.square) {
                 slideMotor?.setPower(1.0)
             } else if (gamepad1.circle) {
