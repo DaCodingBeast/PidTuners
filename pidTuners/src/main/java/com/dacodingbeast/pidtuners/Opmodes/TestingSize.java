@@ -28,7 +28,7 @@ public final class TestingSize {
 
     static double frictionRPM = 0.0;
     static double inertia = 0.0;
-    static AngleRange angleRange = new AngleRange(0.0, 38.0);
+    static AngleRange angleRange = AngleRange.fromRadians(0.0, 38.0);
     static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(inertia, frictionRPM, new GravityModelConstants(0.0,0.0,0.0));
 
     public static ArmMotor armMotor = new ArmMotor.Builder("Slide", DcMotorSimple.Direction.FORWARD,
