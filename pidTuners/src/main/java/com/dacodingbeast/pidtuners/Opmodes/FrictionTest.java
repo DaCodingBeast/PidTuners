@@ -49,15 +49,16 @@ public class FrictionTest extends LinearOpMode {
             //todo what goes in target reached
 
             if(motor.getClass() == ArmMotor.class){
-                run = !motor.targetReached(TestingSize.start + 15);
+                run = !motor.targetReached(TestingSize.start + Math.PI/12);
             }else {
-                run = !motor.targetReached(TestingSize.start + Math.PI / 2);
+                run = !motor.targetReached(TestingSize.start + 15);
             }
 
 
             telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
 
             double position;
+
             // Running motor at half speed
             if (motor.getClass() == ArmMotor.class) {
                 position = motor.findPosition();
