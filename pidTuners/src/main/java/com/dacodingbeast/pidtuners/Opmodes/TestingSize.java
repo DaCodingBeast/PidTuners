@@ -54,8 +54,11 @@ public final class TestingSize {
                 .build();
     }
 
+    public static boolean en = false; // KEEP THIS PLEASE
+
     @OpModeRegistrar
     public static void register(OpModeManager manager) {
+        if (!en) return; // KEEP THIS PLEASE
         manager.register(metaForClass(PSODirectionDebugger.class, ""), new PSODirectionDebugger(null, armMotor));
         manager.register(
                 metaForClass(FrictionTest.class, "Slide"), new FrictionTest(armMotor)
