@@ -13,5 +13,7 @@
     <toc-element topic="HowItWorks.md">
         <toc-element topic="ParticleSwarmOptimization.md"/>
         <toc-element topic="ArmMechanism.md"/>
+        <toc-element topic="MotorLibrary.md"/>
+        <toc-element topic="PIDController.md"/>
     </toc-element>
 </instance-profile>

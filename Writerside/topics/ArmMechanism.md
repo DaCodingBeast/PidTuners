@@ -1,117 +1,120 @@
 # The Dance of the Robotic Arm: A Symphony of Physics and Control
 
-> *"In the delicate balance between gravity and motor power, we find the art of robotic arm control."*
-
 ## The Challenge
 
 [IMAGE_PLACEHOLDER: A technical diagram of a robotic arm in different positions, with force vectors showing gravity, motor torque, and friction. Include annotations for key components and measurements.]
 
 Picture a robotic arm reaching for an object. As it moves, it battles against gravity, fights friction, and must maintain precise control. This is the challenge we solve through our advanced simulation and optimization system.
 
-## The Forces at Play
+## The Physics of Motion
 
-### 1. The Gravity Tango
-Gravity is the constant dance partner of our robotic arm. Its influence changes with every angle:
+To understand how our arm moves, we need to trace the chain of calculations from position to the forces that cause motion:
 
-[IMAGE_PLACEHOLDER: A graph showing gravity torque vs. angle, with annotations for maximum and minimum torque points. Include a small inset showing the arm position at these points.]
+### 1. Position → Velocity → Acceleration
+The fundamental relationship between position, velocity, and acceleration in rotational motion:
 
-To find the gravity torque equation, we use a quadratic fit approach. The gravity test function measures the DC motor torque (TODO: through this relationship) required to hold the arm at various angles. By collecting data points across different arm positions and applying quadratic regression, we can derive the following equation:
-
-Gravity Torque = a*(armAngle +b) -k (a b and k are all constants)
-
-This allows us to know how much torque gravity is applying at all times
-
-### 2. The Motor's Power
-Our motors are the heart of the system, converting electrical energy into mechanical motion:
-
-[IMAGE_PLACEHOLDER: A graph showing motor torque characteristics, including stall torque, free speed, and the torque-speed curve. Include efficiency regions and thermal limits.]
-
-```math
-τ_motor = Kt * I
-```
+- `theta = theta_0 + ∫omega dt`
+- `omega = omega_0 + ∫alpha dt`
 
 Where:
-- Kt: motor torque constant
-- I: current
+- `theta`: Current angle position
+- `omega`: Angular velocity
+- `alpha`: Angular acceleration
+- `theta_0`, `omega_0`: Initial conditions
 
-### 3. The Friction Waltz
-Friction is the subtle resistance that must be overcome:
+### 2. Acceleration → Net Torque
+The angular acceleration is determined by the net torque and the system's rotational inertia:
 
-[IMAGE_PLACEHOLDER: A diagram showing different types of friction (static, dynamic, viscous) and their effects on arm movement. Include velocity vs. friction force curves.]
-
-```math
-τ_friction = b * ω
-```
+- `alpha = t_net / I`
 
 Where:
-- b: friction coefficient
-- ω: angular velocity
+- `alpha`: Angular acceleration
+- `t_net`: Net torque on the system
+- `I`: Rotational inertia (determined through testing)
 
-## The Simulation Canvas
-
-### The Time Step Dance
-Each moment in our simulation is a carefully choreographed sequence:
-
-[IMAGE_PLACEHOLDER: A detailed flowchart showing the simulation loop, with data flow between physics calculations, control updates, and state management.]
-
-```mermaid
-graph TD
-    A[Current State] --> B[Calculate Net Torque]
-    B --> C[Determine Acceleration]
-    C --> D[Update Velocity]
-    D --> E[Update Position]
-    E --> A
+This matches the code in `ArmSim.kt`:
+```kotlin
+val angularAcceleration = torqueApplied / motor.systemConstants.Inertia
 ```
 
-### The PID Conductor
-Our PID controller acts as the conductor of this mechanical orchestra:
+### 3. Net Torque Components
+The net torque is the sum of all torques acting on the system:
 
-[IMAGE_PLACEHOLDER: A graph showing the effect of each PID component (P, I, D) on the system response. Include examples of good and bad tuning.]
+- `t_net = t_motor + t_gravity + t_friction`
 
-| Component | Role | Effect |
-|-----------|------|---------|
-| Proportional | Immediate Response | Quick initial movement |
-| Integral | Error Correction | Eliminates steady-state error |
-| Derivative | Damping | Prevents overshooting |
+Let's break down each component:
 
-## The Motor Library
+#### a. Motor Torque
+The motor's torque is calculated from its power characteristics. We use our [Motor Library](MotorLibrary.md) to obtain the necessary motor constants.
 
-Our comprehensive FTC motor library is like a well-organized music sheet:
+- `t_motor = DC_motor_power * (realistic_RPM / theoretical_RPM) * stall_torque`
 
-[IMAGE_PLACEHOLDER: A comparison chart showing different motor types with their torque-speed curves, efficiency maps, and key specifications.]
+Where:
+- `DC_motor_power`: Power supplied to the motor
+- `realistic_RPM`: Actual RPM under load
+- `theoretical_RPM`: No-load (theoretical) RPM
+- `stall_torque`: Maximum torque at zero speed (from Motor Library)
 
-| Motor Type | Characteristics | Best For |
-|------------|-----------------|-----------|
-| NeveRest | High Torque | Heavy Loads |
-| REV HD | High Speed | Quick Movements |
-| GoBILDA | Balanced | General Purpose |
+This formula reflects how available torque decreases as RPM increases, and how real-world performance differs from theoretical maximums.
 
-## The Validation Process
+#### b. Gravity Torque
+Gravity torque is modeled as a quadratic function of arm angle, based on empirical data and curve fitting:
 
-### 1. Theoretical Validation
-- Mathematical proof of stability
-- Energy conservation verification
-- Boundary condition testing
+- `t_gravity = a * (angle^2) + b * angle + c`
 
-[IMAGE_PLACEHOLDER: A diagram showing the validation process, including mathematical proofs, simulation results, and real-world testing data.]
+Where:
+- `angle`: Arm angle (in radians or degrees, as fitted)
+- `a`, `b`, `c`: Empirically determined constants from gravity torque testing
 
-### 2. Empirical Validation
-- Real-world performance testing
-- Friction coefficient calibration
-- Inertia measurement
+This approach captures the nonlinear relationship between arm angle and the torque gravity applies, which is especially important for arms with non-uniform mass distribution or complex geometry.
 
-[IMAGE_PLACEHOLDER: A graph comparing theoretical vs. actual performance, with error bars and confidence intervals. Include key metrics and success criteria.]
+#### c. Friction Torque
+Friction is determined empirically by analyzing the relationship between the theoretical (no-load) RPM and the actual RPM under load:
 
-## Applications
+- `friction = function(theoretical_RPM, real_RPM)`
 
-Our arm simulation has been successfully applied to:
-- FTC Competition Robots
-- Educational Demonstrations
-- Research Projects
-- Custom Robotic Systems
+By comparing the drop from theoretical RPM to real RPM, we estimate the frictional losses in the system. This data-driven approach allows us to model friction more accurately than using a simple constant coefficient.
 
-[IMAGE_PLACEHOLDER: A gallery of different applications showing the arm simulation in action, including competition robots, educational setups, and research platforms.]
+Where:
+- `theoretical_RPM`: The motor's no-load speed
+- `real_RPM`: The observed speed under load
 
----
+[IMAGE_PLACEHOLDER: A plot showing the relationship between theoretical RPM, real RPM, and frictional losses.]
 
-*"In the harmony of physics and control, we find the perfect balance for robotic precision."* 
+[IMAGE_PLACEHOLDER: A hierarchical diagram showing the relationship between these equations, with arrows indicating how each calculation feeds into the next. Include example values and units.]
+
+## The Simulation Loop
+
+Each time step in our simulation follows this sequence:
+
+1. Calculate all torque components
+2. Sum to find net torque
+3. Calculate angular acceleration
+4. Update angular velocity
+5. Update angular position
+
+This is implemented in the `updateSimulator()` function in `ArmSim.kt`:
+```kotlin
+val torqueApplied = motorTorque + gravityTorque
+val angularAcceleration = torqueApplied / motor.systemConstants.Inertia
+velocity += angularAcceleration * Dt
+target = AngleRange.fromRadians(
+    AngleRange.wrap(target.start + velocity * Dt),
+    target.stop
+)
+```
+
+[IMAGE_PLACEHOLDER: A flowchart showing this simulation loop, with mathematical equations at each step and data flow between components.]
+
+## The PID Conductor
+
+Our PID controller acts as the conductor of this mechanical orchestra, taking inputs from the arm simulation and producing precise motor control signals. The arm's position error is calculated using the AngleRange utilities and fed into the PID controller, which then generates appropriate motor power commands.
+
+For the arm mechanism specifically:
+- The error calculation considers the shortest angular path to the target
+- The feedforward term is calculated based on the arm's angle to counteract gravity
+- The PID controller outputs motor power that is then used to calculate the motor torque
+
+For detailed information about the PID controller's operation, see the [PID Controller](PIDController.md) topic.
+
+[IMAGE_PLACEHOLDER: A diagram showing the PID control loop specifically for the arm mechanism, with arrows indicating the flow of position data, error calculation, and motor power output.]

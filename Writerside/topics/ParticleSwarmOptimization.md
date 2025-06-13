@@ -119,5 +119,3 @@ Our PSO-based PID tuner has been successfully applied to:
 - [Arm Mechanism Documentation](ArmMechanism.md)
 
 ---
-
-*"In the dance of optimization, every particle tells a story, and every iteration brings us closer to perfection."* 
