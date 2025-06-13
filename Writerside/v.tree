@@ -10,4 +10,8 @@
     <toc-element topic="Installation-Instructions.md"/>
     <toc-element topic="Tuners.md"/>
     <toc-element topic="How-to-use-it.md"/>
+    <toc-element topic="HowItWorks.md">
+        <toc-element topic="ParticleSwarmOptimization.md"/>
+        <toc-element topic="ArmMechanism.md"/>
+    </toc-element>
 </instance-profile>
