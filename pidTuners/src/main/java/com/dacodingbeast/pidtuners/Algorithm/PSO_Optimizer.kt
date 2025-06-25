@@ -1,8 +1,5 @@
-package org.firstinspires.ftc.teamcode.ggutil.pidTuners
+package com.dacodingbeast.pidtuners.Algorithm
 
-import com.dacodingbeast.pidtuners.Algorithm.FitnessFunction
-import com.dacodingbeast.pidtuners.Algorithm.Particle
-import com.dacodingbeast.pidtuners.Algorithm.Ranges
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
 import com.dacodingbeast.pidtuners.utilities.DataLogger
 
