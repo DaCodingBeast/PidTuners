@@ -65,6 +65,11 @@ abstract class Motors(
         return targets[targetIndex].start
     }
 
+    fun reset(){
+        motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+    }
+
     fun getCurrentPose(): Double {
         return externalEncoder?.getCurrentPosition()?.toDouble() ?: motor.currentPosition.toDouble()
     }
@@ -146,5 +151,6 @@ abstract class Motors(
         val ticksPerRotation = this.motorSpecs.encoderTicksPerRotation
         return (ticks / ticksPerRotation) * 2 * Math.PI
     }
+
 
 }
