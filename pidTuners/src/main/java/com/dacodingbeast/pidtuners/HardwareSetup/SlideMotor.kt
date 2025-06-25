@@ -62,7 +62,9 @@ class SlideMotor private constructor(
         }
     }
 
-
+    override fun run(targetIndex: Int){
+        //todo
+    }
 
     var conversions = TicksToInch(spoolDiameter, this)
 

@@ -3,6 +3,7 @@ package com.dacodingbeast.pidtuners.HardwareSetup
 import CommonUtilities.PIDFcontroller
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
+import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.Target
 import com.dacodingbeast.pidtuners.utilities.DataLogger
 import com.qualcomm.robotcore.hardware.DcMotor
@@ -28,7 +29,7 @@ abstract class Motors(
 
     abstract val obstacle: Target?
     abstract val targets: List<Target>
-    private val pidController = PIDFcontroller(pidParams)
+    val pidController = PIDFcontroller(pidParams)
 
     init {
         if (externalGearRatio < 0) {
@@ -61,11 +62,8 @@ abstract class Motors(
         reset()
     }
 
-    fun run(targetIndex: Int): Double {
-        //todo if targets multiple list switch constants based on new target
-        motor.power = pidController.calculate(targets[targetIndex], obstacle).motorPower
-        return targets[targetIndex].start
-    }
+
+    abstract fun run(targetIndex: Int)
 
     fun reset(){
         motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER

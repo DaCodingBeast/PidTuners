@@ -10,8 +10,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.List;
 
-import CommonUtilities.PIDFcontroller;
-
 //@Config
 //@TeleOp(name = "SampleOpMode", group = "Linear OpMode")
 public class SampleOpMode extends LinearOpMode {
@@ -27,36 +25,35 @@ public class SampleOpMode extends LinearOpMode {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
         motor.init(hardwareMap,0.0);
-
-        ElapsedTime timer = new ElapsedTime();
-
         x = 0;
-
-
         ElapsedTime timerTime = new ElapsedTime();
+
         while (opModeInInit()) {
             timerTime.reset();
-            timer.reset();
         }
         waitForStart();
+
+
         //todo cases for both motors (accuracy needs to be different)
 
         while (opModeIsActive() && !isStopRequested()) {
-            double looptime = timer.seconds();
-            timer.reset();
-            PIDFcontroller pidFcontroller = motor.getPIDFController();
+
             List<Target> targets = motor.getTargets();
+
             Target target = motor.getTargets().get(x);
-            if (motor.targetReached(target.getStop(), null)) {
+
+
+            if (motor.targetReached(target.getStop())) {
                 if (targets.size() > x + 1 && timerTime.seconds() >= 1.0) {
                     x += 1;
-                    target = targets.get(x);
                     timerTime.reset();
                 }
             }
 
             motor.run(x);
+
             telemetry.addData("X", x);
+
             DataLogger.getInstance().logDebug("X: " + x);
             telemetry.update();
         }

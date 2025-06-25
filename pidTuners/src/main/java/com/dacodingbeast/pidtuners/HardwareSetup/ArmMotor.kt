@@ -59,6 +59,12 @@ class ArmMotor private constructor(
     }
 
 
+    override fun run(targetIndex: Int) {
+        val angleRange = AngleRange.fromRadians(findPositionRads(), targets[targetIndex].stop)
+        motor.power = pidController.calculate(angleRange, obstacle).motorPower
+    }
+
+
 
     /**
      * To find angle in degrees: Angle.fromRadians
