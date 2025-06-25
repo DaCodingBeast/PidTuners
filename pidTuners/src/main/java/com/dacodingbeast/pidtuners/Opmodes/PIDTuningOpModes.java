@@ -19,10 +19,10 @@ import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 
 import CommonUtilities.PIDParams;
 
-public final class PIDTuningOpModes {
+class PIDTuningOpModes {
     public static Double spoolDiameter = 1.0;
     static double frictionRPMSlide = 0.0;
-    static SlideRange slideRange = new SlideRange(0.0, 38.0);
+    static SlideRange slideRange = SlideRange.fromInches(0.0, 38.0);
     static SlideSystemConstants slideSystemConstants = new SlideSystemConstants(0.0, frictionRPMSlide);
     public static SlideMotor slideMotor = new SlideMotor.Builder("Slide", DcMotorSimple.Direction.FORWARD,
             Hardware.YellowJacket.RPM223,
@@ -38,8 +38,6 @@ public final class PIDTuningOpModes {
             Hardware.YellowJacket.RPM223, pivotSystemConstants, angleRange.asArrayList())
             .pidParams(new PIDParams(0.0, 0.0, 0.0, 0.0))
             .build();
-
-    public static double gravityMotorPower = 0.5;
 
     private static OpModeMeta metaForClass(Class<? extends OpMode> cls, String tag) {
         return new OpModeMeta.Builder()
@@ -59,7 +57,7 @@ public final class PIDTuningOpModes {
         }
         if (armEN) {
             manager.register(
-                    metaForClass(FrictionTest.class, "Arm"), new FrictionTest(armMotor)
+                    metaForClass(FrictionTest.class, "Arm"), new FrictionTest(armMotor,angleRange,slideRange)
             );
             manager.register(
                     metaForClass(SampleOpMode.class, "Arm"), new SampleOpMode(armMotor)
@@ -68,12 +66,12 @@ public final class PIDTuningOpModes {
                     metaForClass(FindPID.class, "Arm"), new FindPID(armMotor)
             );
             manager.register(
-                    metaForClass(GravityTest.class, "Arm"), new GravityTest(armMotor)
+                    metaForClass(GravityTest.class, "Arm"), new GravityTest(armMotor,angleRange)
             );
         }
         if (slidesEN){
             manager.register(
-                    metaForClass(FrictionTest.class,"Slide"), new FrictionTest(slideMotor)
+                    metaForClass(FrictionTest.class,"Slide"), new FrictionTest(slideMotor,angleRange,slideRange)
             );
             manager.register(
                     metaForClass(SampleOpMode.class,"Slide"), new SampleOpMode(slideMotor)

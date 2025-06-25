@@ -19,7 +19,7 @@ class SlideSimTest {
 
     @Before
     fun setUp() {
-        targetRange = SlideRange(0.0, 10.0)
+        targetRange = SlideRange.fromInches(0.0, 10.0)
 
         motor = SlideMotor.Builder(
             name = "",

@@ -1,13 +1,13 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
-import static com.dacodingbeast.pidtuners.Opmodes.PIDTuningOpModes.angleRange;
-import static com.dacodingbeast.pidtuners.Opmodes.PIDTuningOpModes.slideRange;
 import static com.dacodingbeast.pidtuners.utilities.MathFunctions.RemoveOutliersKt.removeOutliers;
 import static java.lang.Math.abs;
 
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
 import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor;
+import com.dacodingbeast.pidtuners.Simulators.AngleRange;
+import com.dacodingbeast.pidtuners.Simulators.SlideRange;
 import com.dacodingbeast.pidtuners.utilities.DataLogger;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -16,9 +16,13 @@ import java.util.ArrayList;
 
 public class FrictionTest extends LinearOpMode {
     Motors motor;
+    AngleRange angleRange;
+    SlideRange slideRange;
 
-    public FrictionTest(Motors motor) {
+    public FrictionTest(Motors motor, AngleRange angleRange, SlideRange slideRange) {
         this.motor = motor;
+        this.angleRange = angleRange;
+        this.slideRange = slideRange;
     }
 
     @Override

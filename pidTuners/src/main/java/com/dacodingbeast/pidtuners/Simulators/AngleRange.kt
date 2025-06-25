@@ -1,7 +1,9 @@
 package com.dacodingbeast.pidtuners.Simulators
 
 import ArmSpecific.Direction
+import com.dacodingbeast.pidtuners.utilities.AngleUnit
 import com.dacodingbeast.pidtuners.utilities.DataLogger
+import com.dacodingbeast.pidtuners.utilities.Measurements
 import kotlin.math.PI
 
 /**
@@ -12,17 +14,12 @@ import kotlin.math.PI
 
     companion object Angles {
 
-        const val DEG_TO_RAD = Math.PI / 180
-        const val RAD_TO_DEG = 180 / Math.PI
-
         /**
          * Create an AngleRange using radians.
          */
         @JvmStatic
         fun fromRadians(startAngle: Double, endAngle: Double): AngleRange {
-            val s = wrap(startAngle)
-            val e = wrap(endAngle)
-            return AngleRange(s, e)
+            return from(AngleUnit.RADIANS, startAngle, endAngle)
         }
 
         /**
@@ -30,7 +27,11 @@ import kotlin.math.PI
          */
         @JvmStatic
         fun fromDegrees(startAngle: Double, endAngle: Double): AngleRange {
-            return AngleRange(wrap(startAngle * DEG_TO_RAD), wrap(endAngle * DEG_TO_RAD))
+            return from(AngleUnit.DEGREES, startAngle, endAngle)
+        }
+
+        private fun from(unit: AngleUnit, startAngle: Double, endAngle: Double): AngleRange {
+            return AngleRange(Measurements.Angle(startAngle,unit).toRadians(), Measurements.Angle(endAngle,unit).toRadians())
         }
 
 
@@ -40,11 +41,11 @@ import kotlin.math.PI
          */
         @JvmStatic
         fun wrap(theta: Double): Double {
-            try {
-                require(theta in -2 * PI..2 * PI)
-            }catch (_: IllegalArgumentException){
-                DataLogger.instance.logError("Angle must be between -2PI and 2PI, but was $theta")
-            }
+//            try {
+//                require(theta in -2 * PI..2 * PI)
+//            }catch (_: IllegalArgumentException){
+//                DataLogger.instance.logError("Angle must be between -2PI and 2PI, but was $theta")
+//            }
             var angle = theta
             while (angle > PI) angle -= PI * 2
             while (angle < -PI) angle += PI * 2
@@ -67,7 +68,7 @@ import kotlin.math.PI
          * @return The route the arm must take, while still avoiding any obstacles
          */
         fun findMotorDirection(goal: AngleRange, obstacle: AngleRange?): Direction {
-            val (shortRoute, longRoute) = if (wrap(goal.stop - goal.start) > 0.0) {
+            val (shortRoute, longRoute) = if (Measurements.Angle.ofRadians(goal.stop - goal.start).wrap().number > 0.0) {
                 Direction.CounterClockWise to Direction.Clockwise
             } else {
                 Direction.Clockwise to Direction.CounterClockWise
@@ -85,8 +86,7 @@ import kotlin.math.PI
          * @return Whether there is an obstacle in the way of the shortest route
          */
         fun inRange(goal: AngleRange, obstacle: AngleRange): Boolean {
-
-            val shortestAngleChange = wrap(goal.stop - goal.start)
+            val shortestAngleChange = Measurements.Angle.ofRadians(goal.stop - goal.start).wrap().number
             for (o in listOf(obstacle.start, obstacle.stop)) {
                 return if (shortestAngleChange > 0) {
                     o >= goal.start && o <= goal.stop
@@ -104,7 +104,7 @@ import kotlin.math.PI
          * @return Error in Radians
          */
         fun findPIDFAngleError(direction: Direction, angleRange: AngleRange): Double {
-            val angleChange = wrap(angleRange.stop - angleRange.start)
+            val angleChange = Measurements.Angle.ofRadians(angleRange.stop - angleRange.start).wrap().number
             return when (direction) {
                 Direction.CounterClockWise -> {
                     if (angleChange > 0) {
@@ -130,10 +130,6 @@ import kotlin.math.PI
      */
     override fun toString(): String {
         return "(${this.start}, ${this.stop})"
-    }
-
-    fun toDegrees(): Pair<Double, Double> {
-        return Pair(start * RAD_TO_DEG, stop * RAD_TO_DEG)
     }
 
     fun asArrayList(): ArrayList<AngleRange> {

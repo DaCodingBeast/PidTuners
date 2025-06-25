@@ -1,14 +1,12 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
-import static com.dacodingbeast.pidtuners.Opmodes.PIDTuningOpModes.angleRange;
-import static com.dacodingbeast.pidtuners.Opmodes.PIDTuningOpModes.gravityMotorPower;
-import static com.dacodingbeast.pidtuners.Opmodes.PIDTuningOpModes.slideRange;
 
 import android.util.Pair;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor;
+import com.dacodingbeast.pidtuners.Simulators.AngleRange;
 import com.dacodingbeast.pidtuners.utilities.DataLogger;
 import com.dacodingbeast.pidtuners.utilities.MathFunctions.QuadraticRegression;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -18,15 +16,18 @@ import java.util.Arrays;
 
 public class GravityTest extends LinearOpMode {
     ArmMotor motor;
+    AngleRange angleRange;
 
-    public GravityTest(ArmMotor motor) {
+    public GravityTest(ArmMotor motor, AngleRange angleRange) {
         this.motor = motor;
+        this.angleRange = angleRange;
     }
+
 
     @Override
     public void runOpMode() {
         DataLogger.getInstance().startLogger("GravityTest" + motor.getName());
-        if (gravityMotorPower == 0) throw new RuntimeException("Gravity motor power cannot be 0");
+        if (PowerConstants.getGravityMotorPower() == 0) throw new RuntimeException("Gravity motor power cannot be 0");
         MultipleTelemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), this.telemetry);
 
         telemetry.addLine("Press Record to store data points, and display data points when done.");
@@ -46,13 +47,11 @@ public class GravityTest extends LinearOpMode {
 
             if(motor.getClass() == ArmMotor.class){
                 target = (angleRange.getStop());
-            }else {
-                target = slideRange.getStop();
             }
             run = !motor.targetReached(target);
 
             if (run) {
-                motor.setPower(gravityMotorPower);
+                motor.setPower(PowerConstants.getGravityMotorPower());
             }else{
                 motor.setPower(0);
                 targetHit = true;

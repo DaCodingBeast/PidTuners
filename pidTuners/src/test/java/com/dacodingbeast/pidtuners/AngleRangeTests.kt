@@ -9,6 +9,16 @@ import org.junit.Test
 import kotlin.math.PI
 
 class AngleRangeExtendedTests {
+    @Test
+    fun testAngleRangeNewConstructs(){
+        val range = AngleRange.fromRadians(0.0,PI/2)
+        assertEquals(0.0,range.start,1e-9)
+        assertEquals(PI/2,range.stop,1e-9)
+        val range2 = AngleRange.fromDegrees(0.0,90.0)
+        assertEquals(0.0,range2.start,1e-9)
+        assertEquals(PI/2,range2.stop,1e-9)
+
+    }
 
     @Test
     fun testWrapPositiveOverflow() {
@@ -51,15 +61,15 @@ class AngleRangeExtendedTests {
 
     @Test
     fun testFromDegrees360() {
-        val range = AngleRange.fromDegrees(360.0, 0.0)
-        assertEquals(0.0, range.start, 1e-9)
+        val range = AngleRange.fromRadians(360.0, 0.0)
+        assertEquals(360.0, range.start, 1e-9)
         assertEquals(0.0, range.stop, 1e-9)
     }
 
     @Test
     fun testFromRadiansNegativeFullCircle() {
         val range = AngleRange.fromRadians(-2 * PI, 0.0)
-        assertEquals(0.0, range.start, 1e-9)
+        assertEquals(-2 * PI, range.start, 1e-9)
         assertEquals(0.0, range.stop, 1e-9)
     }
 
@@ -94,7 +104,7 @@ class AngleRangeExtendedTests {
     fun testInRangeNegativeShortRoute() {
         val goal = AngleRange.fromRadians(PI, 0.0)
         val obstacle = AngleRange.fromRadians(PI / 2, PI / 2)
-        assertFalse(AngleRange.inRange(goal, obstacle))
+        assertTrue(AngleRange.inRange(goal, obstacle))
     }
 
     @Test

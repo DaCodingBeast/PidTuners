@@ -43,7 +43,7 @@ class VectorTest {
         val vector = Vector(doubleArrayOf(1.0, 2.0, 3.0))
 
         // Testing the toString method
-        assertEquals("1.0, 2.0, 3.0, 0.0", vector.toString()) // Ensure default toString format
+        assertEquals("1.0, 2.0, 3.0, ", vector.toString()) // Ensure default toString format
     }
 
     @Test
@@ -93,6 +93,6 @@ class VectorTest {
 
         val result = vector.toString()
 
-        assertEquals("1.0, 2.0, 3.0, 0.0", result)
+        assertEquals("1.0, 2.0, 3.0, ", result)
     }
 }

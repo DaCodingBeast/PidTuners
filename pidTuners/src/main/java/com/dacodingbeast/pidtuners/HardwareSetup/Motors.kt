@@ -151,6 +151,4 @@ abstract class Motors(
     }
 
     abstract fun findPosition(): Double
-
-
 }

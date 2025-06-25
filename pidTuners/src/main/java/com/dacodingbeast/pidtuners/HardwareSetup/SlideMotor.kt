@@ -4,6 +4,7 @@ import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
 import com.dacodingbeast.pidtuners.utilities.MathFunctions.TicksToInch
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
+import com.dacodingbeast.pidtuners.utilities.DistanceUnit
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
 class SlideMotor private constructor(
@@ -47,13 +48,34 @@ class SlideMotor private constructor(
         fun externalEncoder(encoder: Encoders?) = apply { this.externalEncoder = encoder }
         fun obstacle(obstacle: SlideRange?) = apply { this.obstacle = obstacle }
         fun build(): SlideMotor {
-            return SlideMotor(
+            val motorPre = SlideMotor(
                 name,
                 motorDirection,
                 motorSpecs,
                 systemConstants,
                 spoolDiameter,
                 targets,
+                externalGearRatio,
+                pidParams,
+                externalEncoder,
+                obstacle
+            )
+
+            val convertedTargets = mutableListOf<SlideRange>()
+            for (target in targets){
+                if (target.unit != DistanceUnit.INCHES){
+                    convertedTargets.add(target.toInches(motorPre))
+                }else{
+                    convertedTargets.add(target)
+                }
+            }
+            return SlideMotor(
+                name,
+                motorDirection,
+                motorSpecs,
+                systemConstants,
+                spoolDiameter,
+                convertedTargets,
                 externalGearRatio,
                 pidParams,
                 externalEncoder,
