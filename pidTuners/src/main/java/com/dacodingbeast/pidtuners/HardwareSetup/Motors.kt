@@ -150,5 +150,7 @@ abstract class Motors(
         return (ticks / ticksPerRotation) * 2 * Math.PI
     }
 
+    abstract fun findPosition(): Double
+
 
 }

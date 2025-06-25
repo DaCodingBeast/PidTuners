@@ -1,6 +1,8 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
+import static com.dacodingbeast.pidtuners.Opmodes.TestingSize.angleRange;
 import static com.dacodingbeast.pidtuners.Opmodes.TestingSize.gravityMotorPower;
+import static com.dacodingbeast.pidtuners.Opmodes.TestingSize.slideRange;
 
 import android.util.Pair;
 
@@ -10,13 +12,10 @@ import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor;
 import com.dacodingbeast.pidtuners.utilities.DataLogger;
 import com.dacodingbeast.pidtuners.utilities.MathFunctions.QuadraticRegression;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
-//@TeleOp(name = "GravityTest", group = "Linear OpMode")
 public class GravityTest extends LinearOpMode {
     ArmMotor motor;
 
@@ -27,20 +26,37 @@ public class GravityTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         DataLogger.getInstance().startLogger("GravityTest" + motor.getName());
+        if (gravityMotorPower == 0) throw new RuntimeException("Gravity motor power cannot be 0");
         MultipleTelemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), this.telemetry);
 
+        telemetry.addLine("Press Record to store data points, and display data points when done.");
+        telemetry.addLine("Data will be output to logcat under: 'tag:pidtunersdatalogger'");
+        telemetry.update();
         motor.init(hardwareMap, TestingSize.start);
 
         ArrayList<Pair<Double, Double>> dataPairs = new ArrayList<>();
 
         waitForStart();
+        double target = 0;
+        boolean targetHit = false;
+        boolean run;
         while (opModeIsActive()) {
 
             double angle = motor.findPosition(false);
 
-            telemetry.addLine("Press Record to store data points, and display data points when done.");
+            if(motor.getClass() == ArmMotor.class){
+                target = (angleRange.getStop());
+            }else {
+                target = slideRange.getStop();
+            }
+            run = !motor.targetReached(target);
 
-            motor.setPower(gravityMotorPower);
+            if (run) {
+                motor.setPower(gravityMotorPower);
+            }else{
+                motor.setPower(0);
+                targetHit = true;
+            }
 
             dataPairs.add(new Pair<>(
                     angle,
@@ -60,23 +76,28 @@ public class GravityTest extends LinearOpMode {
                 x[i] = dataPairs.get(i).first;
                 y[i] = dataPairs.get(i).second;
             }
-            double[] coefficients = QuadraticRegression.quadraticRegressionManual(x, y);
-            double intercept = coefficients[0];
-            double linear = coefficients[1];
-            double quadratic = coefficients[2];
-            double[] vertex = QuadraticRegression.toVertexForm(quadratic, linear, intercept);
-            telemetry.addLine("Place this in your gravity constants in TuningOpModes");
-            telemetry.addData("a", vertex[0]);
-            telemetry.addData("h", vertex[1]);
-            telemetry.addData("k", vertex[2]);
+            if (x.length>3) { // absolute minimum is 3
+                double[] coefficients = QuadraticRegression.quadraticRegressionManual(x, y);
+                double intercept = coefficients[0];
+                double linear = coefficients[1];
+                double quadratic = coefficients[2];
+                double[] vertex = QuadraticRegression.toVertexForm(quadratic, linear, intercept);
 
-            DataLogger.getInstance().logDebug("a: " + vertex[0] + " h: " + vertex[1] + " k: " + vertex[2]);
+                telemetry.addLine("Place this in your gravity constants in TuningOpModes");
+                telemetry.addData("a", vertex[0]);
+                telemetry.addData("h", vertex[1]);
+                telemetry.addData("k", vertex[2]);
+                DataLogger.getInstance().logDebug("Data: " + dataPairs);
 
+                DataLogger.getInstance().logDebug("a: " + vertex[0] + " h: " + vertex[1] + " k: " + vertex[2]);
 //                telemetry.addLine("Input data points into a table in https://www.desmos.com/calculator");
 //                telemetry.addLine("Copy and paste the below equation, and place a,b,k in the config");
 //                telemetry.addLine("y_{1}~a(x_{1}-b)^2+k");
 //                telemetry.addLine("All done!!");
-
+            }
+            if (targetHit){
+                requestOpModeStop();
+            }
             telemetry.update();
         }
     }

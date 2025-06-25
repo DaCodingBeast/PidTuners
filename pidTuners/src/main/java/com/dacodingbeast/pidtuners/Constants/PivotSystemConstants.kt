@@ -23,7 +23,7 @@ data class PivotSystemConstants(
 /**
  * The Constants of a quadratic function that models gravity's effective torque on the Arm
  */
-data class GravityModelConstants(val a: Double, val b: Double, val k: Double) {
+data class GravityModelConstants(val a: Double, val h: Double, val k: Double) {
     /**
      * Preforming the mathematical model using the Constants to Find Gravity Torque
      * @see GravityModelConstants
@@ -38,7 +38,7 @@ data class GravityModelConstants(val a: Double, val b: Double, val k: Double) {
         val angleAbs = abs(angle)
 
         //Its a parabola created by Desmos based on given input
-        return (a * (angleAbs - b).pow(
+        return (a * (angleAbs - h).pow(
             2
         ) + k)
     }

@@ -6,6 +6,7 @@ import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants;
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor;
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware;
 import com.dacodingbeast.pidtuners.Simulators.AngleRange;
+import com.dacodingbeast.pidtuners.Simulators.SlideRange;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
@@ -19,7 +20,7 @@ public final class TestingSize {
 //    public static Double spoolDiameter = 1.0;
 //    static double frictionRPM = 0.0;
 //    static PIDParams pidParams = new PIDParams(0.0, 0.0, 0.0, 0.0);
-//    static SlideRange slideRange = new SlideRange(0.0, 38.0);
+    static SlideRange slideRange = new SlideRange(0.0, 38.0);
 //    static SlideSystemConstants slideSystemConstants = new SlideSystemConstants(0.0, frictionRPM);
 //    public static SlideMotor slideMotor = new SlideMotor("Slide", DcMotorSimple.Direction.FORWARD,
 //            Hardware.YellowJacket.RPM223,

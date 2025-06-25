@@ -70,6 +70,10 @@ class ArmMotor private constructor(
         return if (inDegrees) angle * 180 / Math.PI else angle
     }
 
+    override fun findPosition(): Double {
+        return findPosition()
+    }
+
 
     override fun targetReached(target: Double, accuracy: Double?): Boolean {
         val accurate = accuracy ?: Math.toRadians(15.0)

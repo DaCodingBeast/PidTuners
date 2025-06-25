@@ -66,7 +66,7 @@ class SlideMotor private constructor(
     var conversions = TicksToInch(spoolDiameter, this)
 
 
-    fun findPosition(): Double {
+    override fun findPosition(): Double { // returns inches
         return getCurrentPose() * conversions.inchesPerTick
     }
 
@@ -74,7 +74,7 @@ class SlideMotor private constructor(
      * Checks accuracy in inches
      */
     override fun targetReached(target: Double, accuracy: Double?): Boolean {
-        val accurate = accuracy ?: 1.0
+        val accurate = accuracy ?: 50.0
         val current = findPosition()
         return current in (target - accurate)..(target + accurate)
     }

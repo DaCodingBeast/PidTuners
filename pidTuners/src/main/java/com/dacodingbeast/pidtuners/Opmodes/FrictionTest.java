@@ -1,10 +1,10 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
+import static com.dacodingbeast.pidtuners.Opmodes.TestingSize.angleRange;
+import static com.dacodingbeast.pidtuners.Opmodes.TestingSize.slideRange;
 import static com.dacodingbeast.pidtuners.utilities.MathFunctions.RemoveOutliersKt.removeOutliers;
 import static java.lang.Math.abs;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
 import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor;
@@ -14,7 +14,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.ArrayList;
 
-//@TeleOp(name = "FrictionTest", group = "Linear OpMode")
 public class FrictionTest extends LinearOpMode {
     Motors motor;
 
@@ -25,8 +24,8 @@ public class FrictionTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         DataLogger.getInstance().startLogger("FrictionTest" + motor.getName());
-        telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
-
+        telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
+        telemetry.addLine("Data will be output to logcat under: 'tag:pidtunersdatalogger'");
         motor.init(hardwareMap, TestingSize.start);
 
         ElapsedTime timer = new ElapsedTime();
@@ -40,22 +39,20 @@ public class FrictionTest extends LinearOpMode {
         ArrayList<Double> motorPowers = new ArrayList<>();
         double actualRpm = 0.0;
         boolean run;
-
+        telemetry.update();
         waitForStart();
         if (!opModeInInit()) {
             timer.reset();
         }
+        double target = 0;
+        boolean targetHit = false;
         while (opModeIsActive()) {
-            //todo what goes in target reached
-
             if(motor.getClass() == ArmMotor.class){
-                run = !motor.targetReached(TestingSize.start + Math.PI/12);
+                target = (angleRange.getStop());
             }else {
-                run = !motor.targetReached(TestingSize.start + 15);
+                target = slideRange.getStop();
             }
-
-
-            telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
+            run = !motor.targetReached(target);
 
             double position;
 
@@ -69,9 +66,11 @@ public class FrictionTest extends LinearOpMode {
             if (run) {
                 motor.setPower(0.5);
                 telemetry.addData("Running", motor.getRPM() * .5);
-//                telemetry.addData("Position", position);
+            }else{
+                motor.setPower(0);
+                targetHit = true;
             }
-            //            motor.run(3);
+            telemetry.addData("Position", position);
 
             // Measure RPM
             double ticksPerRevolution = motor.getTicksPerRotation(); // Encoder resolution (ticks per revolution)
@@ -85,8 +84,9 @@ public class FrictionTest extends LinearOpMode {
                 RPMS.add(rpm);
             }
             telemetry.addData("t", theoreticalRpmMeasured);
+//            telemetry.addData("pose", motor.getCurrentPose());
+            telemetry.addData("target",target);
 
-//            else telemetry.addLine("Rpm Constants is incorrect, or your robot is struggling with the amount of weight it has");
 
             // Make sure size is not returning something other than 0
             if (!RPMS.isEmpty()) {
@@ -106,7 +106,8 @@ public class FrictionTest extends LinearOpMode {
             if (run) {
                 angularAccelerationData.add(angularAccel);
                 motorPowers.add(motor.getPower());
-            } else {
+            }
+            if (targetHit){
                 // Calculate if friction test is complete and find rotational Inertia
 
                 angularAccelerationData = removeOutliers(angularAccelerationData);
@@ -124,8 +125,9 @@ public class FrictionTest extends LinearOpMode {
                 ) / averageAA;
 
                 telemetry.addData("Inertia", rotationalInertia);
-                DataLogger.getInstance().logDebug("rotationalInertia: "+rotationalInertia);
-                stop();
+                DataLogger.getInstance().logDebug("frictionRPM: " + actualRpm);
+                DataLogger.getInstance().logData("rotationalInertia: "+rotationalInertia);
+                requestOpModeStop();
             }
 
             lastAngle = position;
