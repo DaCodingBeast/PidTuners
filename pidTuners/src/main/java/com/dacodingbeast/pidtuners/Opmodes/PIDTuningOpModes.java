@@ -53,7 +53,10 @@ public final class PIDTuningOpModes {
     public static void register(OpModeManager manager) {
         boolean armEN = false;
         boolean slidesEN = false;
-        manager.register(metaForClass(PSODirectionDebugger.class, ""), new PSODirectionDebugger(slideMotor, armMotor));
+        if (armEN||slidesEN) {
+            manager.register(metaForClass(PSODirectionDebugger.class, ""), new PSODirectionDebugger(slideMotor, armMotor));
+            DataLogger.getInstance().initLogger(armEN,slidesEN);
+        }
         if (armEN) {
             manager.register(
                     metaForClass(FrictionTest.class, "Arm"), new FrictionTest(armMotor)
@@ -79,7 +82,6 @@ public final class PIDTuningOpModes {
                     metaForClass(FindPID.class,"Slide"),new FindPID(slideMotor)
             );
         }
-        DataLogger.getInstance().initLogger(armEN,slidesEN);
     }
 }
 
