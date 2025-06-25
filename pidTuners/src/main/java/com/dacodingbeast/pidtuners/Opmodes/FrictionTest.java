@@ -1,7 +1,7 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
-import static com.dacodingbeast.pidtuners.Opmodes.TestingSize.angleRange;
-import static com.dacodingbeast.pidtuners.Opmodes.TestingSize.slideRange;
+import static com.dacodingbeast.pidtuners.Opmodes.PIDTuningOpModes.angleRange;
+import static com.dacodingbeast.pidtuners.Opmodes.PIDTuningOpModes.slideRange;
 import static com.dacodingbeast.pidtuners.utilities.MathFunctions.RemoveOutliersKt.removeOutliers;
 import static java.lang.Math.abs;
 
@@ -26,7 +26,7 @@ public class FrictionTest extends LinearOpMode {
         DataLogger.getInstance().startLogger("FrictionTest" + motor.getName());
         telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
         telemetry.addLine("Data will be output to logcat under: 'tag:pidtunersdatalogger'");
-        motor.init(hardwareMap, TestingSize.start);
+        motor.init(hardwareMap, 0.0);
 
         ElapsedTime timer = new ElapsedTime();
         ArrayList<Double> RPMS = new ArrayList<>();
@@ -48,17 +48,17 @@ public class FrictionTest extends LinearOpMode {
         boolean targetHit = false;
         while (opModeIsActive()) {
             if(motor.getClass() == ArmMotor.class){
-                target = (angleRange.getStop());
+                target = (angleRange.getStop()); // should be in radians
             }else {
                 target = slideRange.getStop();
             }
-            run = !motor.targetReached(target);
+            run = !motor.targetReached(target); // does calcs in rads
 
             double position;
 
             // Running motor at half speed
             if (motor.getClass() == ArmMotor.class) {
-                position = motor.findPosition();
+                position = motor.findPosition(); // finds in rads
             } else {
                 position = ((SlideMotor) motor).findPositionUnwrapped();
             }

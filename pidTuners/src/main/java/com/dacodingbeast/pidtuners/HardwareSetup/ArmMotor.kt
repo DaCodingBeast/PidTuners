@@ -64,14 +64,14 @@ class ArmMotor private constructor(
      * To find angle in degrees: Angle.fromRadians
      */
     @JvmOverloads
-    fun findPosition(inDegrees: Boolean = false): Double {
+    fun findPositionRads(inDegrees: Boolean = false): Double {
         val ticks = getCurrentPose()
         val angle = AngleRange.wrap((ticks * (2 * Math.PI / motorSpecs.encoderTicksPerRotation)))
         return if (inDegrees) angle * 180 / Math.PI else angle
     }
 
     override fun findPosition(): Double {
-        return findPosition()
+        return findPositionRads()
     }
 
 

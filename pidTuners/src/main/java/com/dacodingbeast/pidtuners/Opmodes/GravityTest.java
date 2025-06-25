@@ -1,8 +1,8 @@
 package com.dacodingbeast.pidtuners.Opmodes;
 
-import static com.dacodingbeast.pidtuners.Opmodes.TestingSize.angleRange;
-import static com.dacodingbeast.pidtuners.Opmodes.TestingSize.gravityMotorPower;
-import static com.dacodingbeast.pidtuners.Opmodes.TestingSize.slideRange;
+import static com.dacodingbeast.pidtuners.Opmodes.PIDTuningOpModes.angleRange;
+import static com.dacodingbeast.pidtuners.Opmodes.PIDTuningOpModes.gravityMotorPower;
+import static com.dacodingbeast.pidtuners.Opmodes.PIDTuningOpModes.slideRange;
 
 import android.util.Pair;
 
@@ -32,7 +32,7 @@ public class GravityTest extends LinearOpMode {
         telemetry.addLine("Press Record to store data points, and display data points when done.");
         telemetry.addLine("Data will be output to logcat under: 'tag:pidtunersdatalogger'");
         telemetry.update();
-        motor.init(hardwareMap, TestingSize.start);
+        motor.init(hardwareMap, 0.0);
 
         ArrayList<Pair<Double, Double>> dataPairs = new ArrayList<>();
 
@@ -42,7 +42,7 @@ public class GravityTest extends LinearOpMode {
         boolean run;
         while (opModeIsActive()) {
 
-            double angle = motor.findPosition(false);
+            double angle = motor.findPosition();
 
             if(motor.getClass() == ArmMotor.class){
                 target = (angleRange.getStop());

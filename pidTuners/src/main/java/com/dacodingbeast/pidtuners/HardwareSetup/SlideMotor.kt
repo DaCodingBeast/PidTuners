@@ -43,6 +43,7 @@ class SlideMotor private constructor(
         private var obstacle: SlideRange? = null
         fun externalGearRatio(ratio: Double) = apply { this.externalGearRatio = ratio }
         fun pidParams(params: PIDParams) = apply { this.pidParams = params }
+        fun pidParams(p: Double, i: Double, d: Double, f: Double) = apply { this.pidParams = PIDParams(p, i, d, f) }
         fun externalEncoder(encoder: Encoders?) = apply { this.externalEncoder = encoder }
         fun obstacle(obstacle: SlideRange?) = apply { this.obstacle = obstacle }
         fun build(): SlideMotor {
