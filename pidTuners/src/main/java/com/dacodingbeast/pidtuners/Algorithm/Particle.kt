@@ -34,6 +34,7 @@ class Particle(private val ranges: List<Ranges>, private val fitnessFunction: Fi
         fitness = fitnessFunction.findFitness(this) // ITAE
         if (fitness.itae < bestResult) {
             pBestParam = position
+            bestResult = fitness.itae
         }
     }
 

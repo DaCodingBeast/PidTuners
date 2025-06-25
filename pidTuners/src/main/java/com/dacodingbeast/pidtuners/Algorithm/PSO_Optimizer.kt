@@ -1,6 +1,10 @@
-package com.dacodingbeast.pidtuners.Algorithm
+package org.firstinspires.ftc.teamcode.ggutil.pidTuners
 
+import com.dacodingbeast.pidtuners.Algorithm.FitnessFunction
+import com.dacodingbeast.pidtuners.Algorithm.Particle
+import com.dacodingbeast.pidtuners.Algorithm.Ranges
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
+import com.dacodingbeast.pidtuners.utilities.DataLogger
 
 class PSO_Optimizer(
     private val parameterRanges: ArrayList<Ranges>,
@@ -28,9 +32,12 @@ class PSO_Optimizer(
     private var gBestParticle = particles[0]
 
     fun update(times: Int) {
+        DataLogger.instance.logDebug("starting update function ")
         (0 until times).forEach { b ->
+            DataLogger.instance.logDebug("starting iteration $b")
 
             for (particle in particles) {
+                DataLogger.instance.logDebug("particle $b")
 
                 //choosing only a few particles to examine
                 val holdData = particles.indexOf(particle) % (50000 / 1) == 0
