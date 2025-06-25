@@ -57,6 +57,8 @@ abstract class Motors(
         motor.direction = motorDirection
         motor.power = 0.0
         externalEncoder?.init(hardwareMap)
+
+        reset()
     }
 
     fun run(targetIndex: Int): Double {
