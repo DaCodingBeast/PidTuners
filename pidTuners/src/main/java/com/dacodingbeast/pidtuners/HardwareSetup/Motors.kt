@@ -140,8 +140,6 @@ abstract class Motors(
         return motor.getCurrent(currentUnit)
     }
 
-    abstract fun findPosition(): Double
-
     fun fromAngleToTicks(angle: Double): Double {
         val ticksPerRotation = this.motorSpecs.encoderTicksPerRotation
         return (angle / (2 * Math.PI)) * ticksPerRotation

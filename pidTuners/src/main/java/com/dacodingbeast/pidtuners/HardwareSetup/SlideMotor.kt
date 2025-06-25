@@ -66,7 +66,7 @@ class SlideMotor private constructor(
     var conversions = TicksToInch(spoolDiameter, this)
 
 
-    override fun findPosition(): Double {
+    fun findPosition(): Double {
         return getCurrentPose() * conversions.inchesPerTick
     }
 

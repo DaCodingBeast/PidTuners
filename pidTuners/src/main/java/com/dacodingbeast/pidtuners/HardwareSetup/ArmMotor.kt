@@ -63,17 +63,13 @@ class ArmMotor private constructor(
     /**
      * To find angle in degrees: Angle.fromRadians
      */
-
-    override fun findPosition(): Double {
-        val ticks = getCurrentPose()
-        return AngleRange.wrap((ticks * (2 * Math.PI / motorSpecs.encoderTicksPerRotation)))
-    }
-
+    @JvmOverloads
     fun findPosition(inDegrees: Boolean = false): Double {
         val ticks = getCurrentPose()
         val angle = AngleRange.wrap((ticks * (2 * Math.PI / motorSpecs.encoderTicksPerRotation)))
         return if (inDegrees) angle * 180 / Math.PI else angle
     }
+
 
     override fun targetReached(target: Double, accuracy: Double?): Boolean {
         val accurate = accuracy ?: Math.toRadians(15.0)
