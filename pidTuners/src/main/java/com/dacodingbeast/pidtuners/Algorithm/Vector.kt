@@ -9,12 +9,15 @@ class Vector(var particleParams: DoubleArray) {
     private var numOfVelos = particleParams.size
 
     fun ensureNonNegativePosition(swarmBestPosition: Vector, particlePosition: Vector) {
-        particleParams = particleParams.mapIndexed { index, value ->
-            if (value < 0) {
-                if (swarmBestPosition.particleParams[index] < 0) abs(particlePosition.particleParams[index])
-                else swarmBestPosition.particleParams[index]
-            } else value
-        }.toDoubleArray()
+        for (i in particleParams.indices) {
+            if (particleParams[i] < 0) {
+                particleParams[i] = if (swarmBestPosition.particleParams[i] < 0) {
+                    abs(particlePosition.particleParams[i])
+                } else {
+                    swarmBestPosition.particleParams[i]
+                }
+            }
+        }
     }
 
     /**
@@ -22,7 +25,9 @@ class Vector(var particleParams: DoubleArray) {
      */
     operator fun plus(velo: Vector): Vector {
         val final = DoubleArray(numOfVelos)
-        0.until(numOfVelos).forEach { final[it] = particleParams[it] + velo.particleParams[it] }
+        for (i in 0 until numOfVelos) {
+            final[i] = particleParams[i] + velo.particleParams[i]
+        }
         return Vector(final)
     }
 
@@ -31,7 +36,9 @@ class Vector(var particleParams: DoubleArray) {
      */
     operator fun minus(v: Vector): Vector {
         val final = DoubleArray(numOfVelos)
-        0.until(numOfVelos).forEach { final[it] = particleParams[it] - v.particleParams[it] }
+        for (i in 0 until numOfVelos) {
+            final[i] = particleParams[i] - v.particleParams[i]
+        }
         return Vector(final)
     }
 
@@ -40,19 +47,21 @@ class Vector(var particleParams: DoubleArray) {
      */
     operator fun times(v: Double): Vector {
         val final = DoubleArray(numOfVelos)
-        0.until(numOfVelos).forEach { final[it] = particleParams[it] * v }
+        for (i in 0 until numOfVelos) {
+            final[i] = particleParams[i] * v
+        }
         return Vector(final)
     }
 
     override fun toString(): String {
-        var returnable = ""
+        val sb = StringBuilder()
         for (i in particleParams) {
-            returnable += "$i, "
+            sb.append("$i, ")
         }
-        if (returnable.split(",").size % 2 == 0) {
-            returnable += "0.0"
+        if (particleParams.size % 2 == 0) {
+            sb.append("0.0")
         }
-        return returnable
+        return sb.toString()
     }
 
 

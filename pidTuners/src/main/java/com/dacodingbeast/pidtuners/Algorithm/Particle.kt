@@ -14,7 +14,11 @@ class Particle(private val ranges: List<Ranges>, private val fitnessFunction: Fi
      * Initialized values are in between [ranges]
      * @see Vector
      */
-    var position = Vector(ranges.map { Random.nextDouble(it.start, it.stop) }.toDoubleArray())
+    var position = Vector(DoubleArray(ranges.size).apply {
+        for (i in indices) {
+            this[i] = Random.nextDouble(ranges[i].start, ranges[i].stop)
+        }
+    })
     var velocity: Vector = Vector(DoubleArray(ranges.size))
 
     //initialize at start
@@ -56,7 +60,7 @@ class Particle(private val ranges: List<Ranges>, private val fitnessFunction: Fi
 
     //to show algorithm in csv style (for a python script)
     fun printStory(timeOfOptimization: Int) {
-        (0 until fitness.history.size).forEach { c ->
+        for (c in 0 until fitness.history.size) {
             //todo format csv for python visual. It should include all of Simulator Data's components
         }
     }

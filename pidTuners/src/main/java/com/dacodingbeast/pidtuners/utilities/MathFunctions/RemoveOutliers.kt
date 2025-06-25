@@ -21,6 +21,12 @@ fun removeOutliers(data: ArrayList<Double>): ArrayList<Double> {
     val lowerBound = q1 - 1.5 * iqr
     val upperBound = q3 + 1.5 * iqr
 
-    // Filter data within the bounds
-    return ArrayList(sortedData.filter { it in lowerBound..upperBound })
+    // Filter data within the bounds - direct ArrayList creation
+    val result = ArrayList<Double>()
+    for (value in sortedData) {
+        if (value in lowerBound..upperBound) {
+            result.add(value)
+        }
+    }
+    return result
 }

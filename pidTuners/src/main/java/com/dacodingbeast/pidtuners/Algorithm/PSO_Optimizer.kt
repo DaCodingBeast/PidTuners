@@ -30,21 +30,26 @@ class PSO_Optimizer(
 
     fun update(times: Int) {
         DataLogger.instance.logDebug("starting update function ")
-        (0 until times).forEach { b ->
+        for (b in 0 until times) {
             DataLogger.instance.logDebug("starting iteration $b")
 
             for (particle in particles) {
-                DataLogger.instance.logDebug("particle $b")
+//                DataLogger.instance.logDebug("particle $b")
 
                 //choosing only a few particles to examine
-                val holdData = particles.indexOf(particle) % (50000 / 1) == 0
+//                val holdData = particles.indexOf(particle) % (50000 / 1) == 0
 //                if(holdData) particle.printArmSimStory(b)
+
+
+                particle.updateVelocity(gBestParticle)
+
+                particle.updateFitness()
 
                 if (particle.bestResult < gBestParticle.bestResult) {
                     gBestParticle = particle
                 }
 
-                particle.updateVelocity(gBestParticle)
+
 
             }
 

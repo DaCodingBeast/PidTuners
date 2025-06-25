@@ -46,14 +46,23 @@ class FitnessFunction(
         val history = ArrayList<SimulatorData>()
 
         var time = Dt
+        val timeStepCubed = (Dt * Dt * Dt)
+        var timeCubed = timeStepCubed
+
+        var stepCount =0
+
         while (time <= totalTime) {
 
             val result = simulator.updateSimulator()
 
-            history.add(result)
+            if (stepCount % 10 == 0) {
+                history.add(result)
+            }
 
-            itae += time.pow(3) * abs(simulator.error)
+            itae += timeCubed * abs(simulator.error)
             time += Dt
+            timeCubed += timeStepCubed
+            stepCount++
         }
 
         itae += simulator.punishSimulator()
