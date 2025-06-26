@@ -12,7 +12,7 @@ class FindPID(val motor: Motors) :
     LinearOpMode() {
 
         companion object{
-            @JvmField var accuracy: Double = 2.5
+            @JvmField var accuracy: Double = 4.0
             @JvmField var Time: Double = 2.5
         }
 
@@ -27,7 +27,7 @@ class FindPID(val motor: Motors) :
                 arrayListOf(
                     Ranges(0.0, accuracy),
                     Ranges(0.0, accuracy / 3.5),
-                    Ranges(0.0, accuracy),
+                    Ranges(0.0, accuracy/ 1.2),
                     Ranges(0.0, accuracy)
                 ), Time, motor, i
             )

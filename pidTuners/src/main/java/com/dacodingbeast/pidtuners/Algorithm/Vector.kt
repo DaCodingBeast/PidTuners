@@ -8,6 +8,8 @@ import kotlin.math.abs
 class Vector(var particleParams: DoubleArray) {
     private var numOfVelos = particleParams.size
 
+
+    //todo optimize or create new solution
     fun ensureNonNegativePosition(swarmBestPosition: Vector, particlePosition: Vector) {
         for (i in particleParams.indices) {
             if (particleParams[i] < 0) {
