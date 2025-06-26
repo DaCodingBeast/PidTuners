@@ -53,8 +53,6 @@ abstract class Motors(
         this.hardwareMap = hardwareMap
         this.startPosition = startPosition
         this.motor = hardwareMap.get(DcMotorEx::class.java, name)
-        motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-        motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
         motor.direction = motorDirection
         motor.power = 0.0
         externalEncoder?.init(hardwareMap)
