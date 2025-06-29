@@ -2,6 +2,7 @@ package com.dacodingbeast.pidtuners.HardwareSetup
 
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
+import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
 import com.dacodingbeast.pidtuners.utilities.MathFunctions.TicksToInch
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
 import com.dacodingbeast.pidtuners.utilities.DistanceUnit
@@ -48,6 +49,8 @@ class SlideMotor private constructor(
         fun externalEncoder(encoder: Encoders?) = apply { this.externalEncoder = encoder }
         fun obstacle(obstacle: SlideRange?) = apply { this.obstacle = obstacle }
         fun build(): SlideMotor {
+            require(systemConstants is SlideSystemConstants)
+            require(spoolDiameter>0)
             val motorPre = SlideMotor(
                 name,
                 motorDirection,

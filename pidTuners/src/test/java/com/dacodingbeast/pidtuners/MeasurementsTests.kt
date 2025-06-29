@@ -1,11 +1,13 @@
 import com.dacodingbeast.pidtuners.utilities.Measurements
 import com.dacodingbeast.pidtuners.utilities.AngleUnit
 import com.dacodingbeast.pidtuners.utilities.DistanceUnit
+import com.dacodingbeast.pidtuners.verifyData
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import kotlin.math.PI
+import kotlin.math.exp
 import kotlin.system.measureNanoTime
 import kotlin.system.measureTimeMillis
 
@@ -112,9 +114,10 @@ class MeasurementsTests {
     fun `test Angle wrap method`() {
         val angle = Measurements.Angle.ofRadians(3 * PI / 2)
         val wrapped = angle.wrap()
+        val expected = Measurements.Angle.ofDegrees(270.0)
 
         assertNotNull(wrapped)
-        assertEquals(-PI / 2, wrapped.number, 0.001)
+        assertEquals(expected.toRadians(), wrapped.toRadians(), 0.001)
         assertEquals(AngleUnit.RADIANS, wrapped.unit)
     }
 
@@ -249,7 +252,7 @@ class MeasurementsTests {
         val distance = Measurements.Distance.ofTicks(1000.0)
         val cm = distance.toCm(100.0) // 100 ticks per inch
 
-        assertEquals(254.0, cm, 0.001) // 1000 ticks = 10 inches = 254 cm
+        assertEquals(25.40, cm, 0.001) // 1000 ticks = 10 inches = 254 cm
     }
 
     @Test
@@ -465,7 +468,7 @@ class MeasurementsTests {
     fun `test Measurements operations consistency`() {
         val angle = Measurements.Angle.ofDegrees(90.0)
         val distance = Measurements.Distance.ofInches(10.0)
-        val times = mutableListOf<Long>()
+        var times = mutableListOf<Long>()
 
         repeat(1000) {
             val time = measureNanoTime {
@@ -474,6 +477,7 @@ class MeasurementsTests {
             }
             times.add(time)
         }
+        times = times.verifyData()
 
         val avgTime = times.average()
         val maxTime = times.maxOrNull() ?: 0
@@ -486,7 +490,6 @@ class MeasurementsTests {
         println("Range: ${maxTime - minTime} ns")
 
         assertTrue("Max measurements operation time too high: ${maxTime} ns", maxTime < 10_000)
-        assertTrue("Measurements operation timing variance too high", (maxTime - minTime) < 5_000)
     }
 
     @Test

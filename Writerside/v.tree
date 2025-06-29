@@ -8,8 +8,13 @@
 
     <toc-element topic="pidtuners.md"/>
     <toc-element topic="Installation-Instructions.md"/>
-    <toc-element topic="Tuners.md"/>
-    <toc-element topic="How-to-use-it.md"/>
+    <toc-element topic="Tuning-OpModes-File.md"/>
+    <toc-element toc-title="Arms">
+        <toc-element topic="TuningSteps.md"/>
+    </toc-element>
+    <toc-element toc-title="Slides">
+        <toc-element topic="Tuning-Steps.md"/>
+    </toc-element>
     <toc-element topic="HowItWorks.md">
         <toc-element topic="ParticleSwarmOptimization.md"/>
         <toc-element topic="ArmMechanism.md"/>
