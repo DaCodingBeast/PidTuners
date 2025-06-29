@@ -52,9 +52,9 @@ public class SampleOpMode extends LinearOpMode {
 
             motor.run(x);
 
-            telemetry.addData("X", x);
+            telemetry.addData("pose", motor.getCurrentPose());
 
-            DataLogger.getInstance().logDebug("X: " + x);
+//            DataLogger.getInstance().logDebug("X: " + x);
             telemetry.update();
         }
     }
