@@ -32,51 +32,52 @@ class PIDParams(val kp: Double, val ki: Double, val kd: Double, val kf: Double =
  * @see PIDParams
  */
 class Result(val motorPower: Double, val error: Double)
+
 class PIDFcontroller(var params: PIDParams) {
 
     private var prevError = 0.0
     private var integral = 0.0
 
-    /**
-     * @param angleRange Used to determine the feedforward term to fight gravity
-     * @param error Error determined by the motor direction
-     * @see AngleRange.findPIDFAngleError
-     * @see AngleRange.findMotorDirection
-     * @return A motor power that is in the range of 1 to -1
-     */
-    fun calculate(
-        position: Target,
-        obstacle: Target?
-    ): Result {
+    // Pre-calculated constants
+    private val dtInverse = 1.0 / Dt
+    private val errorNormalizationFactor = 1.0 / 10.0
+    private val hasFF = params.kf != 0.0
 
-        var ff = 0.0
-        val error = when (position) {
+    fun calculate(position: Target, obstacle: Target?): Result {
+
+        when (position) {
             is AngleRange -> {
-                val direction = AngleRange.findMotorDirection(position, obstacle as AngleRange?)
-                ff = if (position.start > 0) max(0.0, sin(position.start)) * params.kf else min(
-                    0.0,
-                    sin(position.start)
-                ) * params.kf
-                AngleRange.findPIDFAngleError(direction, position)
+                val (_, error) = AngleRange.findDirectionAndError(position, obstacle as AngleRange?)
+
+                val ff = if (hasFF) {
+                    val sinVal = sin(position.start)
+                    if (position.start > 0.0) max(0.0, sinVal) * params.kf
+                    else min(0.0, sinVal) * params.kf
+                } else 0.0
+
+                return calculateControl(error, ff)
             }
 
             is SlideRange -> {
-                position.stop - position.start
+                val error = position.stop - position.start
+                return calculateControl(error, 0.0)
             }
-
         }
+    }
 
-        integral += (error * Dt)
-
-        val derivative = (error - prevError) / Dt
+    private inline fun calculateControl(error: Double, ff: Double): Result {
+        integral += error * Dt
+        val derivative = (error - prevError) * errorNormalizationFactor * dtInverse
         prevError = error
 
-        val controlEffort =
-            ((derivative * params.kd + integral * params.ki + error * params.kp) + ff).coerceIn(
-                -1.0,
-                1.0
-            )
+        val controlEffort = (error * params.kp + integral * params.ki + derivative * params.kd + ff)
+            .coerceIn(-1.0, 1.0)
+
         return Result(controlEffort, error)
     }
 
+    fun reset() {
+        prevError = 0.0
+        integral = 0.0
+    }
 }

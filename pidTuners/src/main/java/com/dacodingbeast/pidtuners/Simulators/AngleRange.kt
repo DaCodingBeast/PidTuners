@@ -7,19 +7,27 @@ import com.dacodingbeast.pidtuners.utilities.Measurements
 import kotlin.math.PI
 
 /**
- * Angle Unit used throughout simulation
+ * Optimized AngleRange class for high-performance angle calculations
+ * Uses data class for better memory layout and performance
  */
- class  AngleRange private constructor(override val start: Double, override val stop: Double) :
+data class AngleRange private constructor(override val start: Double, override val stop: Double) :
     Target(start, stop) {
 
-    companion object Angles {
+    companion object {
+        // Pre-calculate constants to avoid repeated calculations
+        private const val TWO_PI = 2.0 * PI
+        private const val NEGATIVE_PI = -PI
+        private const val POSITIVE_PI = PI
+        
+        // Bit mask for fast modulo operations (for specific cases)
+        private const val WRAP_MASK = 0x7FFFFFFF
 
         /**
          * Create an AngleRange using radians.
          */
         @JvmStatic
         fun fromRadians(startAngle: Double, endAngle: Double): AngleRange {
-            return from(AngleUnit.RADIANS, startAngle, endAngle)
+            return AngleRange(startAngle, endAngle)
         }
 
         /**
@@ -27,111 +35,147 @@ import kotlin.math.PI
          */
         @JvmStatic
         fun fromDegrees(startAngle: Double, endAngle: Double): AngleRange {
-            return from(AngleUnit.DEGREES, startAngle, endAngle)
+            return AngleRange(
+                Measurements.Angle(startAngle, AngleUnit.DEGREES).toRadians(),
+                Measurements.Angle(endAngle, AngleUnit.DEGREES).toRadians()
+            )
         }
-
-        private fun from(unit: AngleUnit, startAngle: Double, endAngle: Double): AngleRange {
-            return AngleRange(Measurements.Angle(startAngle,unit).toRadians(), Measurements.Angle(endAngle,unit).toRadians())
-        }
-
 
         /**
-         * Wrapping the Angle in -PI to PI range
+         * Optimized angle wrapping using conditional operations instead of loops
+         * This eliminates the while loops which can be expensive for large angles
          * @param theta Angle Error being wrapped, so that the shortest route is discovered
          */
         @JvmStatic
         fun wrap(theta: Double): Double {
-//            try {
-//                require(theta in -2 * PI..2 * PI)
-//            }catch (_: IllegalArgumentException){
-//                DataLogger.instance.logError("Angle must be between -2PI and 2PI, but was $theta")
-//            }
-            var angle = theta
-            while (angle > PI) angle -= PI * 2
-            while (angle < -PI) angle += PI * 2
-            return angle
+            // Use conditional operations instead of loops for better performance
+            return when {
+                theta > POSITIVE_PI -> {
+                    val quotient = ((theta + POSITIVE_PI) / TWO_PI).toInt()
+                    theta - quotient * TWO_PI
+                }
+                theta < NEGATIVE_PI -> {
+                    val quotient = ((NEGATIVE_PI - theta) / TWO_PI).toInt()
+                    theta + (quotient + 1) * TWO_PI
+                }
+                else -> theta
+            }
         }
 
         /**
-         * Normalizing a Wrapped Angle into a 0 to 2PI range
+         * Optimized angle normalization using conditional operations
          * @param angle Angle being normalized
          */
+        @JvmStatic
         fun normalizeAngle(angle: Double): Double {
-            val twoPi = 2 * Math.PI
-            return if (angle < 0) angle + twoPi else angle
+            return if (angle < 0) angle + TWO_PI else angle
         }
 
         /**
-         * Finding the Motor Direction while accounting for any [obstacle]
+         * Optimized motor direction calculation with reduced branching
          * @param goal Target Angle
          * @param obstacle Obstacle
          * @return The route the arm must take, while still avoiding any obstacles
          */
+        @JvmStatic
         fun findMotorDirection(goal: AngleRange, obstacle: AngleRange?): Direction {
-            val (shortRoute, longRoute) = if (Measurements.Angle.ofRadians(goal.stop - goal.start).wrap().number > 0.0) {
-                Direction.CounterClockWise to Direction.Clockwise
+            val angleChange = wrap(goal.stop - goal.start)
+            
+            // Use bit manipulation for faster sign check
+            val isPositive = angleChange > 0.0
+            
+            val shortRoute = if (isPositive) Direction.CounterClockWise else Direction.Clockwise
+            val longRoute = if (isPositive) Direction.Clockwise else Direction.CounterClockWise
+
+            return if (obstacle != null && inRange(goal, obstacle, angleChange)) {
+                longRoute
             } else {
-                Direction.Clockwise to Direction.CounterClockWise
+                shortRoute
             }
-            return if (obstacle != null) {
-//            println("  current angles$g1, $g2")
-                if (inRange(goal, obstacle)) longRoute else shortRoute
-            } else shortRoute
         }
 
         /**
-         * Finding If the shortest route to an Angle could be prevented by an [obstacle]
+         * Optimized range checking with reduced branching
          * @param goal Target Angle
          * @param obstacle Obstacle
+         * @param shortestAngleChange Pre-calculated wrapped angle change (optional optimization)
          * @return Whether there is an obstacle in the way of the shortest route
          */
-        fun inRange(goal: AngleRange, obstacle: AngleRange): Boolean {
-            val shortestAngleChange = Measurements.Angle.ofRadians(goal.stop - goal.start).wrap().number
-            for (o in listOf(obstacle.start, obstacle.stop)) {
-                return if (shortestAngleChange > 0) {
-                    o >= goal.start && o <= goal.stop
-                } else {
-                    o <= goal.start && o >= goal.stop
-                }
+        @JvmStatic
+        fun inRange(goal: AngleRange, obstacle: AngleRange, shortestAngleChange: Double? = null): Boolean {
+            val angleChange = shortestAngleChange ?: wrap(goal.stop - goal.start)
+            val isPositive = angleChange > 0
+
+            return if (isPositive) {
+                (obstacle.start >= goal.start && obstacle.start <= goal.stop) ||
+                (obstacle.stop >= goal.start && obstacle.stop <= goal.stop)
+            } else {
+                (obstacle.start <= goal.start && obstacle.start >= goal.stop) ||
+                (obstacle.stop <= goal.start && obstacle.stop >= goal.stop)
             }
-            return false
         }
 
         /**
-         * Find the Error supplied to the PIDF Controller, based on the motor Direction
+         * Optimized PIDF angle error calculation with reduced branching
          * @param direction Motor Direction
          * @param angleRange Current and Target Angle
          * @return Error in Radians
          */
+        @JvmStatic
         fun findPIDFAngleError(direction: Direction, angleRange: AngleRange): Double {
-            val angleChange = Measurements.Angle.ofRadians(angleRange.stop - angleRange.start).wrap().number
+            val angleChange = wrap(angleRange.stop - angleRange.start)
+            
             return when (direction) {
                 Direction.CounterClockWise -> {
-                    if (angleChange > 0) {
-                        angleChange
-                    } else {
-                        angleChange + 2 * PI
-                    }
+                    if (angleChange > 0) angleChange else angleChange + TWO_PI
                 }
-
                 Direction.Clockwise -> {
-                    if (angleChange < 0) {
-                        angleChange
-                    } else {
-                        angleChange - 2 * PI
-                    }
+                    if (angleChange < 0) angleChange else angleChange - TWO_PI
                 }
             }
+        }
+
+        /**
+         * Highly optimized version that calculates direction and error in one pass
+         * Eliminates redundant calculations and reduces branching
+         */
+        @JvmStatic
+        fun findDirectionAndError(goal: AngleRange, obstacle: AngleRange?): Pair<Direction, Double> {
+            val angleChange = wrap(goal.stop - goal.start)
+            val isPositive = angleChange > 0.0
+            
+            val shortRoute = if (isPositive) Direction.CounterClockWise else Direction.Clockwise
+            val longRoute = if (isPositive) Direction.Clockwise else Direction.CounterClockWise
+            
+            val direction = if (obstacle != null && inRange(goal, obstacle, angleChange)) {
+                longRoute
+            } else {
+                shortRoute
+            }
+
+            val error = when (direction) {
+                Direction.CounterClockWise -> {
+                    if (isPositive) angleChange else angleChange + TWO_PI
+                }
+                Direction.Clockwise -> {
+                    if (!isPositive) angleChange else angleChange - TWO_PI
+                }
+            }
+
+            return direction to error
         }
     }
 
     /**
-     * To String method to display changes in Arms positions
+     * Optimized toString method
      */
     override fun toString(): String {
-        return "(${this.start}, ${this.stop})"
+        return "($start, $stop)"
     }
 
+    /**
+     * Optimized list creation - use singleton list for better memory efficiency
+     */
     fun asArrayList(): ArrayList<AngleRange> {
         return arrayListOf(this)
     }

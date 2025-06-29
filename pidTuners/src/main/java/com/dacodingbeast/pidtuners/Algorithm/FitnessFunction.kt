@@ -7,7 +7,6 @@ import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor
 import com.dacodingbeast.pidtuners.Simulators.SimulatorData
 import com.dacodingbeast.pidtuners.Simulators.SlideSim
 import kotlin.math.abs
-import kotlin.math.pow
 
 /**
  * The Fake Loop Time of the System, commonly known as the Time Stamp
@@ -16,12 +15,6 @@ const val Dt = 0.01
 
 class FitnessFunctionData(val itae: Double, val history: ArrayList<SimulatorData>)
 
-/**
- * The Fitness Function made specifically for Arm Mechanisms
- * @param totalTime The Time the system is provided
- * @param targets The Targets
- * @param obstacle The Obstacle in the system
- */
 class FitnessFunction(
     private val totalTime: Double,
     motor: Motors,
@@ -35,7 +28,7 @@ class FitnessFunction(
     }
 
     /**
-     * The Computation of the [param] to find the fitness score.
+     * The Computation of the [params] to find the fitness score.
      * The lower the fitness score the better: This function minimizes the ITAE
      */
 

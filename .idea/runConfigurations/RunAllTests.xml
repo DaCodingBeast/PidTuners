@@ -10,9 +10,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value=":pidTuners:testDebugUnitTest" />
-          <option value="--tests" />
-          <option value="&quot;com.dacodingbeast.pidtuners.*&quot;" />
+          <option value="pidTuners:testDebugUnitTest" />
         </list>
       </option>
       <option name="vmOptions" />
