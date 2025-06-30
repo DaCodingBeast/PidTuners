@@ -25,7 +25,9 @@ class PIDTuningOpModes {
     static SlideRange slideRange = SlideRange.fromTicks(0.0,700.0);
     static SlideSystemConstants slideSystemConstants = new SlideSystemConstants(0.0, frictionRPMSlide);
     public static SlideMotor slideMotor = new SlideMotor.Builder("Slide", DcMotorSimple.Direction.FORWARD,
-            Hardware.YellowJacket.RPM223,
+            new Hardware.HDHex(//TODO
+
+                    ).getMotorSpecs(),
              slideSystemConstants, spoolDiameter,slideRange.asArrayList()).pidParams(0.0,0.0,0.0,0.0).build();
 
 
