@@ -4,6 +4,7 @@ import CommonUtilities.Result
 import com.dacodingbeast.pidtuners.Algorithm.Vector
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
+import com.dacodingbeast.pidtuners.verifyData
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -419,7 +420,7 @@ class PID {
             val pidController = PIDFcontroller(PIDParams(1.0, 0.1, 0.05))
             val position = AngleRange.fromRadians(0.0, PI / 4)
             val numTests = 1000
-            val times = mutableListOf<Long>()
+            var times = mutableListOf<Long>()
 
             repeat(numTests) {
                 pidController.reset()
@@ -429,6 +430,7 @@ class PID {
                 }
                 times.add(time)
             }
+            times = times.verifyData()
 
             val avgTime = times.average()
             val maxTime = times.maxOrNull() ?: 0

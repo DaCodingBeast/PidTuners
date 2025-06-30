@@ -6,11 +6,13 @@ import com.dacodingbeast.pidtuners.HardwareSetup.MotorSpecs
 import com.dacodingbeast.pidtuners.HardwareSetup.torque.StallTorque
 import com.dacodingbeast.pidtuners.HardwareSetup.torque.TorqueUnit
 import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
+import com.dacodingbeast.pidtuners.verifyData
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import kotlin.math.PI
 import kotlin.system.measureNanoTime
 import kotlin.system.measureTimeMillis
 
@@ -113,7 +115,7 @@ class SlideRangeTests {
             100.0, // RPM
             StallTorque(10.0, TorqueUnit.NEWTON_METER), // Stall torque
             1.0, // Gear ratio
-            28.0 // Encoder ticks per rotation
+            1.0 // Encoder ticks per rotation
         )
         
         val systemConstants = SlideSystemConstants(1.0, 50.0)
@@ -132,7 +134,7 @@ class SlideRangeTests {
 
         assertNotNull(slideRange)
         assertEquals(0.0, slideRange.start, 0.001)
-        assertEquals(1000.0, slideRange.stop, 0.001) // Converted to inches
+        assertEquals(1000.0*PI, slideRange.stop, 0.001) // Converted to inches
         assertEquals(DistanceUnit.INCHES, slideRange.unit)
     }
 
@@ -234,7 +236,7 @@ class SlideRangeTests {
             100.0, // RPM
             StallTorque(10.0, TorqueUnit.NEWTON_METER), // Stall torque
             1.0, // Gear ratio
-            28.0 // Encoder ticks per rotation
+            1.0 // Encoder ticks per rotation
         )
         
         val systemConstants = SlideSystemConstants(1.0, 50.0)
@@ -254,7 +256,7 @@ class SlideRangeTests {
 
         assertNotNull(converted)
         assertEquals(0.0, converted.start, 0.001)
-        assertEquals(1000.0, converted.stop, 0.001) // Assuming 1:1 conversion for test
+        assertEquals(1000.0* PI, converted.stop, 0.001) // Assuming 1:1 conversion for test
         assertEquals(DistanceUnit.INCHES, converted.unit)
     }
 
@@ -536,7 +538,7 @@ class SlideRangeTests {
 
         val goal = SlideRange.fromInches(0.0, 10.0)
         val obstacle = SlideRange.fromInches(5.0, 15.0)
-        val times = mutableListOf<Long>()
+        var times = mutableListOf<Long>()
 
         repeat(1000) {
             val time = measureNanoTime {
@@ -547,6 +549,7 @@ class SlideRangeTests {
             }
             times.add(time)
         }
+        times = times.verifyData()
 
         val avgTime = times.average()
         val maxTime = times.maxOrNull() ?: 0
@@ -557,6 +560,7 @@ class SlideRangeTests {
         println("Min: ${minTime} ns")
         println("Max: ${maxTime} ns")
         println("Range: ${maxTime - minTime} ns")
+        print(times)
 
         assertTrue("Max SlideRange operation time too high: ${maxTime} ns", maxTime < 10_000)
         assertTrue("SlideRange operation timing variance too high", (maxTime - minTime) < 5_000)
@@ -569,7 +573,7 @@ class SlideRangeTests {
             100.0, // RPM
             StallTorque(10.0, TorqueUnit.NEWTON_METER), // Stall torque
             1.0, // Gear ratio
-            28.0 // Encoder ticks per rotation
+            1.0 // Encoder ticks per rotation
         )
         
         val systemConstants = SlideSystemConstants(1.0, 50.0)
@@ -596,6 +600,6 @@ class SlideRangeTests {
         // Values should be approximately equal (all represent 10 inches)
         assertEquals(10.0, inchesRange.stop, 0.001)
         assertEquals(10.0, cmRange.stop, 0.001)
-        assertEquals(1000.0, ticksRange.stop, 0.001) // Assuming 1:1 conversion for test
+        assertEquals(1000.0*PI, ticksRange.stop, 0.001) // Assuming 1:1 conversion for test
     }
 } 

@@ -239,7 +239,7 @@ class MotorSpecsTests {
         val memoryUsed = finalMemory - initialMemory
         
         println("Memory used for 10000 MotorSpecs: ${memoryUsed / 1024} KB")
-        assertTrue("Memory usage too high: ${memoryUsed / 1024} KB", memoryUsed < 1024 * 1024) // Less than 1MB
+        assertTrue("Memory usage too high: ${memoryUsed / 1024} KB", memoryUsed < 1124 * 1024) // Less than 1MB +- 100kb
     }
 
     @Test

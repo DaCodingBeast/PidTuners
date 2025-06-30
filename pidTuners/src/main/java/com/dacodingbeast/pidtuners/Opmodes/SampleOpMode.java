@@ -31,7 +31,6 @@ public class SampleOpMode extends LinearOpMode {
         while (opModeInInit()) {
             timerTime.reset();
         }
-
         waitForStart();
 
 
@@ -57,6 +56,9 @@ public class SampleOpMode extends LinearOpMode {
 
             motor.run(x);
 
+            telemetry.addData("pose", motor.getCurrentPose());
+
+//            DataLogger.getInstance().logDebug("X: " + x);
             telemetry.update();
         }
     }

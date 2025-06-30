@@ -34,7 +34,7 @@ class PIDTuningOpModes {
     static AngleRange angleRange = AngleRange.fromDegrees(0.0, 45.0);
     static PivotSystemConstants pivotSystemConstants = new PivotSystemConstants(inertia, frictionRPM, new GravityModelConstants(0.0,0.0,0.0));
 
-    public static ArmMotor armMotor = new ArmMotor.Builder("Slide", DcMotorSimple.Direction.FORWARD,
+    public static ArmMotor armMotor = new ArmMotor.Builder("Arm", DcMotorSimple.Direction.FORWARD,
             Hardware.YellowJacket.RPM223, pivotSystemConstants, angleRange.asArrayList())
             .pidParams(new PIDParams(0.0, 0.0, 0.0, 0.0))
             .build();

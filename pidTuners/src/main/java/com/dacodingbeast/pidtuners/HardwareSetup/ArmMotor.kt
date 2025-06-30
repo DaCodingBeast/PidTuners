@@ -2,6 +2,7 @@ package com.dacodingbeast.pidtuners.HardwareSetup
 
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
+import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import kotlin.math.abs
@@ -44,6 +45,9 @@ class ArmMotor private constructor(
         fun obstacle(obstacle: AngleRange?) = apply { this.obstacle = obstacle }
 
         fun build(): ArmMotor {
+            require(systemConstants is PivotSystemConstants)
+
+
             return ArmMotor(
                 name,
                 motorDirection,

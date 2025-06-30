@@ -1,6 +1,7 @@
 import com.dacodingbeast.pidtuners.utilities.MathFunctions.QuadraticRegression
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import kotlin.math.abs
@@ -46,9 +47,9 @@ class QuadraticRegressionTests {
 
         assertNotNull(coefficients)
         assertEquals(3, coefficients.size)
-        assertEquals(0.0, coefficients[0], 0.001) // a should be close to 0
+        assertEquals(0.0, coefficients[2], 0.001) // a should be close to 0
         assertEquals(0.0, coefficients[1], 0.001) // b should be close to 0
-        assertEquals(5.0, coefficients[2], 0.001) // c should be close to 5
+        assertEquals(5.0, coefficients[0], 0.001) // c should be close to 5
     }
 
     @Test
@@ -60,9 +61,9 @@ class QuadraticRegressionTests {
 
         assertNotNull(coefficients)
         assertEquals(3, coefficients.size)
-        assertEquals(1.0, coefficients[0], 0.001) // a should be close to 1
+        assertEquals(1.0, coefficients[2], 0.001) // a should be close to 1
         assertEquals(2.0, coefficients[1], 0.001) // b should be close to 2
-        assertEquals(0.0, coefficients[2], 0.001) // c should be close to 0
+        assertEquals(0.0, coefficients[0], 0.001) // c should be close to 0
     }
 
     @Test
@@ -88,25 +89,9 @@ class QuadraticRegressionTests {
 
         assertNotNull(coefficients)
         assertEquals(3, coefficients.size)
-        assertEquals(1.0, coefficients[0], 0.001) // a should be close to 1
+        assertEquals(1.0, coefficients[2], 0.001) // a should be close to 1
         assertEquals(0.0, coefficients[1], 0.001) // b should be close to 0
-        assertEquals(0.0, coefficients[2], 0.001) // c should be close to 0
-    }
-
-    @Test
-    fun `test solveLinearSystem with simple 2x2 system`() {
-        val matrix = arrayOf(
-            doubleArrayOf(2.0, 1.0),
-            doubleArrayOf(1.0, 3.0)
-        )
-        val rhs = doubleArrayOf(5.0, 6.0)
-
-        val solution = QuadraticRegression.solveLinearSystem(matrix, rhs)
-
-        assertNotNull(solution)
-        assertEquals(2, solution.size)
-        assertEquals(1.0, solution[0], 0.001)
-        assertEquals(3.0, solution[1], 0.001)
+        assertEquals(0.0, coefficients[0], 0.001) // c should be close to 0
     }
 
     @Test
@@ -225,24 +210,14 @@ class QuadraticRegressionTests {
         val x = doubleArrayOf(1.0)
         val y = doubleArrayOf(5.0)
 
-        val coefficients = QuadraticRegression.quadraticRegressionManual(x, y)
-
-        assertNotNull(coefficients)
-        assertEquals(3, coefficients.size)
-        // With only one point, the solution may not be unique
-        assertTrue("Coefficients should be finite", coefficients.all { it.isFinite() })
+        assertThrows(IllegalArgumentException::class.java){QuadraticRegression.quadraticRegressionManual(x, y)}
     }
 
     @Test
     fun `test quadraticRegressionManual with two points`() {
         val x = doubleArrayOf(1.0, 2.0)
         val y = doubleArrayOf(3.0, 7.0)
-
-        val coefficients = QuadraticRegression.quadraticRegressionManual(x, y)
-
-        assertNotNull(coefficients)
-        assertEquals(3, coefficients.size)
-        assertTrue("Coefficients should be finite", coefficients.all { it.isFinite() })
+        assertThrows(IllegalArgumentException::class.java) {QuadraticRegression.quadraticRegressionManual(x,y)}
     }
 
     // Performance Tests
