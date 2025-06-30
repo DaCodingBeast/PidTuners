@@ -47,6 +47,9 @@ class SlideRange private constructor(override val start: Double, override val st
     fun toInches(slideMotor: SlideMotor): SlideRange {
         return SlideRange(Measurements.Distance(start,unit).toInches(slideMotor.conversions.ticksPerInch), Measurements.Distance(stop,unit).toInches(slideMotor.conversions.ticksPerInch), DistanceUnit.INCHES)
     }
+    fun toTicks(slideMotor: SlideMotor): SlideRange {
+        return SlideRange(Measurements.Distance(start,unit).toTicks(slideMotor.conversions.ticksPerInch), Measurements.Distance(stop,unit).toTicks(slideMotor.conversions.ticksPerInch), DistanceUnit.TICKS)
+    }
 
     fun asArrayList(): ArrayList<SlideRange> {
         return arrayListOf(this)

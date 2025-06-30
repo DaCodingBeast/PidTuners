@@ -63,7 +63,7 @@ class SlideMotor private constructor(
                 externalEncoder,
                 obstacle
             )
-            val newTargets = targets.apply { forEach { it.toInches(premotor) } }
+            val newTargets = targets.apply { forEach { it.toTicks(premotor) } }
             return SlideMotor(
                 name,
                 motorDirection,
