@@ -51,13 +51,26 @@ class SlideMotor private constructor(
         fun build(): SlideMotor {
             require(systemConstants is SlideSystemConstants)
             require(spoolDiameter>0)
-            return SlideMotor(
+            val premotor = SlideMotor(
                 name,
                 motorDirection,
                 motorSpecs,
                 systemConstants,
                 spoolDiameter,
                 targets,
+                externalGearRatio,
+                pidParams,
+                externalEncoder,
+                obstacle
+            )
+            val newTargets = targets.apply { forEach { it.toInches(premotor) } }
+            return SlideMotor(
+                name,
+                motorDirection,
+                motorSpecs,
+                systemConstants,
+                spoolDiameter,
+                newTargets,
                 externalGearRatio,
                 pidParams,
                 externalEncoder,
@@ -85,19 +98,5 @@ class SlideMotor private constructor(
         val accurate = accuracy ?: 50.0
         val current = findPosition() // in ticks
         return current in (target - accurate)..(target + accurate)
-    }
-
-    fun fromInchesToTicks(value: Double): Double {
-        return value * this.conversions.ticksPerInch
-    }
-
-    fun fromTicksToInches(value: Double): Double {
-        return value / this.conversions.ticksPerInch
-    }
-
-    fun findPositionUnwrapped(): Double {
-        val ticks = getCurrentPose()
-        val angle = (ticks * (2 * Math.PI / motorSpecs.encoderTicksPerRotation))
-        return angle
     }
 }

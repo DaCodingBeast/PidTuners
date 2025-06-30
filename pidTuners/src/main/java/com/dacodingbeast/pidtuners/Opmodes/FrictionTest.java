@@ -5,7 +5,6 @@ import static java.lang.Math.abs;
 
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
-import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor;
 import com.dacodingbeast.pidtuners.Simulators.AngleRange;
 import com.dacodingbeast.pidtuners.Simulators.SlideRange;
 import com.dacodingbeast.pidtuners.utilities.DataLogger;
@@ -48,8 +47,13 @@ public class FrictionTest extends LinearOpMode {
         if (!opModeInInit()) {
             timer.reset();
         }
-        double target = 0;
+        double target;
         boolean targetHit = false;
+        if(motor.getClass() == ArmMotor.class){
+            DataLogger.getInstance().logDebug("target: "+angleRange.getStop());
+        }else {
+            DataLogger.getInstance().logDebug("target: "+slideRange.getStop());
+        }
         while (opModeIsActive()) {
             if(motor.getClass() == ArmMotor.class){
                 target = (angleRange.getStop()); // should be in radians
@@ -64,7 +68,7 @@ public class FrictionTest extends LinearOpMode {
             if (motor.getClass() == ArmMotor.class) {
                 position = motor.findPosition(); // finds in rads
             } else {
-                position = ((SlideMotor) motor).findPositionUnwrapped();
+                position = motor.findPosition();
             }
 
             if (run) {

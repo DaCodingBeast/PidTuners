@@ -21,10 +21,10 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int) :
         val acceleration = motorTorque / motors.systemConstants.Inertia
         velocity += acceleration * Dt
 
-        val angleStart = fromInchesToAngle(target.start)
+        val angleStart =target.start
         val newAngle = angleStart + Dt * velocity
 
-        val currentPose = fromAngleToInches(newAngle)
+        val currentPose = newAngle
         val stop = target.stop
 
 
@@ -41,13 +41,5 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int) :
     override fun punishSimulator(): Double {
         return (if (error >= acceptableError) badAccuracy else 0.0) +
                 (if (velocity >= acceptableVelocity) badVelocity else 0.0)
-    }
-
-    private fun fromInchesToAngle(Inches: Double): Double {
-        return motors.fromTicksToAngle(motors.fromInchesToTicks(Inches))
-    }
-
-    private fun fromAngleToInches(Angle: Double): Double {
-        return motors.fromTicksToInches(motors.fromAngleToTicks(Angle))
     }
 }
