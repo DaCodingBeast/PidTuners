@@ -31,7 +31,7 @@ class PSODirectionDebugger @JvmOverloads constructor (private val slideMotor: Sl
             }else{
                 armMotor?.setPower(0.0)
             }
-            telemetry.addData("Slide Motor pose (in)", slideMotor?.getCurrentPose())
+            telemetry.addData("Slide Motor pose (ticks)", slideMotor?.getCurrentPose())
             telemetry.addData("Arm Motor pose (ticks)", armMotor?.getCurrentPose())
             telemetry.update()
         }

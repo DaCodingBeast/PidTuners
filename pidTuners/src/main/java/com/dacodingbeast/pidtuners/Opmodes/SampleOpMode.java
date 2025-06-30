@@ -33,9 +33,6 @@ public class SampleOpMode extends LinearOpMode {
         }
         waitForStart();
 
-
-        //todo cases for both motors (accuracy needs to be different)
-
         while (opModeIsActive() && !isStopRequested()) {
 
             List<Target> targets = motor.getTargets();

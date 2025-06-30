@@ -62,14 +62,7 @@ public class FrictionTest extends LinearOpMode {
             }
             run = !motor.targetReached(target); // does calcs in rads
 
-            double position;
-
-            // Running motor at half speed
-            if (motor.getClass() == ArmMotor.class) {
-                position = motor.findPosition(); // finds in rads
-            } else {
-                position = motor.findPosition();
-            }
+            double position=motor.findPosition();;
 
             if (run) {
                 motor.setPower(0.5);
