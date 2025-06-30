@@ -22,7 +22,7 @@ import CommonUtilities.PIDParams;
 class PIDTuningOpModes {
     public static Double spoolDiameter = 1.0;
     static double frictionRPMSlide = 0.0;
-    static SlideRange slideRange = SlideRange.fromInches(0.0, 38.0);
+    static SlideRange slideRange = SlideRange.fromTicks(0.0,700.0);
     static SlideSystemConstants slideSystemConstants = new SlideSystemConstants(0.0, frictionRPMSlide);
     public static SlideMotor slideMotor = new SlideMotor.Builder("Slide", DcMotorSimple.Direction.FORWARD,
             Hardware.YellowJacket.RPM223,

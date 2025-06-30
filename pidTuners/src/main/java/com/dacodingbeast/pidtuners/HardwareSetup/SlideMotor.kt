@@ -52,27 +52,13 @@ class SlideMotor private constructor(
         fun build(): SlideMotor {
             require(systemConstants is SlideSystemConstants)
             require(spoolDiameter>0)
-            val premotor = SlideMotor(
-                name,
-                motorDirection,
-                motorSpecs,
-                systemConstants,
-                spoolDiameter,
-                targets,
-                externalGearRatio,
-                pidParams,
-                externalEncoder,
-                obstacle
-            )
-            val newTargets = targets.apply { forEach { it.toTicks(premotor) } }
-            DataLogger.instance.logData(newTargets.forEach { it.unit.name })
             return SlideMotor(
                 name,
                 motorDirection,
                 motorSpecs,
                 systemConstants,
                 spoolDiameter,
-                newTargets,
+                targets,
                 externalGearRatio,
                 pidParams,
                 externalEncoder,

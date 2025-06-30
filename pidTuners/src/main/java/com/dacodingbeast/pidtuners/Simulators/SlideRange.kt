@@ -8,20 +8,20 @@ class SlideRange private constructor(override val start: Double, override val st
     Target(start, stop) {
 
         companion object Distances{
-            @JvmStatic
-            fun fromCM(start: Double, stop: Double,slideMotor: SlideMotor?): SlideRange {
+//            @JvmStatic
+internal  fun fromCM(start: Double, stop: Double,slideMotor: SlideMotor?): SlideRange {
                 return from(DistanceUnit.CM,start,stop,slideMotor)
             }
-            @JvmStatic
-            fun fromCM(start: Double, stop: Double): SlideRange {
+//            @JvmStatic
+internal fun fromCM(start: Double, stop: Double): SlideRange {
                 return from(DistanceUnit.CM,start,stop,null)
             }
-            @JvmStatic
-            fun fromInches(start: Double, stop: Double,slideMotor: SlideMotor? = null): SlideRange {
+//            @JvmStatic
+internal fun fromInches(start: Double, stop: Double,slideMotor: SlideMotor? = null): SlideRange {
                 return from(DistanceUnit.INCHES,start,stop,slideMotor)
             }
-            @JvmStatic
-            fun fromInches(start: Double, stop: Double): SlideRange {
+//            @JvmStatic
+            internal fun fromInches(start: Double, stop: Double): SlideRange {
                 return from(DistanceUnit.INCHES,start,stop,null)
             }
             @JvmStatic
