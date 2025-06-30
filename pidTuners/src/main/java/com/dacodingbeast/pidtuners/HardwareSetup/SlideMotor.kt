@@ -5,6 +5,7 @@ import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
 import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
 import com.dacodingbeast.pidtuners.utilities.MathFunctions.TicksToInch
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
+import com.dacodingbeast.pidtuners.utilities.DataLogger
 import com.dacodingbeast.pidtuners.utilities.DistanceUnit
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
@@ -64,6 +65,7 @@ class SlideMotor private constructor(
                 obstacle
             )
             val newTargets = targets.apply { forEach { it.toTicks(premotor) } }
+            DataLogger.instance.logData(newTargets.forEach { it.unit.name })
             return SlideMotor(
                 name,
                 motorDirection,
