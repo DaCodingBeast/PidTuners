@@ -53,7 +53,7 @@ class AngleRangeTests {
     fun `test angle wrapping with positive angles`() {
         val wrapped = AngleRange.wrap(3 * PI)
 
-        assertEquals(-PI, wrapped, 0.001)
+        assertEquals(PI, wrapped, 0.001)
     }
 
     @Test

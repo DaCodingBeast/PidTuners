@@ -48,19 +48,11 @@ data class AngleRange private constructor(override val start: Double, override v
          */
         @JvmStatic
         fun wrap(theta: Double): Double {
-            // Use conditional operations instead of loops for better performance
-            return when {
-                theta > POSITIVE_PI -> {
-                    val quotient = ((theta + POSITIVE_PI) / TWO_PI).toInt()
-                    theta - quotient * TWO_PI
-                }
-                theta < NEGATIVE_PI -> {
-                    val quotient = ((NEGATIVE_PI - theta) / TWO_PI).toInt()
-                    theta + (quotient + 1) * TWO_PI
-                }
-                else -> theta
-            }
+            var result = (theta + Math.PI) % TWO_PI
+            if (result <= 0) result += TWO_PI
+            return result - Math.PI
         }
+
 
         /**
          * Optimized angle normalization using conditional operations
