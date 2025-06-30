@@ -31,6 +31,7 @@ public class SampleOpMode extends LinearOpMode {
         while (opModeInInit()) {
             timerTime.reset();
         }
+
         waitForStart();
 
 
@@ -44,17 +45,18 @@ public class SampleOpMode extends LinearOpMode {
 
 
             if (motor.targetReached(target.getStop())) {
+                telemetry.addData("Target Reached: ", true);
                 if (targets.size() > x + 1 && timerTime.seconds() >= 1.0) {
                     x += 1;
                     timerTime.reset();
                 }
             }
+            else{
+                telemetry.addData("Target Reached: ", false);
+            }
 
             motor.run(x);
 
-            telemetry.addData("X", x);
-
-            DataLogger.getInstance().logDebug("X: " + x);
             telemetry.update();
         }
     }
