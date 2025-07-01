@@ -10,7 +10,7 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int) :
         val motors = motor as SlideMotor
 
     override fun updateSimulator(): SimulatorData {
-        var target = motors.targets[targetIndex] as SlideRange
+        var target = motors.targets[targetIndex]
 
         val calculate = pidController.calculate(target, motors.obstacle)
         val controlEffort = calculate.motorPower
@@ -33,7 +33,7 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int) :
         return SimulatorData(target.start, controlEffort, error, velocity)
     }
 
-    override val acceptableError = 3.0
+    override val acceptableError = 3.0 //inches
     override val acceptableVelocity = 1.0
     override val badAccuracy = abs(error) * 1000
     override val badVelocity = abs(velocity) * 20
