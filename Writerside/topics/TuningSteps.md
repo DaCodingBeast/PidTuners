@@ -1,3 +1,7 @@
-# Tuning Steps
+# Arm Tuning Steps
 
-Start typing here...
+1) Run the PSO Direction Debugger to verify the direction of your arm motor. If it is moving up when you are pressing the - button, you need to change the direction of the motor in the `TuningOpModes` file.
+2) Run the Friction Test OpMode (ARM) to find the friction RPM and inertia of the motor. Once it finishes, use logcat (flying cat button in AS) to get the values. You should put `tag:PidTunersDataLogger` in the search bar to filter the logs. Place the values in the `TuningOpModes` file and re-push the code.
+3) Run the Gravity Test OpMode (ARM) to find the gravity model constants. Once done, use the logcat as before and put the values in the `TuningOpModes` file and re-push the code.
+4) Run the FindPID OpMode (ARM) to find the PID params. Open logcat right after the start, and it will give you an estimated time of the params. Wait for it to finish, and then copy the PID params from the logcat to the `TuningOpModes` file and re-push the code.
+5) Run the Sample OpMode (ARM) to test the PID params. If it works, you can use the PID params in your robot code. If not, you can try to run the whole thing again, or change the PID params manually in the `TuningOpModes` file. (Let us know if it fails by adding an issue on https://github.com/DaCodingBeast/PidTuners!)

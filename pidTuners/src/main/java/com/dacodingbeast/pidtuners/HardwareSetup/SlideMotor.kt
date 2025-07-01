@@ -5,6 +5,7 @@ import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
 import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
 import com.dacodingbeast.pidtuners.utilities.MathFunctions.TicksToInch
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
+import com.dacodingbeast.pidtuners.utilities.DataLogger
 import com.dacodingbeast.pidtuners.utilities.DistanceUnit
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
@@ -51,7 +52,7 @@ class SlideMotor private constructor(
         fun build(): SlideMotor {
             require(systemConstants is SlideSystemConstants)
             require(spoolDiameter>0)
-            val motorPre = SlideMotor(
+            return SlideMotor(
                 name,
                 motorDirection,
                 motorSpecs,
@@ -63,39 +64,19 @@ class SlideMotor private constructor(
                 externalEncoder,
                 obstacle
             )
-
-            val convertedTargets = mutableListOf<SlideRange>()
-            for (target in targets){
-                if (target.unit != DistanceUnit.INCHES){
-                    convertedTargets.add(target.toInches(motorPre))
-                }else{
-                    convertedTargets.add(target)
-                }
-            }
-            return SlideMotor(
-                name,
-                motorDirection,
-                motorSpecs,
-                systemConstants,
-                spoolDiameter,
-                convertedTargets,
-                externalGearRatio,
-                pidParams,
-                externalEncoder,
-                obstacle
-            )
         }
     }
 
     override fun run(targetIndex: Int){
-        //todo
+        val range = SlideRange.fromTicks(findPosition(),targets[targetIndex].stop)
+        motor.power = pidController.calculate(range, obstacle).motorPower
     }
 
     var conversions = TicksToInch(spoolDiameter, this)
 
 
-    override fun findPosition(): Double { // returns inches
-        return getCurrentPose() * conversions.inchesPerTick
+    override fun findPosition(): Double { // returns ticks
+        return getCurrentPose()
     }
 
     /**
@@ -103,21 +84,7 @@ class SlideMotor private constructor(
      */
     override fun targetReached(target: Double, accuracy: Double?): Boolean {
         val accurate = accuracy ?: 50.0
-        val current = findPosition()
+        val current = findPosition() // in ticks
         return current in (target - accurate)..(target + accurate)
-    }
-
-    fun fromInchesToTicks(value: Double): Double {
-        return value * this.conversions.ticksPerInch
-    }
-
-    fun fromTicksToInches(value: Double): Double {
-        return value / this.conversions.ticksPerInch
-    }
-
-    fun findPositionUnwrapped(): Double {
-        val ticks = getCurrentPose()
-        val angle = (ticks * (2 * Math.PI / motorSpecs.encoderTicksPerRotation))
-        return angle
     }
 }

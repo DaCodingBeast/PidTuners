@@ -27,6 +27,7 @@ public class GravityTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         DataLogger.getInstance().startLogger("GravityTest" + motor.getName());
+        if (motor.getClass() != ArmMotor.class) throw new RuntimeException("Motor must be an arm motor");
         if (PowerConstants.getGravityMotorPower() == 0) throw new RuntimeException("Gravity motor power cannot be 0");
         MultipleTelemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), this.telemetry);
 
@@ -41,13 +42,12 @@ public class GravityTest extends LinearOpMode {
         double target = 0;
         boolean targetHit = false;
         boolean run;
+        DataLogger.getInstance().logDebug("target: "+target);
         while (opModeIsActive()) {
 
             double angle = motor.findPosition();
 
-            if(motor.getClass() == ArmMotor.class){
-                target = (angleRange.getStop());
-            }
+            target = (angleRange.getStop());
             run = !motor.targetReached(target);
 
             if (run) {

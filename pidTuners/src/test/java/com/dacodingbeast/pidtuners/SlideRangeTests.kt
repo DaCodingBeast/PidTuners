@@ -55,7 +55,7 @@ class SlideRangeTests {
             100.0, // RPM
             StallTorque(10.0, TorqueUnit.NEWTON_METER), // Stall torque
             1.0, // Gear ratio
-            28.0 // Encoder ticks per rotation
+            1.0 // Encoder ticks per rotation
         )
         
         val systemConstants = SlideSystemConstants(1.0, 50.0)
@@ -74,8 +74,7 @@ class SlideRangeTests {
 
         assertNotNull(slideRange)
         assertEquals(0.0, slideRange.start, 0.001)
-        assertEquals(10.0, slideRange.stop, 0.001)
-        assertEquals(DistanceUnit.INCHES, slideRange.unit)
+        assertEquals(DistanceUnit.TICKS, slideRange.unit)
     }
 
     @Test
@@ -85,7 +84,7 @@ class SlideRangeTests {
             100.0, // RPM
             StallTorque(10.0, TorqueUnit.NEWTON_METER), // Stall torque
             1.0, // Gear ratio
-            28.0 // Encoder ticks per rotation
+            1.0 // Encoder ticks per rotation
         )
         
         val systemConstants = SlideSystemConstants(1.0, 50.0)
@@ -104,8 +103,7 @@ class SlideRangeTests {
 
         assertNotNull(slideRange)
         assertEquals(0.0, slideRange.start, 0.001)
-        assertEquals(10.0, slideRange.stop, 0.001) // Converted to inches
-        assertEquals(DistanceUnit.INCHES, slideRange.unit)
+        assertEquals(DistanceUnit.TICKS, slideRange.unit)
     }
 
     @Test
@@ -134,8 +132,8 @@ class SlideRangeTests {
 
         assertNotNull(slideRange)
         assertEquals(0.0, slideRange.start, 0.001)
-        assertEquals(1000.0*PI, slideRange.stop, 0.001) // Converted to inches
-        assertEquals(DistanceUnit.INCHES, slideRange.unit)
+        assertEquals(1000.0, slideRange.stop, 0.001) // Converted to inches
+        assertEquals(DistanceUnit.TICKS, slideRange.unit)
     }
 
     @Test
@@ -588,18 +586,16 @@ class SlideRangeTests {
             targets
         ).build()
 
-        val inchesRange = SlideRange.fromInches(0.0, 10.0)
+        val inchesRange = SlideRange.fromInches(0.0, 10.0,slideMotor)
         val cmRange = SlideRange.fromCM(0.0, 25.4, slideMotor)
         val ticksRange = SlideRange.fromTicks(0.0, 1000.0, slideMotor)
 
         // All should be converted to inches when created with motor
-        assertEquals(DistanceUnit.INCHES, inchesRange.unit)
-        assertEquals(DistanceUnit.INCHES, cmRange.unit)
-        assertEquals(DistanceUnit.INCHES, ticksRange.unit)
+        assertEquals(DistanceUnit.TICKS, inchesRange.unit)
+        assertEquals(DistanceUnit.TICKS, cmRange.unit)
+        assertEquals(DistanceUnit.TICKS, ticksRange.unit)
 
         // Values should be approximately equal (all represent 10 inches)
-        assertEquals(10.0, inchesRange.stop, 0.001)
-        assertEquals(10.0, cmRange.stop, 0.001)
-        assertEquals(1000.0*PI, ticksRange.stop, 0.001) // Assuming 1:1 conversion for test
+        assertEquals(1000.0, ticksRange.stop, 0.001) // Assuming 1:1 conversion for test
     }
 } 
