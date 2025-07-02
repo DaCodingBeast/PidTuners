@@ -52,7 +52,7 @@ class SlideMotor private constructor(
         /**
          * Converts to inches, this can be used if needed but is automatic
          */
-        private fun fromInches() = apply { this.targets.forEach { it.toInches(
+        fun fromInches() = apply { this.targets.forEach { it.toInches(
             SlideMotor(name, motorDirection, motorSpecs, systemConstants, spoolDiameter, targets, externalGearRatio, pidParams, externalEncoder, obstacle)
         ) }
             this.inIn = true
