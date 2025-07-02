@@ -14,7 +14,6 @@ import java.util.ArrayList;
 public class SlidesTest extends LinearOpMode {
     SlideMotor motor;
     SlideRange slideRange;
-
     ArrayList<Double> RPM_history = new ArrayList<>();
     ArrayList<Double> linearAccelerations = new ArrayList<>();
     ArrayList<Double> motorPowers = new ArrayList<>();
@@ -22,11 +21,14 @@ public class SlidesTest extends LinearOpMode {
     double accurateRPM_Constant;
 
 
-    public SlidesTest(Motors motor, SlideRange slideRange) {
+    public SlidesTest(Motors motor, int index) {
         this.motor = (SlideMotor) motor;
-        this.slideRange = slideRange;
+        this.slideRange = this.motor.getTargets().get(index);
     }
-
+    public SlidesTest(Motors motor) {
+        this.motor = (SlideMotor) motor;
+        this.slideRange = this.motor.getTargets().get(0);
+    }
 
     public void solveForConstants(){
         ArrayList<Double> cleansedLinearAccel_history = removeOutliers(linearAccelerations);
@@ -92,6 +94,7 @@ public class SlidesTest extends LinearOpMode {
 
         while (opModeIsActive()) {
             target = slideRange.getStop();// inches
+//            DataLogger.getInstance().logDebug("target: " + target);
 
             reachedTarget = motor.targetReached(target);
 

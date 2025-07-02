@@ -96,14 +96,14 @@ class SlideMotor private constructor(
     }
 
     override fun run(targetIndex: Int){
-        val range = SlideRange.fromTicks(getCurrentPose(),targets[targetIndex].stop)
+        val range = SlideRange.fromTicks(getCurrentPose(),targets[targetIndex].stop*conversions.ticksPerInch)
         motor.power = pidController.calculate(range, obstacle).motorPower
     }
 
     var conversions = TicksToInch(spoolDiameter, this)
 
 
-    override fun findPosition(): Double { // returns ticks
+    override fun findPosition(): Double { // returns inches
         return getCurrentPose() * conversions.inchesPerTick
     }
 

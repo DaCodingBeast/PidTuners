@@ -73,7 +73,7 @@ Hardware.HDHexGearRatios.GR5_1
         }
         if (slidesEN){
             manager.register(
-                    metaForClass(FrictionTest.class,"Slide"), new SlidesTest(slideMotor,slideRange)
+                    metaForClass(FrictionTest.class,"Slide"), new SlidesTest(slideMotor)
             );
             manager.register(
                     metaForClass(SampleOpMode.class,"Slide"), new SampleOpMode(slideMotor)
