@@ -13,7 +13,7 @@ class SlideRange private constructor(
     companion object {
 
         @JvmStatic
-        fun from(unit: DistanceUnit, start: Double, stop: Double, slideMotor: SlideMotor? = null): SlideRange {
+        fun from(unit: DistanceUnit, start: Double, stop: Double, slideMotor: SlideMotor?): SlideRange {
             return if (slideMotor == null) {
                 SlideRange(start, stop, unit)
             } else {
@@ -22,10 +22,14 @@ class SlideRange private constructor(
                 SlideRange(startInInches, stopInInches, DistanceUnit.INCHES)
             }
         }
+        @JvmStatic fun fromCM(start: Double, stop: Double, slideMotor: SlideMotor?) = from(DistanceUnit.CM, start, stop, slideMotor)
+        @JvmStatic fun fromCM(start: Double, stop: Double) = from(DistanceUnit.CM, start, stop, null)
 
-        @JvmStatic fun fromCM(start: Double, stop: Double, slideMotor: SlideMotor? = null) = from(DistanceUnit.CM, start, stop, slideMotor)
-        @JvmStatic fun fromInches(start: Double, stop: Double, slideMotor: SlideMotor? = null) = from(DistanceUnit.INCHES, start, stop, slideMotor)
-        @JvmStatic fun fromTicks(start: Double, stop: Double, slideMotor: SlideMotor? = null) = from(DistanceUnit.TICKS, start, stop, slideMotor)
+        @JvmStatic fun fromInches(start: Double, stop: Double, slideMotor: SlideMotor?) = from(DistanceUnit.INCHES, start, stop, slideMotor)
+        @JvmStatic fun fromInches(start: Double, stop: Double) = from(DistanceUnit.INCHES, start, stop, null)
+
+        @JvmStatic fun fromTicks(start: Double, stop: Double, slideMotor: SlideMotor?) = from(DistanceUnit.TICKS, start, stop, slideMotor)
+        @JvmStatic fun fromTicks(start: Double, stop: Double) = from(DistanceUnit.TICKS, start, stop, null)
     }
 
     fun inRange(goal: SlideRange, obstacle: SlideRange): Boolean {
