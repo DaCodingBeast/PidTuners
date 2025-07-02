@@ -28,7 +28,7 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int) :
         val stop = target.stop
 
 
-        target = SlideRange.fromInches(currentPose, stop,motor as SlideMotor)
+        target = SlideRange.fromTicks(currentPose, stop,motor as SlideMotor)
 
         return SimulatorData(target.start, controlEffort, error, velocity)
     }
