@@ -7,7 +7,7 @@ import com.dacodingbeast.pidtuners.Simulators.SlideRange
 import com.dacodingbeast.pidtuners.utilities.DistanceUnit
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
-class SlideMotor private constructor(
+class SlideMotor constructor( // TODO make private
     name: String,
     motorDirection: DcMotorSimple.Direction,
     motorSpecs: MotorSpecs,
@@ -61,7 +61,7 @@ class SlideMotor private constructor(
             require(spoolDiameter>0)
             if (targets[0].unit == DistanceUnit.TICKS) fromInches()
             if (!inIn) fromInches()
-
+            require (this.inIn && targets[0].unit == DistanceUnit.INCHES)
             return SlideMotor(
                 name,
                 motorDirection,
@@ -93,7 +93,7 @@ class SlideMotor private constructor(
      * Checks accuracy in TICKS
      * @param target target in inches
      */
-    override fun targetReached(target: Double, accuracy: Double?): Boolean {
+    override fun targetReached(target: Double, accuracy: Double?): Boolean { // all in ticks
        val target2 =target* conversions.ticksPerInch
         val accurate = accuracy ?: 50.0
         val current = getCurrentPose() // in ticks
