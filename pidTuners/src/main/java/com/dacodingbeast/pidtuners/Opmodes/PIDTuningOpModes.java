@@ -54,12 +54,12 @@ Hardware.HDHexGearRatios.GR5_1
         boolean armEN = false;
         boolean slidesEN = false;
         if (armEN||slidesEN) {
-            manager.register(metaForClass(PSODirectionDebugger.class, ""), new PSODirectionDebugger(slideMotor, armMotor));
+            manager.register(metaForClass(PSODirectionDebugger.class, ""), new PSODirectionDebugger(armMotor,slideMotor));
             DataLogger.getInstance().initLogger(armEN,slidesEN);
         }
         if (armEN) {
             manager.register(
-                    metaForClass(FrictionTest.class, "Arm"), new FrictionTest(armMotor,angleRange,slideRange)
+                    metaForClass(FrictionTest.class, "Arm"), new FrictionTest(armMotor,angleRange)
             );
             manager.register(
                     metaForClass(SampleOpMode.class, "Arm"), new SampleOpMode(armMotor)
@@ -73,13 +73,13 @@ Hardware.HDHexGearRatios.GR5_1
         }
         if (slidesEN){
             manager.register(
-                    metaForClass(FrictionTest.class,"Slide"), new SlidesTest(slideMotor)
-            );
-            manager.register(
-                    metaForClass(SampleOpMode.class,"Slide"), new SampleOpMode(slideMotor)
+                    metaForClass(SlidesTest.class,""), new SlidesTest(slideMotor)
             );
             manager.register(
                     metaForClass(FindPID.class,"Slide"),new FindPID(slideMotor)
+            );
+            manager.register(
+                    metaForClass(SampleOpMode.class,"Slide"), new SampleOpMode(slideMotor)
             );
         }
     }

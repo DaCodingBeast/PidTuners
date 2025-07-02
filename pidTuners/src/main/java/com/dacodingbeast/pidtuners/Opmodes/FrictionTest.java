@@ -6,7 +6,6 @@ import static java.lang.Math.abs;
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
 import com.dacodingbeast.pidtuners.Simulators.AngleRange;
-import com.dacodingbeast.pidtuners.Simulators.SlideRange;
 import com.dacodingbeast.pidtuners.utilities.DataLogger;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -16,12 +15,11 @@ import java.util.ArrayList;
 public class FrictionTest extends LinearOpMode {
     Motors motor;
     AngleRange angleRange;
-    SlideRange slideRange;
 
-    public FrictionTest(Motors motor, AngleRange angleRange, SlideRange slideRange) {
+    public FrictionTest(Motors motor, AngleRange angleRange) {
+        if (motor.getClass() != ArmMotor.class) throw new IllegalArgumentException("Motor must be an ArmMotor");
         this.motor = motor;
         this.angleRange = angleRange;
-        this.slideRange = slideRange;
     }
 
     @Override
@@ -51,15 +49,9 @@ public class FrictionTest extends LinearOpMode {
         boolean targetHit = false;
         if(motor.getClass() == ArmMotor.class){
             DataLogger.getInstance().logDebug("target: "+angleRange.getStop());
-        }else {
-            DataLogger.getInstance().logDebug("target: "+slideRange.getStop());
         }
         while (opModeIsActive()) {
-            if(motor.getClass() == ArmMotor.class){
                 target = (angleRange.getStop()); // should be in radians
-            }else {
-                target = slideRange.getStop();
-            }
             run = !motor.targetReached(target); // does calcs in rads
 
             double position=motor.findPosition();
