@@ -1,7 +1,6 @@
 package com.dacodingbeast.pidtuners.HardwareSetup
 
 import CommonUtilities.PIDParams
-import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
 import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.qualcomm.robotcore.hardware.DcMotorSimple
@@ -11,7 +10,7 @@ class ArmMotor private constructor(
     name: String,
     motorDirection: DcMotorSimple.Direction,
     motorSpecs: MotorSpecs,
-    systemConstants: ConstantsSuper,
+    systemConstants: PivotSystemConstants,
     override val targets: List<AngleRange>,
 
     externalGearRatio: Double = 1.0,
@@ -31,7 +30,7 @@ class ArmMotor private constructor(
         private val name: String,
         private val motorDirection: DcMotorSimple.Direction,
         private val motorSpecs: MotorSpecs,
-        private val systemConstants: ConstantsSuper,
+        private val systemConstants: PivotSystemConstants,
         private val targets: List<AngleRange>
     ) {
         private var externalGearRatio: Double = 1.0
@@ -45,7 +44,6 @@ class ArmMotor private constructor(
         fun obstacle(obstacle: AngleRange?) = apply { this.obstacle = obstacle }
 
         fun build(): ArmMotor {
-            require(systemConstants is PivotSystemConstants)
 
 
             return ArmMotor(

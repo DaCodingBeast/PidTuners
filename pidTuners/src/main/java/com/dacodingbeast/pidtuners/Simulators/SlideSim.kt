@@ -1,34 +1,36 @@
 package com.dacodingbeast.pidtuners.Simulators
 
 import com.dacodingbeast.pidtuners.Algorithm.Dt
+import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
 import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor
+import com.dacodingbeast.pidtuners.HardwareSetup.torque.TorqueUnit
 import kotlin.math.abs
 
 class SlideSim(override var motor: Motors, override val targetIndex: Int) :
     SimulatorStructure(motor, targetIndex) {
-        val motors = motor as SlideMotor
+
+
+
+    val slideMotor = motor as SlideMotor
+    val mass = (slideMotor.systemConstants as SlideSystemConstants ).effectiveMass; // todo in kg
 
     override fun updateSimulator(): SimulatorData {
-        var target = motors.targets[targetIndex]
+        var target = slideMotor.targets[targetIndex]
 
-        val calculate = pidController.calculate(target, motors.obstacle)
+        val calculate = pidController.calculate(target, slideMotor.obstacle)
         val controlEffort = calculate.motorPower
 
-        val motorTorque = motors.calculateTmotor(controlEffort)
+        val motorTorque = TorqueUnit.KILOGRAM_CENTIMETER.convert(slideMotor.calculateTmotor(controlEffort), TorqueUnit.NEWTON_METER);
 
-        //todo look at this in depth
-        val acceleration = motorTorque / motors.systemConstants.Inertia
-        velocity += acceleration * Dt
+        val radiusOfPulley = 0.0; // todo in meters
 
-        val angleStart =target.start
-        val newAngle = angleStart + Dt * velocity
+        val linearAccel = (motorTorque)/mass; // todo accel in inches
+        velocity += linearAccel * Dt
 
-        val currentPose = newAngle
-        val stop = target.stop
+        val updatedExtension = target.start + velocity * Dt + 0.5 * linearAccel * Dt * Dt
 
-
-        target = SlideRange.fromInches(currentPose, stop,motor as SlideMotor)
+        target = SlideRange.fromInches(updatedExtension, target.stop,slideMotor)
 
         return SimulatorData(target.start, controlEffort, error, velocity)
     }

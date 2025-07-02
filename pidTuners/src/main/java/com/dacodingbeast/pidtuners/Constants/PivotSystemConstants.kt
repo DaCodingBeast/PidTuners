@@ -15,10 +15,10 @@ import kotlin.math.pow
  * @see Hardware.Motor
  */
 data class PivotSystemConstants(
-    override val Inertia: Double,
+    val Inertia: Double,
     override val frictionRPM: Double,
     val gravityConstants: GravityModelConstants,
-) : ConstantsSuper(Inertia, frictionRPM)
+): ConstantsSuper(frictionRPM)
 
 /**
  * The Constants of a quadratic function that models gravity's effective torque on the Arm

@@ -1,6 +1,6 @@
 package com.dacodingbeast.pidtuners.Constants
 
 data class SlideSystemConstants(
-    override val Inertia: Double,
+    val effectiveMass: Double,
     override val frictionRPM: Double,
-) : ConstantsSuper(Inertia, frictionRPM)
+): ConstantsSuper (frictionRPM)

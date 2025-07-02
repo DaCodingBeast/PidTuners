@@ -73,7 +73,7 @@ class PIDTuningOpModes {
         }
         if (slidesEN){
             manager.register(
-                    metaForClass(FrictionTest.class,"Slide"), new FrictionTest(slideMotor,angleRange,slideRange)
+                    metaForClass(FrictionTest.class,"Slide"), new SlidesTest(slideMotor,slideRange)
             );
             manager.register(
                     metaForClass(SampleOpMode.class,"Slide"), new SampleOpMode(slideMotor)

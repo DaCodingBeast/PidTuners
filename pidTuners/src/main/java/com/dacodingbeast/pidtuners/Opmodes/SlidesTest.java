@@ -42,8 +42,10 @@ public class SlidesTest extends LinearOpMode {
 
         double SlidesMass = (motorTorque/PIDTuningOpModes.spoolDiameter)/averageLinearAccel;
 
-        DataLogger.getInstance().logDebug("frictionRPM: " + actualRpm);
-        DataLogger.getInstance().logData("rotationalInertia: "+rotationalInertia);
+        DataLogger.getInstance().logDebug("frictionRPM: " + accurateRPM_Constant);
+        DataLogger.getInstance().logData("frictionRPM: "+ accurateRPM_Constant);
+        DataLogger.getInstance().logData("effectiveMass: "+ SlidesMass);
+        DataLogger.getInstance().logDebug("effectiveMass: " + SlidesMass);
         requestOpModeStop();
     }
 
@@ -95,15 +97,15 @@ public class SlidesTest extends LinearOpMode {
 
             reachedTarget = motor.targetReached(target); // does calcs in rads
 
-            double extension = motor.findPositionUnwrapped();
+            double extension = motor.findPosition();
             telemetry.addData("Position", extension);
 
 
             double rpm = ((motor.getCurrentPose() - lastEncoderPosition) / ticksPerRevolution) * (60.0 / timer.seconds());
 
 
-            double linearVelocity = 0.0;
-            double linearAcceleration = 0.0;
+            double linearVelocity = (extension-lastExtension)/timer.seconds();
+            double linearAcceleration = (linearVelocity - lastVelocity)/timer.seconds();
 
             if (!reachedTarget) {
                 motor.setPower(motorPowerConstant);
