@@ -38,8 +38,8 @@ class SlideRange private constructor(
 
     fun toInches(slideMotor: SlideMotor): SlideRange {
         return SlideRange(
-            Measurements.Distance(start, unit).toInches(slideMotor.conversions.ticksPerInch),
-            Measurements.Distance(stop, unit).toInches(slideMotor.conversions.ticksPerInch),
+            Measurements.Distance(start, unit).toInches(slideMotor.conversions.inchesPerTick),
+            Measurements.Distance(stop, unit).toInches(slideMotor.conversions.inchesPerTick),
             DistanceUnit.INCHES
         )
     }
