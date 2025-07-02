@@ -52,7 +52,7 @@ class SlideMotor private constructor(
         /**
          * Converts to inches, this can be used if needed but is automatic
          */
-        fun fromInches():List<SlideRange> {
+        private fun fromInches():List<SlideRange> {
             apply {
                 var newTargets = mutableListOf<SlideRange>()
                 this.targets.forEach {
