@@ -7,7 +7,7 @@ import com.dacodingbeast.pidtuners.Simulators.SlideRange
 import com.dacodingbeast.pidtuners.utilities.DistanceUnit
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
-class SlideMotor constructor( // TODO make private
+class SlideMotor private constructor(
     name: String,
     motorDirection: DcMotorSimple.Direction,
     motorSpecs: MotorSpecs,
@@ -20,7 +20,7 @@ class SlideMotor constructor( // TODO make private
     externalEncoder: Encoders? = null,
     override val obstacle: SlideRange? = null,
 
-) : Motors(
+    ) : Motors(
     name,
     motorDirection,
     motorSpecs,
@@ -52,23 +52,41 @@ class SlideMotor constructor( // TODO make private
         /**
          * Converts to inches, this can be used if needed but is automatic
          */
-        fun fromInches() = apply { this.targets.forEach { it.toInches(
-            SlideMotor(name, motorDirection, motorSpecs, systemConstants, spoolDiameter, targets, externalGearRatio, pidParams, externalEncoder, obstacle)
-        ) }
-            this.inIn = true
+        fun fromInches():List<SlideRange> {
+            apply {
+                var newTargets = mutableListOf<SlideRange>()
+                this.targets.forEach {
+//                    DataLogger.instance.logDebug("Converting slideRange to inches")
+                    newTargets.add(
+                        it.toInches(
+                            SlideMotor(
+                                name,
+                                motorDirection,
+                                motorSpecs,
+                                systemConstants,
+                                spoolDiameter,
+                                targets,
+                                externalGearRatio,
+                                pidParams,
+                                externalEncoder,
+                                obstacle
+                            )
+                        )
+                    )
+                }
+                this.inIn = true
+                return newTargets
+            }
         }
         fun build(): SlideMotor {
             require(spoolDiameter>0)
-            if (targets[0].unit == DistanceUnit.TICKS) fromInches()
-            if (!inIn) fromInches()
-            require (this.inIn && targets[0].unit == DistanceUnit.INCHES)
             return SlideMotor(
                 name,
                 motorDirection,
                 motorSpecs,
                 systemConstants,
                 spoolDiameter,
-                targets,
+                if(targets[0].unit == DistanceUnit.TICKS || !inIn) fromInches() else targets,
                 externalGearRatio,
                 pidParams,
                 externalEncoder,
@@ -94,7 +112,7 @@ class SlideMotor constructor( // TODO make private
      * @param target target in inches
      */
     override fun targetReached(target: Double, accuracy: Double?): Boolean { // all in ticks
-       val target2 =target* conversions.ticksPerInch
+        val target2 =target* conversions.ticksPerInch
         val accurate = accuracy ?: 50.0
         val current = getCurrentPose() // in ticks
         return current in (target2 - accurate)..(target2 + accurate)
