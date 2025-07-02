@@ -74,7 +74,7 @@ class SlideRangeTests {
 
         assertNotNull(slideRange)
         assertEquals(0.0, slideRange.start, 0.001)
-        assertEquals(DistanceUnit.TICKS, slideRange.unit)
+        assertEquals(DistanceUnit.INCHES, slideRange.unit)
     }
 
     @Test
@@ -132,8 +132,8 @@ class SlideRangeTests {
 
         assertNotNull(slideRange)
         assertEquals(0.0, slideRange.start, 0.001)
-        assertEquals(1000.0, slideRange.stop, 0.001) // Converted to inches
-        assertEquals(DistanceUnit.TICKS, slideRange.unit)
+        assertEquals(1000.0*PI, slideRange.stop, 0.001) // Converted to inches
+        assertEquals(DistanceUnit.INCHES, slideRange.unit)
     }
 
     @Test
@@ -591,11 +591,11 @@ class SlideRangeTests {
         val ticksRange = SlideRange.fromTicks(0.0, 1000.0, slideMotor)
 
         // All should be converted to inches when created with motor
-        assertEquals(DistanceUnit.TICKS, inchesRange.unit)
-        assertEquals(DistanceUnit.TICKS, cmRange.unit)
-        assertEquals(DistanceUnit.TICKS, ticksRange.unit)
+        assertEquals(DistanceUnit.INCHES, inchesRange.unit)
+        assertEquals(DistanceUnit.INCHES, cmRange.unit)
+        assertEquals(DistanceUnit.INCHES, ticksRange.unit)
 
         // Values should be approximately equal (all represent 10 inches)
-        assertEquals(1000.0, ticksRange.stop, 0.001) // Assuming 1:1 conversion for test
+        assertEquals(1000.0*PI, ticksRange.stop, 0.001) // Assuming 1:1 conversion for test
     }
 } 

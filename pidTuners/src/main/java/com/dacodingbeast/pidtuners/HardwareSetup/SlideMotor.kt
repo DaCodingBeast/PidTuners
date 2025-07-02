@@ -4,6 +4,7 @@ import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
 import com.dacodingbeast.pidtuners.utilities.MathFunctions.TicksToInch
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
+import com.dacodingbeast.pidtuners.utilities.DistanceUnit
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
 class SlideMotor private constructor(
@@ -41,13 +42,22 @@ class SlideMotor private constructor(
         private var pidParams: PIDParams = PIDParams(0.0, 0.0, 0.0, 0.0)
         private var externalEncoder: Encoders? = null
         private var obstacle: SlideRange? = null
+        private var inIn = false
         fun externalGearRatio(ratio: Double) = apply { this.externalGearRatio = ratio }
         fun pidParams(params: PIDParams) = apply { this.pidParams = params }
         fun pidParams(p: Double, i: Double, d: Double, f: Double) = apply { this.pidParams = PIDParams(p, i, d, f) }
         fun externalEncoder(encoder: Encoders?) = apply { this.externalEncoder = encoder }
         fun obstacle(obstacle: SlideRange?) = apply { this.obstacle = obstacle }
+        fun fromInches() = apply { this.targets.forEach { it.toInches(
+            SlideMotor(name, motorDirection, motorSpecs, systemConstants, spoolDiameter, targets, externalGearRatio, pidParams, externalEncoder, obstacle)
+        ) }
+            this.inIn = true
+        }
         fun build(): SlideMotor {
             require(spoolDiameter>0)
+            if (targets[0].unit == DistanceUnit.TICKS) fromInches()
+            if (!inIn) fromInches()
+
             return SlideMotor(
                 name,
                 motorDirection,
