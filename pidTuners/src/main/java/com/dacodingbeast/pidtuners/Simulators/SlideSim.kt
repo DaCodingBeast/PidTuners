@@ -13,7 +13,7 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int) :
 
 
     val slideMotor = motor as SlideMotor
-    val mass = (slideMotor.systemConstants as SlideSystemConstants ).effectiveMass; // todo in kg
+    val mass= (slideMotor.systemConstants as SlideSystemConstants ).effectiveMass
 
     override fun updateSimulator(): SimulatorData {
         var target = slideMotor.targets[targetIndex]
@@ -23,12 +23,14 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int) :
 
         val motorTorque = TorqueUnit.KILOGRAM_CENTIMETER.convert(slideMotor.calculateTmotor(controlEffort), TorqueUnit.NEWTON_METER);
 
-        val radiusOfPulley = 0.0; // todo in meters
+        val diaIn = slideMotor.spoolDiameter// inches
+        val radiusOfPulley = (diaIn/2) * 0.0254
 
-        val linearAccel = (motorTorque)/mass; // todo accel in inches
-        velocity += linearAccel * Dt
+        val linearAccelMeters = (motorTorque/radiusOfPulley)/mass
+        val linearAccelIN = linearAccelMeters * 1/0.0254
+        velocity += linearAccelIN * Dt
 
-        val updatedExtension = target.start + velocity * Dt + 0.5 * linearAccel * Dt * Dt
+        val updatedExtension = target.start + velocity * Dt + 0.5 * linearAccelIN * Dt * Dt
 
         target = SlideRange.fromInches(updatedExtension, target.stop,slideMotor)
 

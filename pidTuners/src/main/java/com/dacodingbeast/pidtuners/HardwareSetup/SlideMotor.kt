@@ -11,7 +11,7 @@ class SlideMotor private constructor(
     motorDirection: DcMotorSimple.Direction,
     motorSpecs: MotorSpecs,
     systemConstants: SlideSystemConstants,
-    spoolDiameter: Double,
+    val spoolDiameter: Double,
     override val targets: List<SlideRange>,
 
     externalGearRatio: Double = 1.0,

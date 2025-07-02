@@ -40,12 +40,10 @@ public class SlidesTest extends LinearOpMode {
         double averageLinearAccel = sum / cleansedLinearAccel_history.size();
         double motorTorque = motor.calculateTmotor(motorPowerConstant, accurateRPM_Constant);
 
-        double SlidesMass = (motorTorque/PIDTuningOpModes.spoolDiameter)/averageLinearAccel;
+        double SlidesMass = (motorTorque/motor.getSpoolDiameter())/averageLinearAccel;
 
         DataLogger.getInstance().logDebug("frictionRPM: " + accurateRPM_Constant);
-        DataLogger.getInstance().logData("frictionRPM: "+ accurateRPM_Constant);
         DataLogger.getInstance().logData("effectiveMass: "+ SlidesMass);
-        DataLogger.getInstance().logDebug("effectiveMass: " + SlidesMass);
         requestOpModeStop();
     }
 
