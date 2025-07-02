@@ -1,0 +1,73 @@
+name: Check Latest JitPack Build
+
+on:
+  push:
+  workflow_dispatch:  # Trigger manually
+
+jobs:
+  check-jitpack-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get latest tag (release), fallback to latest commit
+      id: get_version
+      run: |
+        echo "Trying to get latest tag..."
+        TAG=$(git ls-remote --tags https://github.com/${{ github.repository }} | cut -d/ -f3 | grep -v '\^{}' | sort -V | tail -n1)
+        
+        if [ -z "$TAG" ]; then
+          echo "No tags found, using latest commit"
+          VERSION=$(curl -s https://api.github.com/repos/${{ github.repository }}/commits | jq -r '.[0].sha')
+        else
+          VERSION=$TAG
+        fi
+
+        echo "Using version: $VERSION"
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Trigger JitPack Build
+      run: |
+        echo "Triggering JitPack build..."
+        curl -s "https://jitpack.io/com/github/${{ github.repository_owner }}/${{ github.event.repository.name }}/${{ steps.get_version.outputs.version }}/build.log" > /dev/null
+
+    - name: Wait for JitPack Build to Complete
+      id: wait_build
+      run: |
+        VERSION=${{ steps.get_version.outputs.version }}
+        REPO_PATH="com.github.${{ github.repository_owner }}:${{ github.event.repository.name }}:$VERSION"
+        STATUS_URL="https://jitpack.io/api/builds/com.github.${{ github.repository_owner}}/${{ github.event.repository.name}}/$VERSION"
+
+        MAX_RETRIES=10
+        DELAY=30
+
+        echo "Checking JitPack build status for $REPO_PATH"
+
+        for i in $(seq 1 $MAX_RETRIES); do
+          RESPONSE=$(curl -s "$STATUS_URL")
+
+          # Validate JSON response
+          if ! echo "$RESPONSE" | jq . >/dev/null 2>&1; then
+            echo "Invalid JSON or no build yet. Response:"
+            echo "$RESPONSE"
+            sleep $DELAY
+            continue
+          fi
+
+          STATUS=$(echo "$RESPONSE" | jq -r '.status')
+          echo "Attempt $i: status=$STATUS"
+
+          if [[ "$STATUS" == "ok" || "$STATUS" == "error" ]]; then
+            echo "build_status=$STATUS" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          sleep $DELAY
+        done
+
+        echo "Timed out waiting for build."
+        echo "build_status=timeout" >> $GITHUB_OUTPUT
+        exit 1
+
+    - name: Output Build Result
+      run: |
+        echo "JitPack Build Status: ${{ steps.wait_build.outputs.build_status }}"
