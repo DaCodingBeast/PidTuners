@@ -48,7 +48,11 @@ class SlideMotor private constructor(
         fun pidParams(p: Double, i: Double, d: Double, f: Double) = apply { this.pidParams = PIDParams(p, i, d, f) }
         fun externalEncoder(encoder: Encoders?) = apply { this.externalEncoder = encoder }
         fun obstacle(obstacle: SlideRange?) = apply { this.obstacle = obstacle }
-        fun fromInches() = apply { this.targets.forEach { it.toInches(
+
+        /**
+         * Converts to inches, this can be used if needed but is automatic
+         */
+        private fun fromInches() = apply { this.targets.forEach { it.toInches(
             SlideMotor(name, motorDirection, motorSpecs, systemConstants, spoolDiameter, targets, externalGearRatio, pidParams, externalEncoder, obstacle)
         ) }
             this.inIn = true
@@ -86,11 +90,13 @@ class SlideMotor private constructor(
     }
 
     /**
-     * Checks accuracy in inches
+     * Checks accuracy in TICKS
+     * @param target target in inches
      */
     override fun targetReached(target: Double, accuracy: Double?): Boolean {
+       val target2 =target* conversions.ticksPerInch
         val accurate = accuracy ?: 50.0
         val current = getCurrentPose() // in ticks
-        return current in (target - accurate)..(target + accurate)
+        return current in (target2 - accurate)..(target2 + accurate)
     }
 }

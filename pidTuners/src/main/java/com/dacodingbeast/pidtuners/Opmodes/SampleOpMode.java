@@ -37,7 +37,7 @@ public class SampleOpMode extends LinearOpMode {
 
             List<Target> targets = motor.getTargets();
 
-            Target target = motor.getTargets().get(x);
+            Target target = motor.getTargets().get(x); // in inches for slides
 
 
             if (motor.targetReached(target.getStop())) {

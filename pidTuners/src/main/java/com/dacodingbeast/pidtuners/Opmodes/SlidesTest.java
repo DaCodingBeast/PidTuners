@@ -93,7 +93,7 @@ public class SlidesTest extends LinearOpMode {
         while (opModeIsActive()) {
             target = slideRange.getStop();// inches
 
-            reachedTarget = motor.targetReached(target*motor.getConversions().getTicksPerInch());
+            reachedTarget = motor.targetReached(target);
 
             double extension = motor.findPosition();
             telemetry.addData("Position", extension);
