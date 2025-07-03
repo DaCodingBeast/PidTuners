@@ -10,10 +10,8 @@ import kotlin.math.abs
 class SlideSim(override var motor: Motors, override val targetIndex: Int) :
     SimulatorStructure(motor, targetIndex) {
 
-
-
-    val slideMotor = motor as SlideMotor
-    val mass= (slideMotor.systemConstants as SlideSystemConstants ).effectiveMass
+    private val slideMotor = motor as SlideMotor
+    private val mass= (slideMotor.systemConstants as SlideSystemConstants ).effectiveMass
 
     override fun updateSimulator(): SimulatorData {
         var target = slideMotor.targets[targetIndex]

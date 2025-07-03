@@ -2,6 +2,8 @@ package com.dacodingbeast.pidtuners.Opmodes;
 
 import static com.dacodingbeast.pidtuners.utilities.MathFunctions.RemoveOutliersKt.removeOutliers;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
 import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor;
 import com.dacodingbeast.pidtuners.Simulators.SlideRange;
@@ -67,6 +69,7 @@ public class SlidesTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(),telemetry);
         DataLogger.getInstance().startLogger("SlidesTest" + motor.getName());
         telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
         telemetry.addLine("Data will be output to logcat under: 'tag:pidtunersdatalogger'");
@@ -75,21 +78,36 @@ public class SlidesTest extends LinearOpMode {
 
 
         ElapsedTime timer = new ElapsedTime();
+        ElapsedTime velocityTimer = new ElapsedTime();
+        ElapsedTime accelerationTimer = new ElapsedTime();
 
         double ticksPerRevolution = motor.getTicksPerRotation();
         double theoreticalRpmMeasured = motor.getRPM() * .5;
 
+        double StartExtension = motor.findPosition();
         boolean reachedTarget;
         double target;
-        int lastEncoderPosition=0;
-        double lastExtension =0.0;
-        double lastVelocity = 0.0;
+        int lastEncoderPosition = motor.motor.getCurrentPosition();
+        double lastExtension = StartExtension;
+        double lastInstantenousVelocity = 0.0;
+
+
+        double intervalVelocityLastExtension = StartExtension;
+        double intervalAccelerationLastVelocity = 0.0;
+//        ArrayList<Double> intervalVelocities = new ArrayList<>();
+
+        int loopsToCountRPM = 4;
+        int loopsToCountVelo = 5;
+        int loopsToCountAccel = 5 * loopsToCountVelo;
+        int loopCount = 0;
 
 
         waitForStart();
 
         if (!opModeInInit()) {
             timer.reset();
+            velocityTimer.reset();
+            accelerationTimer.reset();
         }
 
         while (opModeIsActive()) {
@@ -101,23 +119,59 @@ public class SlidesTest extends LinearOpMode {
             double extension = motor.findPosition();
             telemetry.addData("Position", extension);
 
+            double deltaT = timer.seconds();
+            double rpm = ((motor.getCurrentPose() - lastEncoderPosition) / ticksPerRevolution) * (60.0 / deltaT);
 
-            double rpm = ((motor.getCurrentPose() - lastEncoderPosition) / ticksPerRevolution) * (60.0 / timer.seconds());
+            double instantaneousVelocity = (extension - lastExtension) / deltaT;
+            double instantaneousAcceleration = (instantaneousVelocity - lastInstantenousVelocity) / deltaT;
+
+            telemetry.addData("instantaneous velocity", instantaneousVelocity);
+            telemetry.addData("instantaneous acceleration", instantaneousAcceleration);
 
 
-            double linearVelocity = (extension-lastExtension)/timer.seconds();
-            double linearAcceleration = (linearVelocity - lastVelocity)/timer.seconds();
+
 
             if (!reachedTarget) {
                 motor.setPower(motorPowerConstant);
 
                 boolean validWindow = (rpm > theoreticalRpmMeasured * .5 && rpm < theoreticalRpmMeasured * 1.5)
-                        && extension > lastExtension;
+                        && extension > lastExtension && extension - StartExtension >=2;
 
                 if (validWindow){
-                    linearAccelerations.add(linearAcceleration);
-                    motorPowers.add(motor.getPower());
-                    updateRPM(rpm);
+                    motorPowers.add(motorPowerConstant);
+
+                    if (loopCount % loopsToCountRPM == 0) {
+                        updateRPM(rpm);
+                    }
+
+
+                    if (loopCount % loopsToCountVelo == 0) {
+                        double dtV = velocityTimer.seconds();
+                        double velocity = (extension - intervalVelocityLastExtension) / dtV;
+//                        intervalVelocities.add(velocity);
+                        intervalVelocityLastExtension = extension;
+                        velocityTimer.reset();
+
+
+
+                        telemetry.addData("interval velocity", velocity);
+
+                        if (loopCount % loopsToCountAccel == 0) {
+                            double dtA = accelerationTimer.seconds();
+                            double acceleration = (velocity - intervalAccelerationLastVelocity) / dtA;
+
+                            linearAccelerations.add(acceleration);
+                            intervalAccelerationLastVelocity = velocity;
+                            accelerationTimer.reset();
+
+
+
+                            telemetry.addData("interval acceleration", acceleration);
+                        }
+
+
+                    }
+
                 }
 
             }else{
@@ -127,9 +181,10 @@ public class SlidesTest extends LinearOpMode {
 
 
             lastExtension = extension;
-            lastVelocity = linearVelocity;
+            lastInstantenousVelocity = instantaneousVelocity;
             lastEncoderPosition = (int) motor.getCurrentPose();
             timer.reset();
+            loopCount+=1;
             telemetry.update();
         }
     }
