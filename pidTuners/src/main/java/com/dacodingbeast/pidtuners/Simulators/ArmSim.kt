@@ -55,12 +55,12 @@ class ArmSim(override var motor: Motors, override val targetIndex: Int) :
 
     override val acceptableError = Math.toRadians(3.0)
     override val acceptableVelocity = 1.0
-    override val badAccuracy = abs(error) * 1000
-    override val badVelocity = abs(velocity) * 20
+    override fun badAccuracy() = abs(error) * 1000
+    override fun badVelocity() = abs(velocity) * 20
 
     override fun punishSimulator(): Double {
-        return (if (error >= acceptableError) badAccuracy else 0.0) +
-                (if (velocity >= acceptableVelocity) badVelocity else 0.0)
+        return (if (error >= acceptableError) badAccuracy() else 0.0) +
+                (if (velocity >= acceptableVelocity) badVelocity() else 0.0)
     }
 
 }

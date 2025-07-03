@@ -18,6 +18,7 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int) :
 
         val calculate = pidController.calculate(target, slideMotor.obstacle)
         val controlEffort = calculate.motorPower
+        error = calculate.error
 
         val motorTorque = slideMotor.calculateTmotor(controlEffort, TorqueUnit.NEWTON_METER);
 
@@ -37,11 +38,11 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int) :
 
     override val acceptableError = 3.0 //inches
     override val acceptableVelocity = 1.0
-    override val badAccuracy = abs(error) * 1000
-    override val badVelocity = abs(velocity) * 20
+    override fun badAccuracy() = abs(error) * 1000
+    override fun badVelocity() = abs(velocity) * 10
 
     override fun punishSimulator(): Double {
-        return (if (error >= acceptableError) badAccuracy else 0.0) +
-                (if (velocity >= acceptableVelocity) badVelocity else 0.0)
+        return (if (error >= acceptableError) badAccuracy() else 0.0) +
+                (if (velocity >= acceptableVelocity) badVelocity() else 0.0)
     }
 }

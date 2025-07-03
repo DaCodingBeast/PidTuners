@@ -33,7 +33,7 @@ abstract class SimulatorStructure(open val motor: Motors, open val targetIndex: 
     /**
      * Define the fitness punishment if @see[acceptableError]'s threshold isn't reached
      */
-    abstract val badAccuracy: Double
+    abstract fun badAccuracy(): Double
 
     /**
      * Define the velocity threshold you would like to stay within
@@ -43,7 +43,7 @@ abstract class SimulatorStructure(open val motor: Motors, open val targetIndex: 
     /**
      * Define the fitness punishment if @see[acceptableVelocity]'s criteria isn't met
      */
-    abstract val badVelocity: Double
+    abstract fun badVelocity(): Double
 
 
 }
