@@ -5,6 +5,7 @@ import static java.lang.Math.abs;
 
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
+import com.dacodingbeast.pidtuners.HardwareSetup.torque.TorqueUnit;
 import com.dacodingbeast.pidtuners.Simulators.AngleRange;
 import com.dacodingbeast.pidtuners.utilities.DataLogger;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -114,7 +115,7 @@ public class FrictionTest extends LinearOpMode {
 
                 double rotationalInertia = motor.calculateTmotor(
                         .5,
-                        actualRpm
+                        actualRpm, TorqueUnit.KILOGRAM_CENTIMETER
                 ) / averageAA;
 
                 telemetry.addData("Inertia", rotationalInertia);

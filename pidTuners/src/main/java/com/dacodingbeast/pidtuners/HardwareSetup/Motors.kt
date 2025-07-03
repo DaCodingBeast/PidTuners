@@ -3,6 +3,7 @@ package com.dacodingbeast.pidtuners.HardwareSetup
 import CommonUtilities.PIDFcontroller
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
+import com.dacodingbeast.pidtuners.HardwareSetup.torque.TorqueUnit
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.Target
 import com.dacodingbeast.pidtuners.utilities.DataLogger
@@ -80,7 +81,8 @@ abstract class Motors(
         return motorSpecs.motorGearRatio
     }
 
-    fun getStallTorque(): Double {
+    private fun getStallTorque(unit: TorqueUnit): Double {
+        motorSpecs.stallTorque.to(unit)
         return motorSpecs.stallTorque.value
     }
 
@@ -104,8 +106,8 @@ abstract class Motors(
      * Find the motors torque
      * @param power The power applied to the Motor, derived from the PIDF Controller
      */
-    fun calculateTmotor(power: Double): Double {
-        return calculateTmotor(power, systemConstants.frictionRPM)
+    fun calculateTmotor(power: Double, unit: TorqueUnit): Double {
+        return calculateTmotor(power, systemConstants.frictionRPM, unit)
     }
 
     /**
@@ -116,7 +118,7 @@ abstract class Motors(
      * @param power Motor Power
      */
 
-    fun calculateTmotor(power: Double, actualRPM: Double): Double {
+    fun calculateTmotor(power: Double, actualRPM: Double, unit: TorqueUnit): Double {
         try {
             require(power in -1.0..1.0) //obviously works
         }catch (_: IllegalArgumentException){
@@ -126,7 +128,7 @@ abstract class Motors(
         //friction influenced max power
         val friction = actualRPM / getRPM()
 
-        return getStallTorque() * friction * power
+        return getStallTorque(unit) * friction * power
     }
 
     @JvmOverloads

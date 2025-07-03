@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors;
 import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor;
+import com.dacodingbeast.pidtuners.HardwareSetup.torque.TorqueUnit;
 import com.dacodingbeast.pidtuners.Simulators.SlideRange;
 import com.dacodingbeast.pidtuners.utilities.DataLogger;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -41,10 +42,13 @@ public class SlidesTest extends LinearOpMode {
         double sum = 0;
         for (double num : cleansedLinearAccel_history) sum += num;
 
-        double averageLinearAccel = sum / cleansedLinearAccel_history.size();
-        double motorTorque = motor.calculateTmotor(motorPowerConstant, accurateRPM_Constant);
+        double averageLinearAccel = sum / cleansedLinearAccel_history.size()   * 0.0254; // in Meters per second ^2
+        double motorTorque = motor.calculateTmotor(motorPowerConstant, accurateRPM_Constant, TorqueUnit.NEWTON_METER);
 
-        double SlidesMass = (motorTorque/motor.getSpoolDiameter())/averageLinearAccel;
+
+        double spoolRadius = motor.getSpoolDiameter() * 0.0254 / 2.0; // meters
+        double linearForce = motorTorque/spoolRadius;
+        double SlidesMass = linearForce/averageLinearAccel;
 
         DataLogger.getInstance().logDebug("frictionRPM: " + accurateRPM_Constant);
         DataLogger.getInstance().logData("effectiveMass: "+ SlidesMass);
@@ -124,7 +128,7 @@ public class SlidesTest extends LinearOpMode {
 
             reachedTarget = motor.targetReached(target);
 
-            double extension = motor.findPosition();
+            double extension = motor.findPosition(); // inches
             telemetry.addData("Position", extension);
 
             double deltaT = timer.seconds();

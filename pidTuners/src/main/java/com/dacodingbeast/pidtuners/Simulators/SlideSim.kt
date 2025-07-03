@@ -19,16 +19,16 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int) :
         val calculate = pidController.calculate(target, slideMotor.obstacle)
         val controlEffort = calculate.motorPower
 
-        val motorTorque = TorqueUnit.KILOGRAM_CENTIMETER.convert(slideMotor.calculateTmotor(controlEffort), TorqueUnit.NEWTON_METER);
+        val motorTorque = slideMotor.calculateTmotor(controlEffort, TorqueUnit.NEWTON_METER);
 
-        val diaIn = slideMotor.spoolDiameter// inches
-        val radiusOfPulley = (diaIn/2) * 0.0254
+        val spoolRadius: Double = slideMotor.spoolDiameter * 0.0254 / 2.0 // meters
+        val linearForce = motorTorque / spoolRadius
 
-        val linearAccelMeters = (motorTorque/radiusOfPulley)/mass
-        val linearAccelIN = linearAccelMeters * 1/0.0254
-        velocity += linearAccelIN * Dt
+        val linearAccel = (linearForce/mass)/0.0254 // meters
 
-        val updatedExtension = target.start + velocity * Dt + 0.5 * linearAccelIN * Dt * Dt
+        velocity += linearAccel * Dt
+
+        val updatedExtension = target.start + velocity * Dt + 0.5 * linearAccel * Dt * Dt
 
         target = SlideRange.fromInches(updatedExtension, target.stop,slideMotor)
 

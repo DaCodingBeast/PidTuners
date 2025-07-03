@@ -6,6 +6,7 @@ import android.util.Pair;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor;
+import com.dacodingbeast.pidtuners.HardwareSetup.torque.TorqueUnit;
 import com.dacodingbeast.pidtuners.Simulators.AngleRange;
 import com.dacodingbeast.pidtuners.utilities.DataLogger;
 import com.dacodingbeast.pidtuners.utilities.MathFunctions.QuadraticRegression;
@@ -61,7 +62,8 @@ public class GravityTest extends LinearOpMode {
                     angle,
                     motor.calculateTmotor(
                             motor.getPower(),
-                            motor.getSystemConstants().getFrictionRPM()
+                            motor.getSystemConstants().getFrictionRPM(),
+                            TorqueUnit.KILOGRAM_CENTIMETER
                     )
             ));
 
