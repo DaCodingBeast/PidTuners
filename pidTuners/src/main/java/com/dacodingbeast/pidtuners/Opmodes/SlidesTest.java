@@ -27,12 +27,13 @@ public class SlidesTest extends LinearOpMode {
         this.motor = (SlideMotor) motor;
         this.slideRange = this.motor.getTargets().get(index);
     }
+
     public SlidesTest(Motors motor) {
         this.motor = (SlideMotor) motor;
         this.slideRange = this.motor.getTargets().get(0);
     }
 
-    public void solveForConstants(){
+    public void solveForConstants() {
         ArrayList<Double> cleansedLinearAccel_history = removeOutliers(linearAccelerations);
 
         //only if we want to test at different speeds to improve accuracy
@@ -44,17 +45,20 @@ public class SlidesTest extends LinearOpMode {
         double averageLinearAccel = sum / cleansedLinearAccel_history.size();
         double motorTorque = motor.calculateTmotor(motorPowerConstant, accurateRPM_Constant);
 
-        double SlidesMass = (motorTorque/motor.getSpoolDiameter())/averageLinearAccel;
-
-        DataLogger.getInstance().logDebug("frictionRPM: " + accurateRPM_Constant);
-        DataLogger.getInstance().logData("effectiveMass: "+ SlidesMass);
+        double SlidesMass = (motorTorque / motor.getSpoolDiameter()) / averageLinearAccel;
+        if (accurateRPM_Constant == 0 && SlidesMass == 0) {
+            DataLogger.getInstance().logError("No data found, please run the test again");
+        } else {
+            DataLogger.getInstance().logDebug("frictionRPM: " + accurateRPM_Constant);
+            DataLogger.getInstance().logData("effectiveMass: " + SlidesMass);
+        }
         requestOpModeStop();
     }
 
-    public void updateRPM(double newRPM){
+    public void updateRPM(double newRPM) {
         RPM_history.add(newRPM);
 
-        if (RPM_history.size() >=10){
+        if (RPM_history.size() >= 10) {
             ArrayList<Double> cleansedData = removeOutliers(RPM_history);
 
             double sum = 0;
@@ -69,10 +73,15 @@ public class SlidesTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(),telemetry);
+        telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
         DataLogger.getInstance().startLogger("SlidesTest" + motor.getName());
         telemetry.addLine("Please rotate your robot so that gravity does not affect your mechanism");
         telemetry.addLine("Data will be output to logcat under: 'tag:pidtunersdatalogger'");
+        telemetry.addLine();
+        telemetry.addData("instantaneous velocity", 0.0);
+        telemetry.addData("instantaneous acceleration", 0.0);
+        telemetry.addData("interval acceleration", 0.0);
+        telemetry.addData("interval velocity", 0.0);
         motor.init(hardwareMap, 0.0);
         telemetry.update();
 
@@ -106,13 +115,12 @@ public class SlidesTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            if (loopCount ==0){
+            if (loopCount == 0) {
                 telemetry.addData("instantaneous velocity", 0.0);
                 telemetry.addData("instantaneous acceleration", 0.0);
                 telemetry.addData("interval acceleration", 0.0);
                 telemetry.addData("interval velocity", 0.0);
 
-                sleep(5000);
                 timer.reset();
                 velocityTimer.reset();
                 accelerationTimer.reset();
@@ -137,15 +145,13 @@ public class SlidesTest extends LinearOpMode {
             telemetry.addData("instantaneous acceleration", instantaneousAcceleration);
 
 
-
-
             if (!reachedTarget) {
                 motor.setPower(motorPowerConstant);
 
                 boolean validWindow = (rpm > theoreticalRpmMeasured * .5 && rpm < theoreticalRpmMeasured * 1.5)
-                        && extension > lastExtension && extension - StartExtension >=2;
+                        && extension > lastExtension && extension - StartExtension >= 2;
 
-                if (validWindow){
+                if (validWindow) {
                     motorPowers.add(motorPowerConstant);
 
                     if (loopCount % loopsToCountRPM == 0) {
@@ -161,7 +167,6 @@ public class SlidesTest extends LinearOpMode {
                         velocityTimer.reset();
 
 
-
                         telemetry.addData("interval velocity", velocity);
 
                         if (loopCount % loopsToCountAccel == 0) {
@@ -173,7 +178,6 @@ public class SlidesTest extends LinearOpMode {
                             accelerationTimer.reset();
 
 
-
                             telemetry.addData("interval acceleration", acceleration);
                         }
 
@@ -182,7 +186,7 @@ public class SlidesTest extends LinearOpMode {
 
                 }
 
-            }else{
+            } else {
                 motor.setPower(0);
                 solveForConstants();
             }
@@ -192,7 +196,7 @@ public class SlidesTest extends LinearOpMode {
             lastInstantenousVelocity = instantaneousVelocity;
             lastEncoderPosition = (int) motor.getCurrentPose();
             timer.reset();
-            loopCount+=1;
+            loopCount += 1;
             telemetry.update();
         }
     }
