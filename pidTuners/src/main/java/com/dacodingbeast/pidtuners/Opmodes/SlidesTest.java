@@ -104,13 +104,21 @@ public class SlidesTest extends LinearOpMode {
 
         waitForStart();
 
-        if (!opModeInInit()) {
-            timer.reset();
-            velocityTimer.reset();
-            accelerationTimer.reset();
-        }
-
         while (opModeIsActive()) {
+
+            if (loopCount ==0){
+                telemetry.addData("instantaneous velocity", 0.0);
+                telemetry.addData("instantaneous acceleration", 0.0);
+                telemetry.addData("interval acceleration", 0.0);
+                telemetry.addData("interval velocity", 0.0);
+
+                sleep(5000);
+                timer.reset();
+                velocityTimer.reset();
+                accelerationTimer.reset();
+            }
+
+
             target = slideRange.getStop();// inches
 //            DataLogger.getInstance().logDebug("target: " + target);
 
