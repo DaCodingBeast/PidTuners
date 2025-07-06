@@ -5,20 +5,16 @@
 <instance-profile id="v"
                  name="PidTuners"
                  start-page="pidtuners.md">
-
-    <toc-element topic="pidtuners.md"/>
-    <toc-element topic="Installation-Instructions.md"/>
-    <toc-element topic="Tuning-OpModes-File.md"/>
-    <toc-element toc-title="Arms">
-        <toc-element topic="TuningSteps.md"/>
-    </toc-element>
-    <toc-element toc-title="Slides">
-        <toc-element topic="Tuning-Steps.md"/>
-    </toc-element>
-    <toc-element topic="HowItWorks.md">
-        <toc-element topic="ParticleSwarmOptimization.md"/>
-        <toc-element topic="ArmMechanism.md"/>
-        <toc-element topic="MotorLibrary.md"/>
+    <toc-element toc-title="About" topic="pidtuners.md">
         <toc-element topic="PIDController.md"/>
+        <toc-element topic="OptimizationAlgorithm.md"/>
+        <toc-element topic="MathematicalSimulations.md"/>
     </toc-element>
+    <toc-element toc-title="Optimization and Control">
+        <toc-element topic="Installation-Instructions.md"/>
+        <toc-element topic="Tuning-Steps.md"/>
+        <toc-element topic="ArmTuning.md"/>
+        <toc-element topic="Tuning-OpModes-File.md"/>
+    </toc-element>
+
 </instance-profile>
