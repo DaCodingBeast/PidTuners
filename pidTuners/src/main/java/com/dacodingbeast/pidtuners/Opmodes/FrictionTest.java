@@ -52,7 +52,7 @@ public class FrictionTest extends LinearOpMode {
             DataLogger.getInstance().logDebug("target: "+angleRange.getStop());
         }
         while (opModeIsActive()) {
-                target = (angleRange.getStop()); // should be in radians
+            target = (angleRange.getStop()); // should be in radians
             run = !motor.targetReached(target); // does calcs in rads
 
             double position=motor.findPosition();

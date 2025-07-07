@@ -84,7 +84,7 @@ class ArmMotor private constructor(
 
 
     override fun targetReached(target: Double, accuracy: Double?): Boolean {
-        val accurate = accuracy ?: Math.toRadians(15.0)
+        val accurate = accuracy ?: (target * 0.8)
         val angle = AngleRange.fromRadians(findPosition(), target)
         val direction = AngleRange.findMotorDirection(angle, obstacle)
         return abs(AngleRange.findPIDFAngleError(direction, angle)) < Math.toRadians(accurate)
