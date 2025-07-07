@@ -13,7 +13,7 @@ We have to both get predefined variables on the system
 
 Motor type
 
-We have to empircally test to find mecahinism charactersitics
+We have to empirically test to find mecahinism charactersitics
 
 
 
@@ -26,7 +26,8 @@ Gravity Constants
 Equations - find in arya canva
 
 Empirical tests:
-Videos of Arya and Graden
+Videos of Graden TODO
+Videos of Arya
 
 ### Linear Slide mechanism
 
@@ -37,11 +38,11 @@ Equations
 
 
 Empirical tests:
-Videos of Graden
+Videos of Graden TODO
 
 ## Performance
 
-Video from discord user on arm performance
+
 Arya video on arm performance
 Graden video on arm performance
 
