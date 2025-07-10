@@ -1,5 +1,6 @@
 package com.dacodingbeast.pidtuners.HardwareSetup
 
+import CommonUtilities.PIDFcontroller
 import CommonUtilities.SimulatorPIDController
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
@@ -29,7 +30,7 @@ abstract class Motors(
 
     abstract val obstacle: Target?
     abstract val targets: List<Target>
-    val pidController = SimulatorPIDController(pidParams)
+    val pidController = PIDFcontroller(pidParams)
 
     init {
         if (externalGearRatio < 0) {
@@ -66,6 +67,8 @@ abstract class Motors(
     fun reset(){
         motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+
+        pidController.reset()
     }
 
     fun getCurrentPose(): Double {
@@ -97,7 +100,7 @@ abstract class Motors(
         return motor.power
     }
 
-    fun getPIDFController(): SimulatorPIDController {
+    fun getPIDFController(): PIDFcontroller {
         return pidController
     }
 

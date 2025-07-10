@@ -124,4 +124,9 @@ class PIDFcontroller(var params: PIDParams) {
         return Result(controlEffort, error)
     }
 
+    fun reset(){
+        prevError = 0.0
+        integral = 0.0
+    }
+
 }
