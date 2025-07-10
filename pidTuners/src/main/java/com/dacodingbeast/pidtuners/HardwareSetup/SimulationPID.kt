@@ -110,3 +110,54 @@ class PIDFcontroller(var params: PIDParams, val isSimulator: Boolean = false) {
         integral = 0.0
     }
 }
+
+//
+//class PIDFcontroller(var params: PIDParams) {
+//
+//    private var prevError = 0.0
+//    private var integral = 0.0
+//
+//    // Pre-calculated constants
+//    private val dtInverse = 1.0 / Dt
+//    private val errorNormalizationFactor = 1.0 / 10.0
+//    private val hasFF = params.kf != 0.0
+//
+//    fun calculate(position: Target, obstacle: Target?): Result {
+//
+//        when (position) {
+//            is AngleRange -> {
+//                val (_, error) = AngleRange.findDirectionAndError(position, obstacle as AngleRange?)
+//
+//                val ff = if (hasFF) {
+//                    val sinVal = sin(position.start)
+//                    if (position.start > 0.0) max(0.0, sinVal) * params.kf
+//                    else min(0.0, sinVal) * params.kf
+//                } else 0.0
+//
+//                return calculateControl(error, ff)
+//            }
+//
+//            is SlideRange -> {
+//                val error = position.stop - position.start
+//                return calculateControl(error, 0.0)
+//            }
+//        }
+//    }
+//
+//    private inline fun calculateControl(error: Double, ff: Double): Result {
+//        integral += error * Dt
+//        val derivative = (error - prevError) * errorNormalizationFactor * dtInverse
+//        prevError = error
+//
+//        val controlEffort = (error * params.kp + integral * params.ki + derivative * params.kd + ff)
+//            .coerceIn(-1.0, 1.0)
+//
+//        return Result(controlEffort, error)
+//    }
+//
+//    fun reset() {
+//        prevError = 0.0
+//        integral = 0.0
+//    }
+//}
+

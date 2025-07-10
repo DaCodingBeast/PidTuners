@@ -35,7 +35,7 @@ class ArmSim(override var motor: Motors, override val targetIndex: Int) :
 
         val controlEffort = calculate.motorPower
 
-        val motorTorque = armMotor.calculateTmotor(controlEffort, TorqueUnit.KILOGRAM_CENTIMETER)
+        val motorTorque = armMotor.calculateTmotor(controlEffort, TorqueUnit.NEWTON_METER)
 
         val g = (armMotor.systemConstants as PivotSystemConstants).gravityConstants
         val gravityTorque = g.gravityTorque(abs(target.start)) * if (target.start > 0) -1 else 1

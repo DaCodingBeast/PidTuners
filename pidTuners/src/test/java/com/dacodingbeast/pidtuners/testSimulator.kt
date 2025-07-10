@@ -10,6 +10,7 @@ import com.dacodingbeast.pidtuners.HardwareSetup.Hardware
 import com.dacodingbeast.pidtuners.HardwareSetup.Hardware.HDHex
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.AngleRange.Companion.fromDegrees
+import com.dacodingbeast.pidtuners.utilities.DataLogger
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import org.junit.Test
 
@@ -18,7 +19,6 @@ class testSimulator {
 
     val accuracy = 4.0
     val time = 2.0
-
 
     var frictionRPM: Double = 68.0
     var inertia: Double = 0.00956980942013831
@@ -40,9 +40,31 @@ class testSimulator {
         .pidParams(pidParams)
         .build()
 
-
     @Test
     fun simulatorRun(){
+        // Create a test DataLogger that doesn't use Android Log
+        DataLogger.create("TestLogger")
+        
+        // Override the DataLogger methods to avoid Android Log calls
+        val originalInstance = DataLogger.instance
+        DataLogger.instance = object : DataLogger("TestLogger") {
+            override fun logData(data: Any) {
+                print(data)
+                print("\n")
+            }
+            override fun logError(data: Any) {
+                print(data)
+                print("\n")
+            }
+            override fun logWarning(data: Any) {
+                print(data)
+                print("\n")
+            }
+            override fun logDebug(data: Any) {
+                print(data)
+                print("\n")
+            }
+        }
 
         for (i in armMotor.targets.indices) {
 

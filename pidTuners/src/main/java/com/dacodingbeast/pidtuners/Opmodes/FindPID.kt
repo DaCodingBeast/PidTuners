@@ -17,6 +17,7 @@ class FindPID(val motor: Motors) :
         }
 
     override fun runOpMode() {
+        DataLogger.create()
         DataLogger.instance.startLogger("FindPID" + motor.name)
 
         waitForStart()

@@ -9,7 +9,7 @@ abstract class SimulatorStructure(open val motor: Motors, open val targetIndex: 
     lateinit var pidController: PIDFcontroller
 
     fun init(params: Particle) {
-        pidController = PIDFcontroller(PIDParams(params.position), true)
+        pidController = PIDFcontroller(PIDParams(params.position))
     }
 
     /**
