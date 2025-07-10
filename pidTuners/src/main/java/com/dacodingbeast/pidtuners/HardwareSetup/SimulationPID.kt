@@ -34,7 +34,7 @@ class PIDParams(val kp: Double, val ki: Double, val kd: Double, val kf: Double =
  */
 class Result(val motorPower: Double, val error: Double)
 
-class PIDFcontroller(var params: PIDParams, val isSimulator: Boolean) {
+class PIDFcontroller(var params: PIDParams, val isSimulator: Boolean = false) {
 
     private var prevError = 0.0
     private var integral = 0.0
@@ -43,13 +43,24 @@ class PIDFcontroller(var params: PIDParams, val isSimulator: Boolean) {
     private val dtInverse = 1.0 / Dt
     private val hasFF = params.kf != 0.0
 
+    private var minIntegral: Double = -1.0
+    private var maxIntegral: Double = 1.0
+
     private lateinit var timer: ElapsedTime
 
     init {
         if (!isSimulator) timer = ElapsedTime()
     }
 
-    private fun getInverseLoopTime(): Double{
+    private inline fun getLoopTime(): Double{
+        return if (isSimulator){
+            Dt
+        }else{
+            timer.seconds()
+        }
+    }
+
+    private inline fun getLoopTimeInverse(): Double{
         return if (isSimulator){
             dtInverse
         }else{
@@ -80,8 +91,10 @@ class PIDFcontroller(var params: PIDParams, val isSimulator: Boolean) {
     }
 
     private inline fun calculateControl(error: Double, ff: Double): Result {
-        integral += error * getInverseLoopTime()
-        val derivative = (error - prevError) * getInverseLoopTime()
+        integral += error * getLoopTime()
+        integral = integral.coerceIn(minIntegral,maxIntegral)
+
+        val derivative = (error - prevError) * getLoopTimeInverse()
         prevError = error
 
         val controlEffort = (error * params.kp + integral * params.ki + derivative * params.kd + ff)
