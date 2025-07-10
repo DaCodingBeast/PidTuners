@@ -1,7 +1,6 @@
 package com.dacodingbeast.pidtuners.HardwareSetup
 
 import CommonUtilities.PIDFcontroller
-import CommonUtilities.SimulatorPIDController
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
 import com.dacodingbeast.pidtuners.HardwareSetup.torque.TorqueUnit

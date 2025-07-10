@@ -18,7 +18,7 @@ import kotlin.math.PI
 import kotlin.math.abs
 import org.junit.Test
 import org.junit.Assert.*
-import CommonUtilities.SimulatorPIDController
+import CommonUtilities.PIDFcontroller
 import CommonUtilities.PIDParams
 import kotlin.system.measureNanoTime
 import kotlin.system.measureTimeMillis
@@ -536,7 +536,7 @@ class SimulatorTests {
         armSim.error = 0.0
         armSim.velocity = 0.0
         // Use a real PIDFcontroller with high proportional gain
-        armSim.pidController = SimulatorPIDController(PIDParams(10.0, 0.0, 0.0, 0.0))
+        armSim.pidController = PIDFcontroller(PIDParams(10.0, 0.0, 0.0, 0.0))
         val data = armSim.updateSimulator()
         // The velocity should be nonzero after a step with nonzero control effort
         assertTrue(data.velocity != 0.0)
@@ -556,7 +556,7 @@ class SimulatorTests {
         slideSim.error = 0.0
         slideSim.velocity = 0.0
         // Use a real PIDFcontroller with high proportional gain
-        slideSim.pidController = SimulatorPIDController(PIDParams(10.0, 0.0, 0.0, 0.0))
+        slideSim.pidController = PIDFcontroller(PIDParams(10.0, 0.0, 0.0, 0.0))
         val data = slideSim.updateSimulator()
         // The velocity should be nonzero after a step with nonzero control effort
         assertTrue(data.velocity != 0.0)
@@ -572,7 +572,7 @@ class SimulatorTests {
             armTargets
         ).build()
         val armSim = ArmSim(armMotor, 0)
-        armSim.pidController = SimulatorPIDController(PIDParams(1.0, 0.1, 0.05, 0.2))
+        armSim.pidController = PIDFcontroller(PIDParams(1.0, 0.1, 0.05, 0.2))
         
         val executionTime = measureNanoTime {
             val data = armSim.updateSimulator()
@@ -594,7 +594,7 @@ class SimulatorTests {
             slideTargets
         ).build()
         val slideSim = SlideSim(slideMotor, 0)
-        slideSim.pidController = SimulatorPIDController(PIDParams(1.0, 0.1, 0.05, 0.0))
+        slideSim.pidController = PIDFcontroller(PIDParams(1.0, 0.1, 0.05, 0.0))
         
         val executionTime = measureNanoTime {
             val data = slideSim.updateSimulator()
@@ -615,7 +615,7 @@ class SimulatorTests {
             armTargets
         ).build()
         val armSim = ArmSim(armMotor, 0)
-        armSim.pidController = SimulatorPIDController(PIDParams(1.0, 0.1, 0.05, 0.2))
+        armSim.pidController = PIDFcontroller(PIDParams(1.0, 0.1, 0.05, 0.2))
         
         val numCalculations = 1000
         val totalTime = measureTimeMillis {
@@ -644,7 +644,7 @@ class SimulatorTests {
             slideTargets
         ).build()
         val slideSim = SlideSim(slideMotor, 0)
-        slideSim.pidController = SimulatorPIDController(PIDParams(1.0, 0.1, 0.05, 0.0))
+        slideSim.pidController = PIDFcontroller(PIDParams(1.0, 0.1, 0.05, 0.0))
         
         val numCalculations = 1000
         val totalTime = measureTimeMillis {
@@ -673,7 +673,7 @@ class SimulatorTests {
             armTargets
         ).build()
         val armSim = ArmSim(armMotor, 0)
-        armSim.pidController = SimulatorPIDController(PIDParams(1.0, 0.1, 0.05, 0.2))
+        armSim.pidController = PIDFcontroller(PIDParams(1.0, 0.1, 0.05, 0.2))
         
         val slideMotor = SlideMotor.Builder(
             "testSlide",
@@ -684,7 +684,7 @@ class SimulatorTests {
             slideTargets
         ).build()
         val slideSim = SlideSim(slideMotor, 0)
-        slideSim.pidController = SimulatorPIDController(PIDParams(1.0, 0.1, 0.05, 0.0))
+        slideSim.pidController = PIDFcontroller(PIDParams(1.0, 0.1, 0.05, 0.0))
         
         val numCalculations = 100
         
@@ -726,7 +726,7 @@ class SimulatorTests {
             armTargets
         ).build()
         val armSim = ArmSim(armMotor, 0)
-        armSim.pidController = SimulatorPIDController(PIDParams(2.0, 0.5, 0.1, 0.3))
+        armSim.pidController = PIDFcontroller(PIDParams(2.0, 0.5, 0.1, 0.3))
         
         val slideMotor = SlideMotor.Builder(
             "testSlide",
@@ -737,7 +737,7 @@ class SimulatorTests {
             slideTargets
         ).build()
         val slideSim = SlideSim(slideMotor, 0)
-        slideSim.pidController = SimulatorPIDController(PIDParams(2.0, 0.5, 0.1, 0.0))
+        slideSim.pidController = PIDFcontroller(PIDParams(2.0, 0.5, 0.1, 0.0))
         
         val numCalculations = 10000
         

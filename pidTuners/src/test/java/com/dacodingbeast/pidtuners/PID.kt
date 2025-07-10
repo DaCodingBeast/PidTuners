@@ -1,4 +1,4 @@
-import CommonUtilities.SimulatorPIDController
+import CommonUtilities.PIDFcontroller
 import CommonUtilities.PIDParams
 import CommonUtilities.Result
 import com.dacodingbeast.pidtuners.Algorithm.Vector
@@ -50,7 +50,7 @@ class PID {
     @Test
     fun `test PIDFController initialization`() {
         val params = PIDParams(1.0, 0.5, 0.1, 0.2)
-        val controller = SimulatorPIDController(params)
+        val controller = PIDFcontroller(params)
 
         assertNotNull(controller)
         assertEquals(params, controller.params)
@@ -59,7 +59,7 @@ class PID {
     @Test
     fun `test SlideRange calculation with zero error`() {
         val params = PIDParams(1.0, 0.0, 0.0, 0.0)
-        val controller = SimulatorPIDController(params)
+        val controller = PIDFcontroller(params)
         val slideRange = SlideRange.fromInches(5.0, 5.0) // Same start and stop
 
         val result = controller.calculate(slideRange, null)
@@ -72,7 +72,7 @@ class PID {
     @Test
     fun `test SlideRange calculation with positive error`() {
         val params = PIDParams(1.0, 0.0, 0.0, 0.0)
-        val controller = SimulatorPIDController(params)
+        val controller = PIDFcontroller(params)
         val slideRange = SlideRange.fromInches(0.0, 2.0) // Move forward 2 units
 
         val result = controller.calculate(slideRange, null)
@@ -85,7 +85,7 @@ class PID {
     @Test
     fun `test SlideRange calculation with negative error`() {
         val params = PIDParams(1.0, 0.0, 0.0, 0.0)
-        val controller = SimulatorPIDController(params)
+        val controller = PIDFcontroller(params)
         val slideRange = SlideRange.fromInches(5.0, 2.0) // Move backward 3 units
 
         val result = controller.calculate(slideRange, null)
@@ -98,7 +98,7 @@ class PID {
     @Test
     fun `test AngleRange calculation without obstacle`() {
         val params = PIDParams(1.0, 0.0, 0.0, 0.0)
-        val controller = SimulatorPIDController(params)
+        val controller = PIDFcontroller(params)
         val angleRange = AngleRange.fromRadians(0.0, PI / 2) // 90 degree turn
 
         val result = controller.calculate(angleRange, null)
@@ -111,7 +111,7 @@ class PID {
     @Test
     fun `test AngleRange calculation with obstacle`() {
         val params = PIDParams(1.0, 0.0, 0.0, 0.0)
-        val controller = SimulatorPIDController(params)
+        val controller = PIDFcontroller(params)
         val angleRange = AngleRange.fromRadians(0.0, PI / 2)
         val obstacle = AngleRange.fromRadians(PI / 4, PI / 3) // Obstacle in the way
 
@@ -125,7 +125,7 @@ class PID {
     @Test
     fun `test feedforward term with positive angle`() {
         val params = PIDParams(0.0, 0.0, 0.0, 1.0) // Only feedforward
-        val controller = SimulatorPIDController(params)
+        val controller = PIDFcontroller(params)
         val angleRange = AngleRange.fromRadians(PI / 6, PI / 4) // Positive start angle
 
         val result = controller.calculate(angleRange, null)
@@ -137,7 +137,7 @@ class PID {
     @Test
     fun `test feedforward term with negative angle`() {
         val params = PIDParams(0.0, 0.0, 0.0, 1.0) // Only feedforward
-        val controller = SimulatorPIDController(params)
+        val controller = PIDFcontroller(params)
         val angleRange = AngleRange.fromRadians(-PI / 6, -PI / 4) // Negative start angle
 
         val result = controller.calculate(angleRange, null)
@@ -149,7 +149,7 @@ class PID {
     @Test
     fun `test integral accumulation over multiple calls`() {
         val params = PIDParams(0.0, 1.0, 0.0, 0.0) // Only integral
-        val controller = SimulatorPIDController(params)
+        val controller = PIDFcontroller(params)
         val slideRange = SlideRange.fromInches(0.0, 1.0) // Constant error
 
         val result1 = controller.calculate(slideRange, null)
@@ -164,7 +164,7 @@ class PID {
     @Test
     fun `test motor power clamping`() {
         val params = PIDParams(10.0, 0.0, 0.0, 0.0) // High proportional gain
-        val controller = SimulatorPIDController(params)
+        val controller = PIDFcontroller(params)
         val slideRange = SlideRange.fromInches(0.0, 10.0) // Large error
 
         val result = controller.calculate(slideRange, null)
@@ -177,7 +177,7 @@ class PID {
     @Test
     fun `test controller reset functionality`() {
         val params = PIDParams(0.0, 1.0, 1.0, 0.0) // Integral and derivative
-        val controller = SimulatorPIDController(params)
+        val controller = PIDFcontroller(params)
         val slideRange = SlideRange.fromInches(0.0, 1.0)
 
         // Run controller to build up integral and set previous error
@@ -197,7 +197,7 @@ class PID {
     @Test
     fun `test combined PIDF response`() {
         val params = PIDParams(1.0, 0.1, 0.05, 0.2)
-        val controller = SimulatorPIDController(params)
+        val controller = PIDFcontroller(params)
         val angleRange = AngleRange.fromRadians(0.0, PI / 4)
 
         val result = controller.calculate(angleRange, null)
@@ -218,7 +218,7 @@ class PID {
     @Test
     fun `test controller with zero gains`() {
         val params = PIDParams(0.0, 0.0, 0.0, 0.0)
-        val controller = SimulatorPIDController(params)
+        val controller = PIDFcontroller(params)
         val slideRange = SlideRange.fromInches(0.0, 5.0)
 
         val result = controller.calculate(slideRange, null)
@@ -230,7 +230,7 @@ class PID {
 
         @Test
         fun testSingleAngleCalculationTime() {
-            val pidController = SimulatorPIDController(PIDParams(1.0, 0.1, 0.05))
+            val pidController = PIDFcontroller(PIDParams(1.0, 0.1, 0.05))
             val position = AngleRange.fromRadians(0.0, PI / 4)
 
             val executionTime = measureNanoTime {
@@ -244,7 +244,7 @@ class PID {
 
         @Test
         fun testSingleSlideCalculationTime() {
-            val pidController = SimulatorPIDController(PIDParams(1.0, 0.1, 0.05))
+            val pidController = PIDFcontroller(PIDParams(1.0, 0.1, 0.05))
             val position = SlideRange.fromInches(0.0, 100.0)
 
             val executionTime = measureNanoTime {
@@ -258,7 +258,7 @@ class PID {
 
         @Test
         fun testFeedforwardCalculationTime() {
-            val pidController = SimulatorPIDController(PIDParams(1.0, 0.1, 0.05, 0.2))
+            val pidController = PIDFcontroller(PIDParams(1.0, 0.1, 0.05, 0.2))
             val position = AngleRange.fromRadians(PI / 6, PI / 3)
 
             val executionTime = measureNanoTime {
@@ -272,7 +272,7 @@ class PID {
 
         @Test
         fun testCalculationWithObstacle() {
-            val pidController = SimulatorPIDController(PIDParams(1.0, 0.1, 0.05))
+            val pidController = PIDFcontroller(PIDParams(1.0, 0.1, 0.05))
             val position = AngleRange.fromRadians(0.0, PI / 2)
             val obstacle = AngleRange.fromRadians(PI / 4, PI / 3)
 
@@ -287,7 +287,7 @@ class PID {
 
         @Test
         fun testBatch100Calculations() {
-            val pidController = SimulatorPIDController(PIDParams(1.0, 0.1, 0.05))
+            val pidController = PIDFcontroller(PIDParams(1.0, 0.1, 0.05))
             val positions = mutableListOf<AngleRange>()
 
             // Generate 100 test positions
@@ -312,7 +312,7 @@ class PID {
 
         @Test
         fun testBatch1000Calculations() {
-            val pidController = SimulatorPIDController(PIDParams(1.0, 0.1, 0.05))
+            val pidController = PIDFcontroller(PIDParams(1.0, 0.1, 0.05))
             val positions = mutableListOf<SlideRange>()
 
             // Generate 1000 test positions
@@ -337,7 +337,7 @@ class PID {
 
         @Test
         fun testHighFrequencyCalculations() {
-            val pidController = SimulatorPIDController(PIDParams(2.0, 0.5, 0.1, 0.3))
+            val pidController = PIDFcontroller(PIDParams(2.0, 0.5, 0.1, 0.3))
             val position = AngleRange.fromRadians(0.0, PI / 4)
             val numCalculations = 10000
 
@@ -362,7 +362,7 @@ class PID {
 
             val constructionTime = measureNanoTime {
                 val pidParams = PIDParams(vectorParams)
-                val pidController = SimulatorPIDController(pidParams)
+                val pidController = PIDFcontroller(pidParams)
                 assertNotNull(pidController)
             }
 
@@ -372,7 +372,7 @@ class PID {
 
         @Test
         fun testResetPerformance() {
-            val pidController = SimulatorPIDController(PIDParams(1.0, 0.1, 0.05))
+            val pidController = PIDFcontroller(PIDParams(1.0, 0.1, 0.05))
 
             // Do some calculations to build up state
             val position = AngleRange.fromRadians(0.0, PI / 4)
@@ -390,7 +390,7 @@ class PID {
 
         @Test
         fun testSequentialCalculationsWithReset() {
-            val pidController = SimulatorPIDController(PIDParams(1.0, 0.1, 0.05))
+            val pidController = PIDFcontroller(PIDParams(1.0, 0.1, 0.05))
             val position = AngleRange.fromRadians(0.0, PI / 2)
             val numSequences = 100
             val calculationsPerSequence = 10
@@ -417,7 +417,7 @@ class PID {
 
         @Test
         fun testCalculationConsistency() {
-            val pidController = SimulatorPIDController(PIDParams(1.0, 0.1, 0.05))
+            val pidController = PIDFcontroller(PIDParams(1.0, 0.1, 0.05))
             val position = AngleRange.fromRadians(0.0, PI / 4)
             val numTests = 1000
             var times = mutableListOf<Long>()
