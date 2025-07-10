@@ -1,15 +1,15 @@
 package com.dacodingbeast.pidtuners.Simulators
 
-import CommonUtilities.PIDFcontroller
+import CommonUtilities.SimulatorPIDController
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Algorithm.Particle
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
 
 abstract class SimulatorStructure(open val motor: Motors, open val targetIndex: Int) {
-    lateinit var pidController: PIDFcontroller
+    lateinit var pidController: SimulatorPIDController
 
     fun init(params: Particle) {
-        pidController = PIDFcontroller(PIDParams(params.position))
+        pidController = SimulatorPIDController(PIDParams(params.position))
     }
 
     /**

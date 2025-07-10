@@ -1,10 +1,9 @@
 package com.dacodingbeast.pidtuners.HardwareSetup
 
-import CommonUtilities.PIDFcontroller
+import CommonUtilities.SimulatorPIDController
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
 import com.dacodingbeast.pidtuners.HardwareSetup.torque.TorqueUnit
-import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.Target
 import com.dacodingbeast.pidtuners.utilities.DataLogger
 import com.qualcomm.robotcore.hardware.DcMotor
@@ -30,7 +29,7 @@ abstract class Motors(
 
     abstract val obstacle: Target?
     abstract val targets: List<Target>
-    val pidController = PIDFcontroller(pidParams)
+    val pidController = SimulatorPIDController(pidParams)
 
     init {
         if (externalGearRatio < 0) {
@@ -98,7 +97,7 @@ abstract class Motors(
         return motor.power
     }
 
-    fun getPIDFController(): PIDFcontroller {
+    fun getPIDFController(): SimulatorPIDController {
         return pidController
     }
 
