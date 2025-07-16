@@ -5,6 +5,7 @@ import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import kotlin.math.abs
+import kotlin.math.sin
 
 class ArmMotor private constructor(
     name: String,
@@ -63,7 +64,10 @@ class ArmMotor private constructor(
 
     override fun run(targetIndex: Int) {
         val angleRange = AngleRange.fromRadians(findPositionRads(), targets[targetIndex].stop)
-        motor.power = pidController.calculate(angleRange, obstacle).motorPower
+        val (_,error) = AngleRange.findDirectionAndError(angleRange, this.obstacle)
+        val ticksError = fromAngleToTicks(error)
+        val ff = sin(findPositionRads())
+        motor.power = pidController.calculate(ticksError, ff).motorPower
     }
 
 

@@ -2,10 +2,12 @@ package com.dacodingbeast.pidtuners.HardwareSetup
 
 import CommonUtilities.PIDParams
 import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
+import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.utilities.MathFunctions.TicksToInch
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
 import com.dacodingbeast.pidtuners.utilities.DistanceUnit
 import com.qualcomm.robotcore.hardware.DcMotorSimple
+import kotlin.math.sin
 
 class SlideMotor private constructor(
     name: String,
@@ -95,12 +97,13 @@ class SlideMotor private constructor(
         }
     }
 
+    val conversions = TicksToInch(spoolDiameter, this)
+
     override fun run(targetIndex: Int){
-        val range = SlideRange.fromTicks(getCurrentPose(),targets[targetIndex].stop*conversions.ticksPerInch)
-        motor.power = pidController.calculate(range, obstacle).motorPower
+        val error = targets[targetIndex].stop*conversions.ticksPerInch - getCurrentPose()
+        motor.power = pidController.calculate(error, 0.0).motorPower
     }
 
-    var conversions = TicksToInch(spoolDiameter, this)
 
 
     override fun findPosition(): Double { // returns inches
