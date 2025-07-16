@@ -25,7 +25,7 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int) :
         val spoolRadius: Double = slideMotor.spoolDiameter * 0.0254 / 2.0 // meters
         val linearForce = motorTorque / spoolRadius
 
-        val linearAccel = (linearForce/mass)/0.0254 // meters
+        val linearAccel = (linearForce/mass)* 39.3701 // linear accel in inches
 
         velocity += linearAccel * Dt
 

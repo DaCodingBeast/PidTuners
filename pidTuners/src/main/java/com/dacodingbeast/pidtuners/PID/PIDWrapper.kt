@@ -3,13 +3,7 @@ package com.dacodingbeast.pidtuners.PID
 import CommonUtilities.PIDParams
 import CommonUtilities.Result
 import com.dacodingbeast.pidtuners.Algorithm.Dt
-import com.dacodingbeast.pidtuners.Simulators.AngleRange
-import com.dacodingbeast.pidtuners.Simulators.SlideRange
-import com.qualcomm.robotcore.util.ElapsedTime
 import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.sin
 
 interface PIDWrapper {
     var pidParams: PIDParams
@@ -20,30 +14,36 @@ interface PIDWrapper {
     val isSimulator: Boolean
         get() = false
 
-    fun calculate(error:Double, ff: Double): Result
+    fun calculate(error: Double, ff: Double): Result
     fun reset()
-    class Builder(var pidParams: PIDParams){
-        private var resetFun:(()->Unit)? = null
-        private var calcFun:((Double,Double)->Result)? = null
-        fun calculate(calcFunV:(Double,Double)->Result): Builder{
+    class Builder(var pidParams: PIDParams) {
+        private var resetFun: (() -> Unit)? = null
+        private var calcFun: ((Double, Double) -> Result)? = null
+        fun calculate(calcFunV: (Double, Double) -> Result): Builder {
             this.calcFun = calcFunV
             return this
         }
-        fun reset(resetFun:()->Unit):Builder{
+
+        fun reset(resetFun: () -> Unit): Builder {
             this.resetFun = resetFun
             return this
         }
-        fun build(): PIDWrapper{
-            require(calcFun!=null && resetFun!=null){"Both calculate or reset should be provided"}
-            return PIDWrapperImpl(pidParams,calcFun!!,resetFun!!)
+
+        fun build(): PIDWrapper {
+            require(calcFun != null && resetFun != null) { "Both calculate or reset should be provided" }
+            return PIDWrapperImpl(pidParams, calcFun!!, resetFun!!)
         }
 
     }
 }
 
-class PIDWrapperImpl(override var pidParams: PIDParams,val calcFun:(Double,Double)->Result,val resetFun:()->Unit) : PIDWrapper{
+class PIDWrapperImpl(
+    override var pidParams: PIDParams,
+    val calcFun: (Double, Double) -> Result,
+    val resetFun: () -> Unit
+) : PIDWrapper {
     override fun calculate(error: Double, ff: Double): Result {
-        return calcFun(error,ff)
+        return calcFun(error, ff)
     }
 
     override fun reset() {
@@ -52,8 +52,7 @@ class PIDWrapperImpl(override var pidParams: PIDParams,val calcFun:(Double,Doubl
 }
 
 
-
-class THISPIDWrapperImpl(override var pidParams: PIDParams) : PIDWrapper{
+class THISPIDWrapperImpl(override var pidParams: PIDParams) : PIDWrapper {
     private var prevError = 0.0
     private var integral = 0.0
 
@@ -64,11 +63,13 @@ class THISPIDWrapperImpl(override var pidParams: PIDParams) : PIDWrapper{
         val derivative = (error - prevError) * errorNormalizationFactor * dtInverse
         prevError = error
 
-        val controlEffort = (error * pidParams.kp + integral * pidParams.ki + derivative * pidParams.kd + ff *pidParams.kf)
-            .coerceIn(-1.0, 1.0)
+        val controlEffort =
+            (error * pidParams.kp + integral * pidParams.ki + derivative * pidParams.kd + ff * pidParams.kf)
+                .coerceIn(-1.0, 1.0)
 
-        return Result(controlEffort, error,this.javaClass)
+        return Result(controlEffort, error, this.javaClass)
     }
+
     override fun reset() {
         prevError = 0.0
         integral = 0.0
@@ -76,37 +77,8 @@ class THISPIDWrapperImpl(override var pidParams: PIDParams) : PIDWrapper{
 
 }
 
-class PSOPID(var pidParams: PIDParams){
-    private var prevError = 0.0
-    private var integral = 0.0
 
-    private val dtInverse = 1.0 / Dt
-    private val errorNormalizationFactor = 1.0 / 10.0
-
-
-    val pidController = PIDWrapper.Builder(
-        pidParams)
-        .calculate { error, ff ->
-            integral += error * Dt
-            val derivative = (error - prevError) * errorNormalizationFactor * dtInverse
-            prevError = error
-
-            val controlEffort = (error * pidParams.kp + integral * pidParams.ki + derivative * pidParams.kd + ff *pidParams.kf)
-                .coerceIn(-1.0, 1.0)
-
-            Result.of(controlEffort, error,this.javaClass)
-        }
-        .reset {
-            var prevError = 0.0
-            var integral = 0.0
-        }
-        .build()
-}
-
-
-
-
-class PIDAcmeTest(){
+class PIDAcmeTest() {
     private var setPoint: Double = 0.0
     private var measuredValue: Double = 0.0
     private var minIntegral: Double = -1.0
@@ -119,11 +91,12 @@ class PIDAcmeTest(){
 
     private var lastTimeStamp: Double = 0.0
     private var period: Double = 0.0
-    private var pidParams: PIDParams = PIDParams(1.0,0.0,0.0,0.0)
+    private var pidParams: PIDParams = PIDParams(1.0, 0.0, 0.0, 0.0)
 
 
     val pidController = PIDWrapper.Builder(
-        pidParams)
+        pidParams
+    )
         .calculate { current, target ->
             prevErrorVal = errorValP
 
@@ -132,8 +105,8 @@ class PIDAcmeTest(){
             period = currentTimeStamp - lastTimeStamp
             lastTimeStamp = currentTimeStamp
 
-            errorValP = target -current
-            measuredValue =current
+            errorValP = target - current
+            measuredValue = current
 
             errorValV = if (abs(period) > 1E-6) {
                 (errorValP - prevErrorVal) / period
@@ -143,8 +116,9 @@ class PIDAcmeTest(){
 
             totalError += period * (setPoint - measuredValue)
             totalError = totalError.coerceIn(minIntegral, maxIntegral)
-            val power = pidParams.kp* errorValP + pidParams.ki * totalError +pidParams.ki * errorValV + pidParams.kf * setPoint
-            Result.of(power,errorValV,this.javaClass)
+            val power =
+                pidParams.kp * errorValP + pidParams.ki * totalError + pidParams.ki * errorValV + pidParams.kf * setPoint
+            Result.of(power, errorValV, this.javaClass)
         }
         .reset {
             totalError = 0.0
@@ -154,7 +128,7 @@ class PIDAcmeTest(){
         .build()
 }
 
-class PIDAcmeImpl(override var pidParams: PIDParams) : PIDWrapper{
+class PIDAcmeImpl(override var pidParams: PIDParams) : PIDWrapper {
     private var setPoint: Double = 0.0
     private var measuredValue: Double = 0.0
     private var minIntegral: Double = -1.0
@@ -175,7 +149,7 @@ class PIDAcmeImpl(override var pidParams: PIDParams) : PIDWrapper{
         period = currentTimeStamp - lastTimeStamp
         lastTimeStamp = currentTimeStamp
 
-        errorValP = target -current
+        errorValP = target - current
         measuredValue = current
 
         errorValV = if (abs(period) > 1E-6) {
@@ -187,7 +161,7 @@ class PIDAcmeImpl(override var pidParams: PIDParams) : PIDWrapper{
         totalError += period * (setPoint - measuredValue)
         totalError = totalError.coerceIn(minIntegral, maxIntegral)
         val power = kP() * errorValP + kI() * totalError + kD() * errorValV + kF() * setPoint
-        return Result.of(power,errorValV,this.javaClass)
+        return Result.of(power, errorValV, this.javaClass)
     }
 
     override fun reset() {
