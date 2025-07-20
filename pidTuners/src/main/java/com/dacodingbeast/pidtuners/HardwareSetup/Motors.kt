@@ -1,7 +1,7 @@
 package com.dacodingbeast.pidtuners.HardwareSetup
 
-import CommonUtilities.PIDFcontroller
-import CommonUtilities.PIDParams
+import com.dacodingbeast.pidtuners.HardwareSetup.PIDFcontroller
+import com.dacodingbeast.pidtuners.HardwareSetup.PIDParams
 import com.dacodingbeast.pidtuners.Constants.ConstantsSuper
 import com.dacodingbeast.pidtuners.HardwareSetup.torque.TorqueUnit
 import com.dacodingbeast.pidtuners.PID.THISPIDWrapperImpl
@@ -125,6 +125,7 @@ abstract class Motors(
             require(power in -1.0..1.0) //obviously works
         }catch (_: IllegalArgumentException){
             DataLogger.instance.logError("Power must be between -1 and 1")
+            DataLogger.instance.logData(power)
 
         }
         //friction influenced max power

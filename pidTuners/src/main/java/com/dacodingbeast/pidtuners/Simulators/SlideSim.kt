@@ -14,9 +14,15 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int) :
     private val mass= (slideMotor.systemConstants as SlideSystemConstants ).effectiveMass
 
     override fun updateSimulator(): SimulatorData {
-        var target = slideMotor.targets[targetIndex]
+        val target = slideMotor.targets[targetIndex]
 
-        val calculate = pidController.calculate(target, slideMotor.obstacle)
+        // Update current position based on velocity
+        currentPosition += velocity * Dt
+        
+        // Create current position object for PID calculation
+        val currentPositionObj = SlideRange.fromInches(currentPosition, target.stop, slideMotor)
+
+        val calculate = pidController.calculate(currentPositionObj, slideMotor.obstacle)
         val controlEffort = calculate.motorPower
         error = calculate.error
 
@@ -29,11 +35,7 @@ class SlideSim(override var motor: Motors, override val targetIndex: Int) :
 
         velocity += linearAccel * Dt
 
-        val updatedExtension = target.start + velocity * Dt + 0.5 * linearAccel * Dt * Dt
-
-        target = SlideRange.fromInches(updatedExtension, target.stop,slideMotor)
-
-        return SimulatorData(target.start, controlEffort, error, velocity)
+        return SimulatorData(currentPosition, controlEffort, error, velocity)
     }
 
     override val acceptableError = 3.0 //inches

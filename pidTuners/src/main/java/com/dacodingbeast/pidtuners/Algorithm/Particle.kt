@@ -45,16 +45,19 @@ class Particle(private val ranges: List<Ranges>, private val fitnessFunction: Fi
      * Update the velocity and angles for each circle based on PSO rules
      */
     fun updateVelocity(globalBest: Particle) {
-        val prevVeloCoeffecient = 0.05
-        val particleBestCoefficient = 0.1
-        val swarmBestCoefficient = 0.2
+        // Improved coefficients for better convergence
+        val prevVeloCoeffecient = 0.7  // Increased from 0.05 for better momentum
+        val particleBestCoefficient = 1.5  // Increased from 0.1 for better local search
+        val swarmBestCoefficient = 1.5  // Increased from 0.2 for better global search
 
         velocity = ((velocity * prevVeloCoeffecient) +
                 ((pBestParam - position) * particleBestCoefficient * Random.nextDouble()) +
-                ((globalBest.pBestParam - pBestParam) * swarmBestCoefficient * Random.nextDouble()))
-
-        velocity.ensureNonNegativePosition(globalBest.position, position)
+                ((globalBest.pBestParam - position) * swarmBestCoefficient * Random.nextDouble()))
+        
         position += velocity
+        
+        // Ensure position stays within bounds
+        position.clampToRanges(ranges)
     }
 
     //to show algorithm in csv style (for a python script)

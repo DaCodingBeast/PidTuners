@@ -1,7 +1,7 @@
 package com.dacodingbeast.pidtuners.Simulators
 
-import CommonUtilities.PIDFcontroller
-import CommonUtilities.PIDParams
+import com.dacodingbeast.pidtuners.HardwareSetup.PIDFcontroller
+import com.dacodingbeast.pidtuners.HardwareSetup.PIDParams
 import com.dacodingbeast.pidtuners.Algorithm.Particle
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
 
@@ -10,6 +10,10 @@ abstract class SimulatorStructure(open val motor: Motors, open val targetIndex: 
 
     fun init(params: Particle) {
         pidController = PIDFcontroller(PIDParams(params.position))
+        pidController.reset()
+        currentPosition = motor.targets[targetIndex].start
+        velocity = 0.0
+        error = 0.0
     }
 
     /**
@@ -19,6 +23,7 @@ abstract class SimulatorStructure(open val motor: Motors, open val targetIndex: 
 
     var error = 0.0
     var velocity = 0.0
+    var currentPosition = 0.0  // Track current position separately
 
     /**
      * Punish Fitness based on performance

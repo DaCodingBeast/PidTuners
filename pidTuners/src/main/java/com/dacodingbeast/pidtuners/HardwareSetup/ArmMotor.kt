@@ -1,6 +1,6 @@
 package com.dacodingbeast.pidtuners.HardwareSetup
 
-import CommonUtilities.PIDParams
+import com.dacodingbeast.pidtuners.HardwareSetup.PIDParams
 import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.qualcomm.robotcore.hardware.DcMotorSimple

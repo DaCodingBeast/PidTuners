@@ -1,7 +1,7 @@
 package com.dacodingbeast.pidtuners.PID
 
-import CommonUtilities.PIDParams
-import CommonUtilities.Result
+import com.dacodingbeast.pidtuners.HardwareSetup.PIDParams
+import com.dacodingbeast.pidtuners.HardwareSetup.Result
 import com.dacodingbeast.pidtuners.Algorithm.Dt
 import kotlin.math.abs
 

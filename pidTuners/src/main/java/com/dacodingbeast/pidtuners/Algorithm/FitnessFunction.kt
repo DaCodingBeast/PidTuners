@@ -1,6 +1,6 @@
 package com.dacodingbeast.pidtuners.Algorithm
 
-import ArmSpecific.ArmSim
+import com.dacodingbeast.pidtuners.Simulators.ArmSim
 import com.dacodingbeast.pidtuners.HardwareSetup.ArmMotor
 import com.dacodingbeast.pidtuners.HardwareSetup.Motors
 import com.dacodingbeast.pidtuners.HardwareSetup.SlideMotor
@@ -42,7 +42,9 @@ class FitnessFunction(
         val timeStepCubed = (Dt * Dt * Dt)
         var timeCubed = timeStepCubed
 
-        var stepCount =0
+        var stepCount = 0
+        var totalError = 0.0
+        var maxError = 0.0
 
         while (time <= totalTime) {
 
@@ -52,13 +54,32 @@ class FitnessFunction(
                 history.add(result)
             }
 
-            itae += timeCubed * abs(simulator.error)
+            val errorContribution = timeCubed * abs(simulator.error)
+            itae += errorContribution
+            totalError += abs(simulator.error)
+            maxError = maxOf(maxError, abs(simulator.error))
+            
+            // Debug output every 100 steps
+            if (stepCount % 100 == 0) {
+//                println("Step $stepCount: Error=${simulator.error}, TimeCubed=$timeCubed, Contribution=$errorContribution, ITAE=$itae")
+            }
+            
             time += Dt
             timeCubed += timeStepCubed
             stepCount++
         }
 
-        itae += simulator.punishSimulator()
+        val punishment = simulator.punishSimulator()
+        itae += punishment
+        
+//        println("=== Fitness Calculation Summary ===")
+//        println("Total Steps: $stepCount")
+//        println("Total Error Accumulated: $totalError")
+//        println("Max Error: $maxError")
+//        println("Final ITAE: $itae")
+//        println("Punishment: $punishment")
+//        println("Final Fitness Score: $itae")
+//        println("================================")
 
         // Return ITAE as the fitness score (lower is better)
         return FitnessFunctionData(itae, history)

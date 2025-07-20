@@ -1,6 +1,6 @@
 package com.dacodingbeast.pidtuners
 
-import ArmSpecific.ArmSim
+import com.dacodingbeast.pidtuners.Simulators.ArmSim
 import com.dacodingbeast.pidtuners.Algorithm.Dt
 import com.dacodingbeast.pidtuners.Constants.GravityModelConstants
 import com.dacodingbeast.pidtuners.Constants.PivotSystemConstants
@@ -18,8 +18,8 @@ import kotlin.math.PI
 import kotlin.math.abs
 import org.junit.Test
 import org.junit.Assert.*
-import CommonUtilities.PIDFcontroller
-import CommonUtilities.PIDParams
+import com.dacodingbeast.pidtuners.HardwareSetup.PIDFcontroller
+import com.dacodingbeast.pidtuners.HardwareSetup.PIDParams
 import kotlin.system.measureNanoTime
 import kotlin.system.measureTimeMillis
 

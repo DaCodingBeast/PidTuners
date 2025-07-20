@@ -1,5 +1,5 @@
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
-import ArmSpecific.Direction
+import com.dacodingbeast.pidtuners.Simulators.Direction
 import com.dacodingbeast.pidtuners.utilities.MathFunctions.removeOutliers
 import com.dacodingbeast.pidtuners.verifyData
 import org.junit.Assert.assertEquals

@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 
-import CommonUtilities.PIDParams;
+import com.dacodingbeast.pidtuners.HardwareSetup.PIDParams;
 
 class PIDTuningOpModes {
     public static Double spoolDiameter = 1.0;

@@ -8,7 +8,6 @@ import kotlin.math.abs
 class Vector(var particleParams: DoubleArray) {
     private var numOfVelos = particleParams.size
 
-
     //todo optimize or create new solution
     fun ensureNonNegativePosition(swarmBestPosition: Vector, particlePosition: Vector) {
         for (i in particleParams.indices) {
@@ -18,6 +17,27 @@ class Vector(var particleParams: DoubleArray) {
                 } else {
                     swarmBestPosition.particleParams[i]
                 }
+            }
+        }
+    }
+
+    /**
+     * Clamp velocity to prevent excessive movement
+     */
+    fun clampVelocity() {
+        val maxVelocity = 0.1 // Maximum velocity magnitude
+        for (i in particleParams.indices) {
+            particleParams[i] = particleParams[i].coerceIn(-maxVelocity, maxVelocity)
+        }
+    }
+
+    /**
+     * Clamp position to stay within defined ranges
+     */
+    fun clampToRanges(ranges: List<Ranges>) {
+        for (i in particleParams.indices) {
+            if (i < ranges.size) {
+                particleParams[i] = particleParams[i].coerceIn(ranges[i].start, ranges[i].stop)
             }
         }
     }

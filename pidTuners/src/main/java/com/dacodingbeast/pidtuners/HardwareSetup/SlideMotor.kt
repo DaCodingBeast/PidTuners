@@ -1,6 +1,6 @@
 package com.dacodingbeast.pidtuners.HardwareSetup
 
-import CommonUtilities.PIDParams
+import com.dacodingbeast.pidtuners.HardwareSetup.PIDParams
 import com.dacodingbeast.pidtuners.Constants.SlideSystemConstants
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.utilities.MathFunctions.TicksToInch

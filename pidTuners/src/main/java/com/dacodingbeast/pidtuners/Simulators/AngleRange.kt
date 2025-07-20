@@ -1,6 +1,6 @@
 package com.dacodingbeast.pidtuners.Simulators
 
-import ArmSpecific.Direction
+import com.dacodingbeast.pidtuners.Simulators.Direction
 import com.dacodingbeast.pidtuners.utilities.AngleUnit
 import com.dacodingbeast.pidtuners.utilities.DataLogger
 import com.dacodingbeast.pidtuners.utilities.Measurements
@@ -50,7 +50,15 @@ data class AngleRange private constructor(override val start: Double, override v
         fun wrap(theta: Double): Double {
             var result = (theta + Math.PI) % TWO_PI
             if (result <= 0) result += TWO_PI
-            return result - Math.PI
+            val wrapped = result - Math.PI
+            
+            // Debug: Print angle wrapping
+//            println("=== Angle Wrapping ===")
+//            println("Input angle: ${Math.toDegrees(theta)}° (${theta} rad)")
+//            println("Wrapped angle: ${Math.toDegrees(wrapped)}° (${wrapped} rad)")
+//            println("================================")
+            
+            return wrapped
         }
 
 

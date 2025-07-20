@@ -1,6 +1,6 @@
 package com.dacodingbeast.pidtuners
 
-import CommonUtilities.PIDParams
+import com.dacodingbeast.pidtuners.HardwareSetup.PIDParams
 import com.dacodingbeast.pidtuners.Algorithm.PSO_Optimizer
 import com.dacodingbeast.pidtuners.Algorithm.Ranges
 import com.dacodingbeast.pidtuners.Constants.GravityModelConstants
@@ -28,7 +28,7 @@ class testSimulator {
     var pivotSystemConstants: PivotSystemConstants = PivotSystemConstants(
         inertia,
         frictionRPM,
-        GravityModelConstants(-0.6820297006437362, 0.2932062495195341, 0.35586130838651726)
+        GravityModelConstants(-0.6820297006437362, 0.2932062495195341, 0.35586130838651725)
     )
     var armMotor: ArmMotor = ArmMotor.Builder(
         "pivot", DcMotorSimple.Direction.FORWARD, HDHex(
@@ -42,6 +42,10 @@ class testSimulator {
 
     @Test
     fun simulatorRun(){
+        runSimulator()
+    }
+    
+    fun runSimulator(){
         // Create a test DataLogger that doesn't use Android Log
         DataLogger.create("TestLogger")
         
@@ -78,9 +82,14 @@ class testSimulator {
             )
 
             algorithm.update(25)
-            print(algorithm.getBest().toString())
+            val bestParticle = algorithm.getBest()
+            println("=== TEST RESULTS ===")
+            println("Best PID Parameters: $bestParticle")
+            println("Best Fitness Score: ${bestParticle.bestResult}")
+            println("===================")
         }
 
     }
+
 
 }

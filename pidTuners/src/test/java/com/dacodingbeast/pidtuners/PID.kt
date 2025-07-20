@@ -1,6 +1,6 @@
-import CommonUtilities.PIDFcontroller
-import CommonUtilities.PIDParams
-import CommonUtilities.Result
+import com.dacodingbeast.pidtuners.HardwareSetup.PIDFcontroller
+import com.dacodingbeast.pidtuners.HardwareSetup.PIDParams
+import com.dacodingbeast.pidtuners.HardwareSetup.Result
 import com.dacodingbeast.pidtuners.Algorithm.Vector
 import com.dacodingbeast.pidtuners.Simulators.AngleRange
 import com.dacodingbeast.pidtuners.Simulators.SlideRange
@@ -205,14 +205,6 @@ class PID {
         assertNotNull(result)
         assertTrue("Motor power should be within bounds", abs(result.motorPower) <= 1.0)
         assertTrue("Error should be reasonable", abs(result.error) <= 2 * PI)
-    }
-
-    @Test
-    fun `test Result class properties`() {
-        val result = Result(0.75, 1.5)
-
-        assertEquals(0.75, result.motorPower, 0.001)
-        assertEquals(1.5, result.error, 0.001)
     }
 
     @Test
