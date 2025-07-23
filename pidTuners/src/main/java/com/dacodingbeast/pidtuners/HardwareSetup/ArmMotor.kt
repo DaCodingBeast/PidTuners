@@ -62,14 +62,19 @@ class ArmMotor private constructor(
     }
 
 
+//    override fun run(targetIndex: Int) {
+//        val angleRange = AngleRange.fromRadians(findPositionRads(), targets[targetIndex].stop)
+//        val (_,error) = AngleRange.findDirectionAndError(angleRange, this.obstacle)
+//        val ticksError = fromAngleToTicks(error)
+//        val ff = sin(findPositionRads())
+//        motor.power = pidController.calculate(ticksError, ff).motorPower
+//    }
+
+
     override fun run(targetIndex: Int) {
         val angleRange = AngleRange.fromRadians(findPositionRads(), targets[targetIndex].stop)
-        val (_,error) = AngleRange.findDirectionAndError(angleRange, this.obstacle)
-        val ticksError = fromAngleToTicks(error)
-        val ff = sin(findPositionRads())
-        motor.power = pidController.calculate(ticksError, ff).motorPower
+        motor.power = pidController.calculate(angleRange, this.obstacle).motorPower
     }
-
 
 
     /**

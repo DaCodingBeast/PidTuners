@@ -30,7 +30,7 @@ abstract class Motors(
 
     abstract val obstacle: Target?
     abstract val targets: List<Target>
-    val pidController = THISPIDWrapperImpl(pidParams)
+    val pidController = PIDFcontroller(pidParams)
 
     init {
         if (externalGearRatio < 0) {
@@ -100,7 +100,7 @@ abstract class Motors(
         return motor.power
     }
 
-    fun getPIDFController(): THISPIDWrapperImpl {
+    fun getPIDFController(): PIDFcontroller {
         return pidController
     }
 
